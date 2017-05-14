@@ -26,4 +26,16 @@ public class EstablishmentService {
     public void addEstablishment(Establishment establishment){
         establishmentRepository.save(establishment);
     }
+
+    public Establishment getEstablishment(Long id) {
+        return establishmentRepository.findOne(id);
+    }
+
+    public void updateEstablishment(Establishment establishment) {
+        establishmentRepository.save(establishment);
+    }
+
+    public void deleteEstablishment(Long id) {
+        establishmentRepository.delete(id);
+    }
 }

@@ -3,6 +3,7 @@ package com.oksocios.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * Created by Envy on 14/5/2017.
@@ -25,6 +26,8 @@ public class Establishment {
     @JoinColumn(name="id_user")
     @JsonBackReference
     private User user;
+    @OneToMany(mappedBy = "establishment")
+    private List<Activity> activities;
 
     public Establishment() {
     }
@@ -67,5 +70,13 @@ public class Establishment {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public List<Activity> getActivities() {
+        return activities;
+    }
+
+    public void setActivities(List<Activity> activities) {
+        this.activities = activities;
     }
 }
