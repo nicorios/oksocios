@@ -23,7 +23,7 @@ public class UserController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/users")
-    public void addUser(@ModelAttribute User user){
+    public void addUser(@RequestBody User user){
         userService.addUser(user);
     }
 
@@ -33,7 +33,8 @@ public class UserController {
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = "users/{id}")
-    public void updateUser(@ModelAttribute User user, @PathVariable Long id){
+    public void updateUser(@RequestBody User user, @PathVariable Long id){
+        user.setId(id);
         userService.updateUser(user);
     }
 

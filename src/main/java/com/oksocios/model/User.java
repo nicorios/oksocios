@@ -3,6 +3,7 @@ package com.oksocios.model;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * Created by Envy on 11/5/2017.
@@ -43,6 +44,9 @@ public class User {
     private String password;
     //@Column(name = "registry_date")
     //private Date registryDate;
+
+    @OneToMany(mappedBy = "user")
+    private List<Establishment> establishments;
 
     public Long getId() {
         return id;
@@ -146,5 +150,13 @@ public class User {
 
     public void setGender(Boolean gender) {
         this.gender = gender;
+    }
+
+    public List<Establishment> getEstablishments() {
+        return establishments;
+    }
+
+    public void setEstablishments(List<Establishment> establishments) {
+        this.establishments = establishments;
     }
 }
