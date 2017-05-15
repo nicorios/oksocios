@@ -1,6 +1,9 @@
 package com.oksocios.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
 import java.util.List;
@@ -22,11 +25,15 @@ public class Establishment {
     private String street;
     @Column(name = "number")
     private Integer number;
+    @Column(name = "status")
+    private Integer status;
     @ManyToOne
     @JoinColumn(name="id_user")
     @JsonBackReference
     private User user;
-    @OneToMany(mappedBy = "establishment")
+    @OneToMany(mappedBy = "establishment", cascade=CascadeType.ALL)
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @JsonIdentityReference(alwaysAsId = true)
     private List<Activity> activities;
 
     public Establishment() {
@@ -78,5 +85,13 @@ public class Establishment {
 
     public void setActivities(List<Activity> activities) {
         this.activities = activities;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 }
