@@ -4,14 +4,13 @@ package com.oksocios.controller;
 import com.oksocios.model.User;
 import com.oksocios.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/**
- * Created by Envy on 11/5/2017.
- */
-@RestController
+@Controller
 public class UserController {
 
     @Autowired
@@ -42,4 +41,5 @@ public class UserController {
     public void deleteUser(@PathVariable Long id){
         userService.deleteUser(id);
     }
+
 }

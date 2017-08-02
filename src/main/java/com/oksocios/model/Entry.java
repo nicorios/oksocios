@@ -1,6 +1,7 @@
 package com.oksocios.model;
 
 import javax.persistence.*;
+import java.util.Date;
 
 /**
  * Created by Envy on 14/5/2017.
@@ -20,7 +21,7 @@ public class Entry {
     @JoinColumn(name = "id_establishment")
     private Establishment establishment;
     @Column(name = "entry_date")
-    private String entryDate;
+    private Date entryDate;
 
     public Long getId() {
         return id;
@@ -46,11 +47,11 @@ public class Entry {
         this.establishment = establishment;
     }
 
-    public String getEntryDate() {
+    public Date getEntryDate() {
         return entryDate;
     }
 
-    public void setEntryDate(String entryDate) {
+    public void setEntryDate(Date entryDate) {
         this.entryDate = entryDate;
     }
 }

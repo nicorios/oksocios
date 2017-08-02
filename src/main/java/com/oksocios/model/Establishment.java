@@ -8,9 +8,6 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import javax.persistence.*;
 import java.util.List;
 
-/**
- * Created by Envy on 14/5/2017.
- */
 @Entity
 @Table(name = "establishment")
 public class Establishment {

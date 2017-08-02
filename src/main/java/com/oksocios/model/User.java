@@ -3,17 +3,16 @@ package com.oksocios.model;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.util.Collection;
 import java.util.List;
 
-/**
- * Created by Envy on 11/5/2017.
- */
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements UserDetails{
 
     @Id
     @Column(name = "id_user")
@@ -145,6 +144,11 @@ public class User {
         return password;
     }
 
+    @Override
+    public String getUsername() {
+        return this.email;
+    }
+
     public void setPassword(String password) {
         this.password = password;
     }
@@ -163,5 +167,30 @@ public class User {
 
     public void setEstablishments(List<Establishment> establishments) {
         this.establishments = establishments;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }
