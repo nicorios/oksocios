@@ -3,18 +3,21 @@ package com.oksocios.controller;
 import com.oksocios.model.Entry;
 import com.oksocios.service.EntryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/**
- * Created by Envy on 21/5/2017.
- */
 @RestController
 public class EntryController {
 
+    private final EntryService entryService;
+
     @Autowired
-    private EntryService entryService;
+    public EntryController(EntryService entryService){
+        this.entryService = entryService;
+    }
 
     @RequestMapping(method = RequestMethod.GET, value = "users/{id_user}/entries")
     public List<Entry> getAllEntriesByUserId(@PathVariable Long id_user){
@@ -26,5 +29,10 @@ public class EntryController {
         return entryService.getAllEntriesByEstablishmentId(id_establishment);
     }
 
+    @RequestMapping(method = RequestMethod.POST, value = "/new-entry")
+    public ResponseEntity<Boolean> addEntry(@RequestBody Entry entry){
+        System.out.println(entry);
+        return new ResponseEntity<>(true, HttpStatus.OK);
+    }
 
 }

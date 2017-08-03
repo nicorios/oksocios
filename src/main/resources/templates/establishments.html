@@ -45,7 +45,7 @@
 
   <div id="login-page" class="row">
     <div class="col s12 z-depth-4 card-panel">
-      <form action="/home"  class="login-form">
+      <form action="/home"  class="login-form" id="formValidate">
         <div class="row">
           <div class="input-field col s12 center">
             <img th:src="${user.picture}" class="circle responsive-img valign profile-image-login"/>
@@ -55,10 +55,13 @@
         <div th:if="${hasEstablishments}">
           <div class="row margin">
             <div class="input-field col s12">
-              <select id="select-establishment" name="establishment">
-                <option value="-1">Selecciona Establecimiento</option>
+              <select class="error browser-default" id="crole" name="establishment" data-error=".errorTxt6">
+                <option value="">Selecciona Establecimiento</option>
                 <option th:each="establishment : ${establishments}" th:value="${establishment.id}" th:text="${establishment.name}">Estabishment</option>
               </select>
+              <div class="input-field">
+                <div class="errorTxt6 error-class"></div>
+              </div>
             </div>
             <div class="row">
               <div class="input-field col s12">
@@ -100,7 +103,30 @@
   <script type="text/javascript" th:src="@{js/plugins.js}"></script>
   <!--custom-script.js - Add your own theme custom JS-->
   <script type="text/javascript" th:src="@{js/custom-script.js}"></script>
-
+  <script type="text/javascript" th:src="@{js/plugins/jquery-validation/jquery.validate.min.js}"></script>
+  <script type="text/javascript" th:src="@{js/plugins/jquery-validation/additional-methods.min.js}"></script>
+  <script>
+      $("#formValidate").validate({
+          rules: {
+              establishment:"required"
+          },
+          //For custom messages
+          messages: {
+              establishment:{
+                  required: "Debe seleccionar un establecimiento"
+              }
+          },
+          errorElement : 'div',
+          errorPlacement: function(error, element) {
+              var placement = $(element).data('error');
+              if (placement) {
+                  $(placement).append(error)
+              } else {
+                  error.insertAfter(element);
+              }
+          }
+      });
+  </script>
 </body>
 
 </html>

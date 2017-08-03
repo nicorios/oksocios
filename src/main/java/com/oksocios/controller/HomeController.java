@@ -1,6 +1,5 @@
 package com.oksocios.controller;
 
-import com.oksocios.model.Entry;
 import com.oksocios.service.EntryService;
 import com.oksocios.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +34,7 @@ public class HomeController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/login-error")
     public String loginError(Model model) {
-        model.addAttribute("loginError", true);
+        model.addAttribute("error", true);
         return "login";
     }
 
@@ -45,12 +44,17 @@ public class HomeController {
         if (auth != null) {
             new SecurityContextLogoutHandler().logout(request, response, auth);
         }
-        return "index";
+        return "login";
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/home")
     public String getCurrentUsers(Model model, @RequestParam(required = false, name = "establishment") Long idEstablishment){
         model.addAttribute("entries", entryService.getAllEntriesByEstablishmentIdInLastTwoHours(idEstablishment));
         return "home";
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "new-entry")
+    public String getNewEntryView(){
+        return "new-entry";
     }
 }

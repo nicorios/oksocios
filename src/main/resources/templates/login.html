@@ -44,6 +44,14 @@
 
 
   <div id="login-page" class="row">
+    <div th:if="${error}" id="card-alert" class="card red lighten-5">
+      <div class="card-content red-text">
+        <p>Usuario o contraseña incorrectos</p>
+      </div>
+      <button type="button" class="close red-text" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">×</span>
+      </button>
+    </div>
     <div class="col s12 z-depth-4 card-panel">
       <form name="f" action="login" method="post" class="login-form">
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
@@ -75,7 +83,7 @@
         </div>
         <div class="row">
           <div class="input-field col s12">
-            <button type="submit" href="index.html" class="btn waves-effect waves-light col s12">Ingresar</button>
+            <button type="submit" class="btn waves-effect waves-light col s12">Ingresar</button>
           </div>
         </div>
         <div class="row">
