@@ -40,10 +40,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .antMatchers("/css/**", "/index").permitAll()
-                .antMatchers("/users/**").authenticated()
+                .antMatchers("/users/**", "/establishments/**").authenticated()
                 .and()
                 .formLogin()
-                .loginPage("/login").defaultSuccessUrl("/home").failureUrl("/login-error");
+                .loginPage("/login").defaultSuccessUrl("/establishments").failureUrl("/login-error");
     }
 
 }

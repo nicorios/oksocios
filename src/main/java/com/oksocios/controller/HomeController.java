@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -48,8 +49,8 @@ public class HomeController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/home")
-    public String getCurrentUsers(Model model){
-        model.addAttribute("entries", entryService.getAllEntriesByEstablishmentIdInLastTwoHours(161L));
-        return "index";
+    public String getCurrentUsers(Model model, @RequestParam(required = false, name = "establishment") Long idEstablishment){
+        model.addAttribute("entries", entryService.getAllEntriesByEstablishmentIdInLastTwoHours(idEstablishment));
+        return "home";
     }
 }

@@ -14,8 +14,12 @@ import java.util.List;
 @Service
 public class EstablishmentService {
 
+    private final EstablishmentRepository establishmentRepository;
+
     @Autowired
-    private EstablishmentRepository establishmentRepository;
+    public EstablishmentService(EstablishmentRepository establishmentRepository){
+        this.establishmentRepository = establishmentRepository;
+    }
 
     public List<Establishment> getAllEstablishment(){
         List<Establishment> establishments = new ArrayList<>();
@@ -37,5 +41,9 @@ public class EstablishmentService {
 
     public void deleteEstablishment(Long id) {
         establishmentRepository.delete(id);
+    }
+
+    public List<Establishment> getEstablishmentsByUserId(Long userId){
+        return establishmentRepository.findByUserId(userId);
     }
 }
