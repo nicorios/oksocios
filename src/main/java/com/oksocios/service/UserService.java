@@ -28,6 +28,8 @@ public class UserService {
         return userRepository.findOne(id);
     }
 
+    public User getUserByDni(Long dni){ return userRepository.findByDni(dni);}
+
     public void updateUser(User user){
         userRepository.save(user);
     }

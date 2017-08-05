@@ -6,11 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-/**
- * Created by Envy on 21/5/2017.
- */
 @Service
 public class SubscriptionService {
 
@@ -33,6 +31,11 @@ public class SubscriptionService {
         List<Subscription> subscriptions = new ArrayList<>();
         subscriptionRepository.findByUser_Id(idUser).forEach(subscriptions :: add);
         return subscriptions;
+    }
+
+    public Boolean checkSubscription(Long dni, Long currentEstablishment){
+        if(subscriptionRepository.findFirstByUserDniAndEstablishmentIdAndExpirationDateIsAfter(dni, currentEstablishment, new Date()) != null) return true;
+        return false;
     }
 
     public void addSubscription(Subscription subscription){

@@ -2,6 +2,8 @@ package com.oksocios.controller;
 
 import com.oksocios.model.Entry;
 import com.oksocios.service.EntryService;
+import com.oksocios.service.SubscriptionService;
+import com.oksocios.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,10 +15,14 @@ import java.util.List;
 public class EntryController {
 
     private final EntryService entryService;
+    private final SubscriptionService subscriptionService;
+    private final UserService userService;
 
     @Autowired
-    public EntryController(EntryService entryService){
+    public EntryController(EntryService entryService, SubscriptionService subscriptionService, UserService userService){
         this.entryService = entryService;
+        this.subscriptionService = subscriptionService;
+        this.userService = userService;
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "users/{id_user}/entries")
@@ -30,9 +36,12 @@ public class EntryController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/new-entry")
-    public ResponseEntity<Boolean> addEntry(@RequestBody Entry entry){
-        System.out.println(entry);
-        return new ResponseEntity<>(true, HttpStatus.OK);
+    public ResponseEntity<Boolean> addEntry(@RequestBody Entry entry, @SessionAttribute Long idEstablishment){
+        if(subscriptionService.checkSubscription(entry.getUser().getDni(), idEstablishment)){
+            entryService.addEntry(entry, idEstablishment);
+            return new ResponseEntity<>(true, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(false, HttpStatus.OK);
     }
 
 }

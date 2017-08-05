@@ -31,7 +31,7 @@ public class EstablishmentService {
         establishmentRepository.save(establishment);
     }
 
-    public Establishment getEstablishment(Long id) {
+    public Establishment getEstablishmentById(Long id) {
         return establishmentRepository.findOne(id);
     }
 

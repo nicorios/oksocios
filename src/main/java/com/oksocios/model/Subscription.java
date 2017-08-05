@@ -1,6 +1,7 @@
 package com.oksocios.model;
 
 import javax.persistence.*;
+import java.util.Date;
 
 /**
  * Created by Envy on 21/5/2017.
@@ -23,9 +24,9 @@ public class Subscription {
     @JoinColumn(name = "id_activity")
     private Activity activity;
     @Column(name = "subscription_date")
-    private String subscriptionDate;
+    private Date subscriptionDate;
     @Column(name = "expiration_date")
-    private String expirationDate;
+    private Date expirationDate;
     @Column(name = "price")
     private Double price;
 
@@ -61,19 +62,19 @@ public class Subscription {
         this.activity = activity;
     }
 
-    public String getSubscriptionDate() {
+    public Date getSubscriptionDate() {
         return subscriptionDate;
     }
 
-    public void setSubscriptionDate(String subscriptionDate) {
+    public void setSubscriptionDate(Date subscriptionDate) {
         this.subscriptionDate = subscriptionDate;
     }
 
-    public String getExpirationDate() {
+    public Date getExpirationDate() {
         return expirationDate;
     }
 
-    public void setExpirationDate(String expirationDate) {
+    public void setExpirationDate(Date expirationDate) {
         this.expirationDate = expirationDate;
     }
 

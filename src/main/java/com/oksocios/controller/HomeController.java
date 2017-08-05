@@ -1,5 +1,6 @@
 package com.oksocios.controller;
 
+import com.oksocios.model.Entry;
 import com.oksocios.service.EntryService;
 import com.oksocios.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,14 +9,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @Controller
+@SessionAttributes("idEstablishment")
 public class HomeController {
 
     private final UserService userService;
@@ -47,8 +47,14 @@ public class HomeController {
         return "login";
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "/get-entries")
+    public String setSessionIdEstablishment(Model model, @RequestParam(name = "establishment") Long idEstablishment){
+        model.addAttribute("idEstablishment", idEstablishment);
+        return "redirect:/home";
+    }
+
     @RequestMapping(method = RequestMethod.GET, value = "/home")
-    public String getCurrentUsers(Model model, @RequestParam(required = false, name = "establishment") Long idEstablishment){
+    public String getCurrentUsers(Model model, @SessionAttribute Long idEstablishment){
         model.addAttribute("entries", entryService.getAllEntriesByEstablishmentIdInLastTwoHours(idEstablishment));
         return "home";
     }

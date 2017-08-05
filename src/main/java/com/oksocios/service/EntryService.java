@@ -13,10 +13,14 @@ import java.util.List;
 public class EntryService {
 
     private final EntryRepository entryRepository;
+    private final EstablishmentService establishmentService;
+    private final UserService userService;
 
     @Autowired
-    public EntryService(EntryRepository entryRepository){
+    public EntryService(EntryRepository entryRepository, EstablishmentService establishmentService, UserService userService){
         this.entryRepository = entryRepository;
+        this.establishmentService = establishmentService;
+        this.userService = userService;
     }
 
     public List<Entry> getAllEntries(){
@@ -37,7 +41,10 @@ public class EntryService {
         return entryRepository.findByEstablishment_IdAndEntryDateGreaterThan(idEstablishment, new Date(System.currentTimeMillis() - (2 * 60 * 60 * 1000)));
     }
 
-    public void addEntry(Entry entry){
+    public void addEntry(Entry entry, Long idEstablishment){
+        entry.setUser(userService.getUserByDni(entry.getUser().getDni()));
+        entry.setEstablishment(establishmentService.getEstablishmentById(idEstablishment));
+        entry.setEntryDate(new Date());
         entryRepository.save(entry);
     }
 
