@@ -22,21 +22,25 @@
 
               <!--DataTables example-->
               <div id="table-datatables">
-                  <h4 class="header">Socios Presentes</h4>
+                  <h4 class="header">Suscripciones Activas</h4>
                   <div class="row">
                       <div class="col s12">
                           <table id="tbl-entries" class="responsive-table display" cellspacing="0">
                               <thead>
                               <tr>
                                   <th>Nombre</th>
-                                  <th>Entrada</th>
+                                  <th>Fecha Nacimiento</th>
+                                  <th>Actividad</th>
+                                  <th>Vencimiento</th>
                                   <th>Acciones</th>
                               </tr>
                               </thead>
                               <tbody>
-                              <tr th:each="entry : ${entries}">
-                                  <td th:text="${entry.user.name + ' ' + entry.user.lastName}">Nombre</td>
-                                  <td th:text="${#dates.format(entry.entryDate, 'HH:mm')}">Hora</td>
+                              <tr th:each="subscription : ${subscriptions}">
+                                  <td th:text="${subscription.user.name + ' ' + subscription.user.lastName}">Nombre</td>
+                                  <td th:text="${#dates.format(subscription.user.birthDate, 'dd-MM-yyyy')}">Fecha Nacimiento</td>
+                                  <td th:text="${subscription.activity.name}">Actividad</td>
+                                  <td th:text="${#dates.format(subscription.expirationDate, 'dd-MM-yyyy')}"></td>
                                   <td>Acciones</td>
                               </tr>
                               </tbody>
@@ -48,8 +52,8 @@
           </div>
           <!-- Floating Action Button -->
             <div class="fixed-action-btn" style="bottom: 50px; right: 19px;">
-                <a href="/new-entry" class="btn-floating btn-large">
-                  <i class="mdi-content-add"></i>
+                <a href="/new-customer" class="btn-floating btn-large">
+                  <i class="mdi-social-person-add"></i>
                 </a>
             </div>
             <!-- Floating Action Button -->

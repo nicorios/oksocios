@@ -132,9 +132,21 @@
                 success : function(data) {
                     console.log(data);
                     if(data){
-                        swal("Adelante!", "Tu suscripción ha sido confirmada", "success");
+                        swal({
+                            title: "Adelante!",
+                            text: "Tu suscripción ha sido confirmada",
+                            type: "success",
+                            timer: 2000,
+                            showConfirmButton: false
+                        });
                     }else{
-                        swal("Un momento", "Tu suscripción no es válida", "error");
+                        swal({
+                            title: "Un momento",
+                            text: "Tu suscripción no es válida",
+                            type: "error",
+                            timer: 2000,
+                            showConfirmButton: false
+                        });
                     }
                     $('#dni').val("");
                     $('#dni').focus();

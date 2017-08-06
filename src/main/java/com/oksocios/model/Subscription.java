@@ -29,6 +29,13 @@ public class Subscription {
     private Date expirationDate;
     @Column(name = "price")
     private Double price;
+    @Column(name = "classes_left")
+    private Integer classesLeft;
+    @Column(name = "freepass")
+    private Boolean freePass;
+
+    @Transient
+    private Integer period;
 
     public Long getId() {
         return id;
@@ -84,5 +91,29 @@ public class Subscription {
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    public Integer getPeriod() {
+        return period;
+    }
+
+    public void setPeriod(Integer period) {
+        this.period = period;
+    }
+
+    public Integer getClassesLeft() {
+        return classesLeft;
+    }
+
+    public void setClassesLeft(Integer classesLeft) {
+        this.classesLeft = classesLeft;
+    }
+
+    public Boolean getFreePass() {
+        return freePass;
+    }
+
+    public void setFreePass(Boolean freepass) {
+        this.freePass = freepass;
     }
 }

@@ -3,11 +3,13 @@ package com.oksocios.model;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -24,8 +26,10 @@ public class User implements UserDetails{
     private String lastName;
     @Column(name = "dni")
     private Long dni;
-    //@Column(name = "birth_date")
-    //private Date birthDate;
+    @Column(name = "birth_date")
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date birthDate;
     @Column(name = "street")
     private String street;
     @Column(name = "number")
@@ -82,6 +86,14 @@ public class User implements UserDetails{
 
     public void setDni(Long dni) {
         this.dni = dni;
+    }
+
+    public Date getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(Date birthDate) {
+        this.birthDate = birthDate;
     }
 
     public String getStreet() {
