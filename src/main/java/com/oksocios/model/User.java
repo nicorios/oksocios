@@ -16,6 +16,9 @@ import java.util.List;
 @Table(name = "users")
 public class User implements UserDetails{
 
+    public static final String STATUS_NAME_ACTIVE = "Activo";
+    public static final int STATUS_KEY_ACTIVE = 1;
+
     @Id
     @Column(name = "id_user")
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -48,8 +51,10 @@ public class User implements UserDetails{
     private Integer rol;
     @Column(name = "password")
     private String password;
-    //@Column(name = "registry_date")
-    //private Date registryDate;
+    @Column(name = "registry_date")
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date registryDate;
 
     @OneToMany(mappedBy = "user", cascade=CascadeType.ALL)
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
@@ -179,6 +184,21 @@ public class User implements UserDetails{
 
     public void setEstablishments(List<Establishment> establishments) {
         this.establishments = establishments;
+    }
+
+    public Date getRegistryDate() {
+        return registryDate;
+    }
+
+    public void setRegistryDate(Date registryDate) {
+        this.registryDate = registryDate;
+    }
+
+    public String getStatusName(){
+        switch(this.status){
+            case STATUS_KEY_ACTIVE : return STATUS_NAME_ACTIVE;
+            default: return "Sin definir";
+        }
     }
 
     @Override

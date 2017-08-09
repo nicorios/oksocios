@@ -1,6 +1,7 @@
 package com.oksocios.controller;
 
 import com.oksocios.model.Entry;
+import com.oksocios.model.Subscription;
 import com.oksocios.service.EntryService;
 import com.oksocios.service.SubscriptionService;
 import com.oksocios.service.UserService;
@@ -37,7 +38,8 @@ public class EntryController {
 
     @RequestMapping(method = RequestMethod.POST, value = "/new-entry")
     public ResponseEntity<Boolean> addEntry(@RequestBody Entry entry, @SessionAttribute Long idEstablishment){
-        if(subscriptionService.checkSubscription(entry.getUser().getDni(), idEstablishment)){
+        Subscription subscription = subscriptionService.checkSubscription(entry.getUser().getDni(), idEstablishment);
+        if(subscription != null){
             entryService.addEntry(entry, idEstablishment);
             return new ResponseEntity<>(true, HttpStatus.OK);
         }
