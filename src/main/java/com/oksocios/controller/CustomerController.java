@@ -33,7 +33,7 @@ public class CustomerController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/new-customer")
-    public String getCustomerView(Model model, @SessionAttribute Long idEstablishment){
+    public String getNewCustomerView(Model model, @SessionAttribute Long idEstablishment){
         model.addAttribute("user", new User());
         model.addAttribute("subscription", new Subscription());
         model.addAttribute("activities", activityService.getAllActivitiesByEstablishment(idEstablishment));
@@ -45,5 +45,11 @@ public class CustomerController {
         if (user.getDni() == null) return new ResponseEntity<>("Por favor, Ingrese el DNI del nuevo socio", HttpStatus.OK) ;
         userService.addUser(user);
         return new ResponseEntity<>(true, HttpStatus.OK);
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/customers/{id}")
+    public String getCustomer(Model model, @PathVariable Long id){
+        model.addAttribute("user", userService.getUser(id));
+        return "user";
     }
 }

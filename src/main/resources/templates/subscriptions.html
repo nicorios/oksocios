@@ -41,7 +41,14 @@
                                   <td th:text="${#dates.format(subscription.user.birthDate, 'dd-MM-yyyy')}">Fecha Nacimiento</td>
                                   <td th:text="${subscription.activity.name}">Actividad</td>
                                   <td th:text="${#dates.format(subscription.expirationDate, 'dd-MM-yyyy')}"></td>
-                                  <td>Acciones</td>
+                                  <td>
+                                      <a th:href="@{'/customers/' + ${subscription.user.id}}">
+                                          <i style="font-size: x-large;" class="mdi-image-edit"></i>
+                                      </a>
+                                      <a href="javascript:void(0)">
+                                          <i style="font-size: x-large;" class="mdi-action-delete"></i>
+                                      </a>
+                                  </td>
                               </tr>
                               </tbody>
                           </table>
