@@ -9,5 +9,6 @@ import java.util.List;
 public interface EntryRepository extends CrudRepository<Entry, Long> {
     List<Entry> findByEstablishment_Id(Long idEstablishment);
     List<Entry> findByEstablishment_IdAndEntryDateGreaterThan(Long idEstablishment, Date twoHoursAgo);
+    List<Entry> findByUserDniAndEstablishment_IdAndEntryDateGreaterThan(Long dni, Long idEstablishment, Date twoHoursAgo);
     List<Entry> findByUser_Id(Long idEstablishment);
 }

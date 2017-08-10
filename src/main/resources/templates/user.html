@@ -42,15 +42,12 @@
                 <div class="card-reveal">
                     <p>
                         <span class="card-title grey-text text-darken-4"><span th:text="${user.name + ' ' + user.lastName}"></span> <i class="mdi-navigation-close right"></i></span>
-                        <span><i class="mdi-action-perm-identity cyan-text text-darken-2"></i> Project Manager</span>
                     </p>
 
-                    <p>I am a very simple card. I am good at containing small bits of information. I am convenient because I require little markup to use effectively.</p>
-
-                    <p><i class="mdi-action-perm-phone-msg cyan-text text-darken-2"></i> +1 (612) 222 8989</p>
-                    <p><i class="mdi-communication-email cyan-text text-darken-2"></i> mail@domain.com</p>
-                    <p><i class="mdi-social-cake cyan-text text-darken-2"></i> 18th June 1990</p>
-                    <p><i class="mdi-device-airplanemode-on cyan-text text-darken-2"></i> BAR - AUS</p>
+                    <p><i class="mdi-action-perm-phone-msg cyan-text text-darken-2"></i><span th:text="${user.phoneNumber!=null? ' Teléfono: ' + user.phoneNumber : ' No se ha almacenado teléfono'}"></span></p>
+                    <p><i class="mdi-communication-email cyan-text text-darken-2"></i><span th:text="${' Email: ' + user.email}"></span></p>
+                    <p><i class="mdi-social-cake cyan-text text-darken-2"></i><span th:text="${user.birthDate!=null? ' Fecha de Nacimiento: ' + user.phoneNumber : ' No se ha almacenado fecha de nacimiento'}"></span></p>
+                    <p><i class="mdi-action-assignment cyan-text text-darken-2"></i><span th:text="${' DNI: ' + user.dni}"></span></p>
                 </div>
             </div>
             <!--/ profile-page-header -->
@@ -61,10 +58,22 @@
                 <div id="profile-page-sidebar" class="col s12 m4">
 
                     <!-- Profile About  -->
-                    <div class="card amber darken-2">
+                    <div th:if="${hasSubscription}" class="card amber darken-2">
                         <div class="card-content white-text center-align">
-                            <p class="card-title"><i class="mdi-navigation-check"></i> Clases</p>
-                            <p>3 clases restantes</p>
+                            <div th:if="${subscription.freePass}">
+                                <p class="card-title"><i class="mdi-navigation-check"></i> Pase Libre</p>
+                                <p th:text="${'Vencimiento: ' + #dates.format(subscription.expirationDate, 'dd-MMM-yyyy')}"></p>
+                            </div>
+                            <div th:if="${!subscription.freePass}">
+                                <p class="card-title"><i class="mdi-navigation-check"></i> Clases</p>
+                                <p th:text="${subscription.classesLeft + ' clases restantes'}">3 clases restantes</p>
+                                <p th:text="${'Vencimiento: ' + #dates.format(subscription.expirationDate, 'dd-MMM-yyyy')}"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div th:if="${!hasSubscription}" class="card blue darken-2">
+                        <div class="card-content white-text center-align">
+                            <p><i class="mdi-navigation-check"></i> No tiene subscripción vigente</p>
                         </div>
                     </div>
                     <!-- Profile About  -->
@@ -106,10 +115,10 @@
                             <!-- task-card -->
                             <ul id="task-card" class="collection with-header">
                                 <li class="collection-header cyan">
-                                    <h4 class="task-card-title">Ingresos</h4>
-                                    <p class="task-card-date">March 26, 2015</p>
+                                    <h4 class="task-card-title">Ingresos en el último mes</h4>
+                                    <p class="task-card-date" th:text="${#dates.format(#dates.createNow(), 'dd-MMM-yyyy')}">March 26, 2015</p>
                                 </li>
-                                <li class="collection-item">
+                                <li th:if="${hasEntries}" class="collection-item">
                                     <div id="table-datatables">
                                         <div class="row">
                                             <div class="col s12">
@@ -118,25 +127,21 @@
                                                     <tr>
                                                         <th>Fecha</th>
                                                         <th>Hora</th>
-                                                        <th>Actividad</th>
                                                     </tr>
                                                     </thead>
                                                     <tbody>
-                                                    <tr>
-                                                        <td>Fecha</td>
-                                                        <td>Hora</td>
-                                                        <td>Actividad</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Fecha</td>
-                                                        <td>Hora</td>
-                                                        <td>Actividad</td>
+                                                    <tr th:each="entry : ${entries}">
+                                                        <td th:text="${#dates.format(entry.entryDate, 'dd-MMM-yyyy')}">Fecha</td>
+                                                        <td th:text="${#dates.format(entry.entryDate, 'HH:mm')}">Hora</td>
                                                     </tr>
                                                     </tbody>
                                                 </table>
                                             </div>
                                         </div>
                                     </div>
+                                </li>
+                                <li th:if="${!hasEntries}">
+                                    <p th:text="${'Parece que ' + user.name + ' no ha ingresado al establecimiento en el último mes'}"></p>
                                 </li>
                             </ul>
                         </div>

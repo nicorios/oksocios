@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -39,6 +40,12 @@ public class EntryService {
 
     public List<Entry> getAllEntriesByEstablishmentIdInLastTwoHours(Long idEstablishment){
         return entryRepository.findByEstablishment_IdAndEntryDateGreaterThan(idEstablishment, new Date(System.currentTimeMillis() - (2 * 60 * 60 * 1000)));
+    }
+
+    public List<Entry> getAllEntriesByEstablishmentIdInLastMonth(Long dni, Long idEstablishment){
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.MONTH, -1);
+        return entryRepository.findByUserDniAndEstablishment_IdAndEntryDateGreaterThan(dni, idEstablishment, cal.getTime());
     }
 
     public void addEntry(Entry entry, Long idEstablishment){

@@ -68,4 +68,5 @@ public class SubscriptionService {
     public void deleteSubscription(Long idSubscription){
         subscriptionRepository.delete(idSubscription);
     }
+
 }
