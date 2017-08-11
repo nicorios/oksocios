@@ -58,7 +58,9 @@ public class CustomerController {
         User user = userService.getUser(id);
         Subscription subscription = subscriptionService.checkSubscription(user.getDni(), idEstablishment);
         List<Entry> entries = entryService.getAllEntriesByEstablishmentIdInLastMonth(user.getDni(), idEstablishment);
+        boolean hasLocation = user.hasLocation();
         model.addAttribute("user", user);
+        model.addAttribute("hasLocation", hasLocation);
         model.addAttribute("hasSubscription", subscription != null? true : false);
         model.addAttribute("subscription", subscription);
         model.addAttribute("hasEntries", entries.size()>0? true : false);

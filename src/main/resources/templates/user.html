@@ -79,27 +79,29 @@
                     <!-- Profile About  -->
 
                     <!-- Map Card -->
-                    <div class="map-card">
+                    <div th:if="${hasLocation}" class="map-card">
                         <div class="card">
                             <div class="card-image waves-effect waves-block waves-light">
-                                <div id="map-canvas" data-lat="40.747688" data-lng="-74.004142"></div>
+                                <div id="map-canvas"></div>
                             </div>
                             <div class="card-content">
                                 <a class="btn-floating activator btn-move-up waves-effect waves-light darken-2 right">
                                     <i class="mdi-maps-pin-drop"></i>
                                 </a>
-                                <h4 class="card-title grey-text text-darken-4"><a href="#" class="grey-text text-darken-4">Company Name LLC</a>
+                                <h4 class="card-title grey-text text-darken-4"><a href="#" class="grey-text text-darken-4"><span th:text="${user.name + ' ' + user.lastName}"></span></a>
                                 </h4>
-                                <p class="blog-post-content">Some more information about this company.</p>
+                                <p class="blog-post-content">Domicilio</p>
                             </div>
                             <div class="card-reveal">
-                                <span class="card-title grey-text text-darken-4">Company Name LLC <i class="mdi-navigation-close right"></i></span>
-                                <p>Here is some more information about this company. As a creative studio we believe no client is too big nor too small to work with us to obtain good advantage.By combining the creativity of artists with the precision of engineers we develop custom solutions that achieve results.Some more information about this company.</p>
-                                <p><i class="mdi-action-perm-identity cyan-text text-darken-2"></i> Manager Name</p>
-                                <p><i class="mdi-communication-business cyan-text text-darken-2"></i> 125, ABC Street, New Yourk, USA</p>
-                                <p><i class="mdi-action-perm-phone-msg cyan-text text-darken-2"></i> +1 (612) 222 8989</p>
-                                <p><i class="mdi-communication-email cyan-text text-darken-2"></i> support@geekslabs.com</p>
+                                <span class="card-title grey-text text-darken-4"><span th:text="${user.name + ' ' + user.lastName}"></span><i class="mdi-navigation-close right"></i></span>
+                                <p><i class="mdi-communication-business cyan-text text-darken-2"></i><span th:text="${' ' + user.street + ' ' + user.number}"></span></p>
                             </div>
+                        </div>
+                    </div>
+                    <div th:if="${!hasLocation}" class="card blue darken-2">
+                        <div class="card-content white-text center-align">
+                            <p><i class="mdi-navigation-check"></i> No se ha almacenado domicilio para el usuario</p>
+                            <small>En caso de haberlo hecho, por favor comúniquese con oksocios.consultas@gmail.com</small>
                         </div>
                     </div>
                     <!-- Map Card -->
@@ -141,7 +143,7 @@
                                     </div>
                                 </li>
                                 <li th:if="${!hasEntries}">
-                                    <p th:text="${'Parece que ' + user.name + ' no ha ingresado al establecimiento en el último mes'}"></p>
+                                    <p style="text-align: center;" th:text="${'Parece que ' + user.name + ' no ha ingresado al establecimiento en el último mes'}"></p>
                                 </li>
                             </ul>
                         </div>
