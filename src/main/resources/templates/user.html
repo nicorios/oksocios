@@ -212,9 +212,27 @@
 </section>
 <!-- END CONTENT -->
     <!-- google map api -->
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAAZnaZBXLqNBRXjd-82km_NO7GUItyKek"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDdGKeF76VJl28uWcUOg2vS8t9Sk1kFrHw"></script>
     <!--google map-->
-    <script type="text/javascript" th:src="@{../js/plugins/google-map/google-map-script.js}"></script>
+    <!--<script type="text/javascript" th:src="@{../js/plugins/google-map/google-map-script.js}"></script>-->
+
+    <script>
+        function initMap() {
+            var uluru = {lat: -25.363, lng: 131.044};
+            var map = new google.maps.Map(document.getElementById('map-canvas'), {
+                zoom: 4,
+                center: uluru
+            });
+            var marker = new google.maps.Marker({
+                position: uluru,
+                map: map
+            });
+        }
+
+        $(document).ready(function(){
+            initMap();
+        });
+    </script>
 
 </th:block>
 
