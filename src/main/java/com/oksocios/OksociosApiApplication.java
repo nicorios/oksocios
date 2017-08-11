@@ -1,7 +1,5 @@
 package com.oksocios;
 
-import com.oksocios.service.GoogleMapsService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -19,9 +17,5 @@ public class OksociosApiApplication {
 
 	public static void main(String[] args) throws IOException {
 		SpringApplication.run(OksociosApiApplication.class, args);
-
-		GoogleMapsService googleMapsService = new GoogleMapsService(new RestTemplate());
-
-		googleMapsService.getCandidateById("San Jeronimo", 2486);
 	}
 }
