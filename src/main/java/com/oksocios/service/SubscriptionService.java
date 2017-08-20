@@ -61,12 +61,27 @@ public class SubscriptionService {
         subscriptionRepository.save(subscription);
     }
 
-    public void updateSubscription(Subscription subscription){
-        subscriptionRepository.save(subscription);
+    public int[] findAllLastYearSubscriptionsByActivity(Long idActivity, Long idEstablishment){
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.YEAR, -1);
+        List<Subscription> subscriptions = subscriptionRepository.findAllByActivityIdAndAndEstablishmentIdAndSubscriptionDateIsAfter(idActivity, idEstablishment, cal.getTime());
+        return calculateUsers(subscriptions);
     }
 
-    public void deleteSubscription(Long idSubscription){
-        subscriptionRepository.delete(idSubscription);
+    public int[] calculateUsers(List<Subscription> subscriptions){
+        int[] users = new int[25];
+        Calendar cal = Calendar.getInstance();
+        int month;
+        for (Subscription subscription : subscriptions){
+            cal.setTime(subscription.getSubscriptionDate());
+            month = cal.get(Calendar.MONTH);
+            if(subscription.getUser().getGender() != null){
+                if(subscription.getUser().getGender()) users[month]++;
+                else users[month+12]++;
+            }
+            else users[24]++;
+        }
+        return users;
     }
 
 }

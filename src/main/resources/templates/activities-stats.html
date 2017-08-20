@@ -33,6 +33,15 @@
                                 <option th:each="activity : ${activities}" th:value="${activity.id}" th:text="${activity.name}">Activity</option>
                             </select>
                         </div>
+                        <br/>
+                        <div id="card-alert" class="card red lighten-5" style="display: none">
+                            <div class="card-content red-text">
+                                <p>Parece que no hubieron subscripciones en el último año para dicha actividad</p>
+                            </div>
+                            <button type="button" class="close red-text" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
                     </div>
                     <div class="col s12 m8 l9">
                         <div class="sample-chart-wrapper">
@@ -119,13 +128,40 @@
 
             $('select').on('change', function (e) {
 
-                var valueSelected = this.value;
-                console.log(valueSelected);
+                var idActivity = this.value;
 
-                myChart.data.datasets[0].data = [28, 48, 40, 19, 86, 27, 90];
-                myChart.data.datasets[1].data = [98, 28, 50, 49, 46, 17, 90];
-                myChart.update();
+                $.ajax({
+                    type : "GET",
+                    contentType : "application/json",
+                    url : "/activities-stats/" + idActivity,
+                    success : function(data) {
+                        console.log("SUCCESS: ", data);
+                        display(data);
+                    },
+                    error : function(e) {
+                        console.log("ERROR: ", e);
+                    },
+                    done : function(e) {
+                        console.log("DONE");
+                    }
+                });
+
             });
+
+            function display(users){
+                var empty = true;
+                for (var i=0; i<users.length; i++){
+                    if(users[i] != 0) {
+                        empty = false;
+                    }
+                }
+                if(empty){
+                    $('#card-alert').css('display','block');
+                }
+                myChart.data.datasets[0].data = users.splice(0,12);
+                myChart.data.datasets[1].data = users;
+                myChart.update();
+            }
 
         });
 

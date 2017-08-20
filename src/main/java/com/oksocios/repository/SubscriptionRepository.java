@@ -10,4 +10,5 @@ public interface SubscriptionRepository extends CrudRepository<Subscription, Lon
     List<Subscription> findByEstablishment_Id(Long idEstablishment);
     List<Subscription> findByUser_Id(Long idEstablishment);
     Subscription findFirstByUserDniAndEstablishmentIdAndExpirationDateIsAfter(Long dni, Long establishmentId, Date date);
+    List<Subscription> findAllByActivityIdAndAndEstablishmentIdAndSubscriptionDateIsAfter(Long idActivity, Long idEstablishment, Date date);
 }
