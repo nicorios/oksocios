@@ -1,14 +1,13 @@
 package com.oksocios.controller;
 
+import com.oksocios.model.Email;
 import com.oksocios.model.Entry;
 import com.oksocios.model.Subscription;
 import com.oksocios.model.User;
-import com.oksocios.service.ActivityService;
-import com.oksocios.service.EntryService;
-import com.oksocios.service.SubscriptionService;
-import com.oksocios.service.UserService;
+import com.oksocios.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,13 +22,15 @@ public class CustomerController {
     private final ActivityService activityService;
     private final UserService userService;
     private final EntryService entryService;
+    private final EmailService emailService;
 
     @Autowired
-    public CustomerController(SubscriptionService subscriptionService, ActivityService activityService, UserService userService, EntryService entryService){
+    public CustomerController(SubscriptionService subscriptionService, ActivityService activityService, UserService userService, EntryService entryService, EmailService emailService){
         this.subscriptionService = subscriptionService;
         this.activityService = activityService;
         this.userService = userService;
         this.entryService = entryService;
+        this.emailService = emailService;
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/customers")
@@ -66,5 +67,11 @@ public class CustomerController {
         model.addAttribute("hasEntries", entries.size()>0? true : false);
         model.addAttribute("entries", entries);
         return "user";
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "customers/{id}/email")
+    public ResponseEntity<?> sendEmail(@PathVariable Long id, @RequestBody Email email){
+        emailService.sendMail(email);
+        return new ResponseEntity<Object>(true, HttpStatus.OK);
     }
 }

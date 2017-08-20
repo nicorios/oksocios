@@ -165,7 +165,7 @@
                                         </div>
                                         <div class="col s12 m7 l7 hide-on-med-and-down">
                                             <ul class="right">
-                                                <li><a href="#!"><i class="modal-action modal-close  mdi-content-send"></i></a>
+                                                <li><a id="btn-sendEmail" href="javascript:void(0)"><i class="modal-action modal-close  mdi-content-send"></i></a>
                                                 </li>
                                             </ul>
                                         </div>
@@ -176,22 +176,18 @@
 
                                     <div class="model-email-content">
                                         <div class="row">
-                                            <form class="col s12">
-                                                <!--<div class="row">
-                                                  <div class="input-field col s12">
-                                                    <input id="from_email" type="email" class="validate">
-                                                    <label for="from_email">From</label>
-                                                  </div>
-                                                </div> -->
+                                            <form id="form-email" class="col s12">
+                                                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                                                <input type="hidden" th:value="${user.email}" name="emailTo"/>
                                                 <div class="row">
                                                     <div class="input-field col s12">
-                                                        <input id="subject" type="text" class="validate"/>
+                                                        <input id="subject" type="text" class="validate" name="subject"/>
                                                         <label for="subject">Asunto</label>
                                                     </div>
                                                 </div>
                                                 <div class="row">
                                                     <div class="input-field col s12">
-                                                        <textarea id="compose" class="materialize-textarea" length="500"></textarea>
+                                                        <textarea id="compose" class="materialize-textarea" length="500" name="message"></textarea>
                                                         <label for="compose">Redactar email</label>
                                                     </div>
                                                 </div>
@@ -223,6 +219,7 @@
 
         var latitude = [[${user.latitude}]];
         var longitude = [[${user.longitude}]];
+        var userId = [[${user.id}]];
 
         function initMap() {
             var location = {lat: latitude, lng: longitude};
@@ -237,9 +234,57 @@
         }
 
         $(document).ready(function(){
-            initMap();
+            var hasLocation = [[${hasLocation}]];
+            if(hasLocation){
+                initMap();
+            }
+
+            $('#btn-sendEmail').click(function(){
+                var email = objectifyForm($('#form-email').serializeArray());
+                $('#subject').val("");
+                $('#compose').val("");
+                $.ajax({
+                    type : "POST",
+                    contentType : "application/json",
+                    url : "/customers/" + userId + "/email",
+                    data : JSON.stringify(email),
+                    dataType : 'json',
+                    timeout : 100000,
+                    success : function(data) {
+                        if(data){
+                            swal({
+                                title: "¡Éxito!",
+                                text: "Email enviado correctamente",
+                                type: "success",
+                                timer: 1000,
+                                showConfirmButton: false
+                            });
+                        }
+                    },
+                    error : function(e) {
+                        console.log("ERROR: ", e);
+                    }
+                });
+            });
         });
 
+
+        $(function () {
+            var token = $("input[name='_csrf']").val();
+            var header = "X-CSRF-TOKEN";
+            $(document).ajaxSend(function(e, xhr, options) {
+                xhr.setRequestHeader(header, token);
+            });
+        });
+
+        function objectifyForm(formArray) {
+
+            var returnArray = {};
+            formArray.forEach(function(input, i){
+                returnArray[formArray[i]['name']] = formArray[i]['value'];
+            });
+            return returnArray;
+        }
         /*]]>*/
     </script>
 
