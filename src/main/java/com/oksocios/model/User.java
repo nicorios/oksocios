@@ -3,11 +3,15 @@ package com.oksocios.model;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import org.apache.tomcat.jni.Local;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.Year;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -248,5 +252,10 @@ public class User implements UserDetails{
 
     public boolean hasLocation() {
         return this.latitude!=null && this.longitude!=null;
+    }
+
+    public Integer calculateAge() {
+        LocalDate birthDate = new java.sql.Date(this.birthDate.getTime()).toLocalDate();
+        return Period.between(birthDate, LocalDate.now()).getYears();
     }
 }

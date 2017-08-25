@@ -65,10 +65,10 @@ public class SubscriptionService {
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.YEAR, -1);
         List<Subscription> subscriptions = subscriptionRepository.findAllByActivityIdAndAndEstablishmentIdAndSubscriptionDateIsAfter(idActivity, idEstablishment, cal.getTime());
-        return calculateUsers(subscriptions);
+        return calculateUsersActivitiesStat(subscriptions);
     }
 
-    public int[] calculateUsers(List<Subscription> subscriptions){
+    public int[] calculateUsersActivitiesStat(List<Subscription> subscriptions){
         int[] users = new int[25];
         Calendar cal = Calendar.getInstance();
         int month;
@@ -84,4 +84,32 @@ public class SubscriptionService {
         return users;
     }
 
+    public int[] getCustomersAges(Long idEstablishment) {
+        List<Subscription> subscriptions = subscriptionRepository.findAllByEstablishmentIdAndExpirationDateIsAfter(idEstablishment, new Date());
+        return calculateAgesUsersStat(subscriptions);
+    }
+
+    public int[] calculateAgesUsersStat(List<Subscription> subscriptions){
+        int[] users = new int[54];
+        User customer;
+        Integer age;
+        for(Subscription subscription: subscriptions){
+            customer = subscription.getUser();
+            age = customer.calculateAge();
+            if(subscription.getUser().getGender() != null){
+                if(subscription.getUser().getGender()) {
+                    if(age>16) users[0]++;
+                    if(age<40) users[26]++;
+                    if(age >= 16 && age <= 40)users[age-15]++;
+                }
+                else {
+                    if(age>16) users[27]++;
+                    if(age<40) users[53]++;
+                    if(age >= 16 && age <= 40)users[age+12]++;
+                }
+            }
+            else users[54]++;
+        }
+        return users;
+    }
 }

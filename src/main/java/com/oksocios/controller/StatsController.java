@@ -24,16 +24,28 @@ public class StatsController {
         this.subscriptionService = subscriptionService;
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/activities-stats")
+    @RequestMapping(method = RequestMethod.GET, value = "/stats/activities")
     public String getActivitiesStats(@SessionAttribute Long idEstablishment, Model model){
         model.addAttribute("activities", activityService.getAllActivitiesByEstablishment(idEstablishment));
         return "activities-stats";
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/activities-stats/{idActivity}")
+    @RequestMapping(method = RequestMethod.GET, value = "/stats/activities/{idActivity}/draw")
     @ResponseBody
     public ResponseEntity<int[]> getSubscriptionsPerActivity(@PathVariable Long idActivity, @SessionAttribute Long idEstablishment){
         int[] users = subscriptionService.findAllLastYearSubscriptionsByActivity(idActivity, idEstablishment);
+        return new ResponseEntity(users, HttpStatus.OK);
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/stats/customers")
+    public String getCustomersStats(){
+        return "customers-stats";
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/stats/customers/draw")
+    @ResponseBody
+    public ResponseEntity<int[]> getCustomersAges(@SessionAttribute Long idEstablishment){
+        int[] users = subscriptionService.getCustomersAges(idEstablishment);
         return new ResponseEntity(users, HttpStatus.OK);
     }
 }

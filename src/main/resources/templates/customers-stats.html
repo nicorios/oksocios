@@ -18,34 +18,25 @@
     <!--start container-->
     <div class="container">
         <div class="section">
-            <p class="caption"><a href="http://www.chartjs.org/docs/#getting-started" target="_blank">Chart.js</a> provides simple, responsive, clean and engaging charts for designers and developers.</p>
-
-            <div class="divider"></div>
             <!--Bar Chart-->
             <div id="chartjs-bar-chart" class="section">
-                <h4 class="header">Subscripciones por Actividad</h4>
+                <h4 class="header">Edades de los socios</h4>
                 <div class="row">
-                    <div class="col s12 m4 l3">
+                    <div class="col s12 m12 l2">
                         <p>A bar chart is a way of showing data as bars. It is sometimes used to show trend data, and the comparison of multiple data sets side by side.</p>
-                        <div class="input-field">
-                            <select class="browser-default" id="crole" name="activities">
-                                <option value="">Selecciona Actividad</option>
-                                <option th:each="activity : ${activities}" th:value="${activity.id}" th:text="${activity.name}">Activity</option>
-                            </select>
-                        </div>
                         <br/>
                         <div id="card-alert" class="card red lighten-5" style="display: none">
                             <div class="card-content red-text">
-                                <p>Parece que no hubieron subscripciones en el último año para dicha actividad</p>
+                                <p>Parece que no hay socios subscriptios aún.</p>
                             </div>
                             <button type="button" class="close red-text" data-dismiss="alert" aria-label="Close">
                                 <span aria-hidden="true">×</span>
                             </button>
                         </div>
                     </div>
-                    <div class="col s12 m8 l9">
+                    <div class="col s12 m12 l10">
                         <div class="sample-chart-wrapper">
-                            <canvas id="bar-chart-sample" height="120"></canvas>
+                            <canvas id="customers-ages-chart" height="120"></canvas>
                         </div>
                     </div>
                 </div>
@@ -75,23 +66,12 @@
 
     <!-- chartjs -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
-    <!--<script type="text/javascript" th:src="@{js/plugins/chartjs/chartjs-sample-chart.js}"></script>-->
 
     <script th:inline="javascript">
         /*<![CDATA[*/
-        var months = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+        var labels = ["15 o menos", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41 o más"];
 
         $(document).ready(function(){
-
-            var currentMonth = new Date().getMonth();
-            var labels = [];
-
-            for (var i = 1; i < (12 - currentMonth); i++) {
-                labels.push(months[currentMonth + i]);
-            }
-            for (i = 0; i <= currentMonth; i++) {
-                labels.push(months[i]);
-            }
 
             var BarChartSampleData = {
                 labels: labels,
@@ -111,7 +91,7 @@
                 ]
             };
 
-            var ctx = document.getElementById("bar-chart-sample").getContext("2d");
+            var ctx = document.getElementById("customers-ages-chart").getContext("2d");
             var myChart = new Chart(ctx, {
                 type: 'bar',
                 data: BarChartSampleData,
@@ -126,28 +106,6 @@
                 }
             });
 
-            $('select').on('change', function (e) {
-
-                var idActivity = this.value;
-
-                $.ajax({
-                    type : "GET",
-                    contentType : "application/json",
-                    url : "stats/activities/" + idActivity + "/draw",
-                    success : function(data) {
-                        console.log("SUCCESS: ", data);
-                        display(data);
-                    },
-                    error : function(e) {
-                        console.log("ERROR: ", e);
-                    },
-                    done : function(e) {
-                        console.log("DONE");
-                    }
-                });
-
-            });
-
             function display(users){
                 var empty = true;
                 for (var i=0; i<users.length; i++){
@@ -158,10 +116,26 @@
                 if(empty){
                     $('#card-alert').css('display','block');
                 }
-                myChart.data.datasets[0].data = users.splice(0,12);
+                myChart.data.datasets[0].data = users.splice(0,27);
                 myChart.data.datasets[1].data = users;
                 myChart.update();
             }
+
+            $.ajax({
+                type : "GET",
+                contentType : "application/json",
+                url : "/stats/customers/draw",
+                success : function(data) {
+                    console.log("SUCCESS: ", data);
+                    display(data);
+                },
+                error : function(e) {
+                    console.log("ERROR: ", e);
+                },
+                done : function(e) {
+                    console.log("DONE");
+                }
+            });
 
         });
 
