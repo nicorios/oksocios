@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml"  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layouts/default">
+<head>
+
+</head>
+<th:block layout:fragment="content">
+
+    <!-- Start Page Loading -->
+    <div id="loader-wrapper">
+        <div id="loader"></div>
+        <div class="loader-section section-left"></div>
+        <div class="loader-section section-right"></div>
+    </div>
+    <!-- End Page Loading -->
+    <!-- START CONTENT -->
+<section id="content">
+
+    <!--start container-->
+    <div class="container">
+        <div class="section">
+            <!--Bar Chart-->
+            <div id="chartjs-bar-chart" class="section">
+                <h4 class="header">Ingresos en la última semana</h4>
+                <div class="row">
+                    <div class="col s12 m4 l3">
+                        <p>A bar chart is a way of showing data as bars. It is sometimes used to show trend data, and the comparison of multiple data sets side by side.</p>
+                        <!--<div class="input-field">-->
+                            <!--<select class="browser-default" id="crole" name="activities">-->
+                                <!--<option value="">Selecciona Actividad</option>-->
+                                <!--<option th:each="activity : ${activities}" th:value="${activity.id}" th:text="${activity.name}">Activity</option>-->
+                            <!--</select>-->
+                        <!--</div>-->
+                        <!--<br/>-->
+                        <div id="alert-week" class="card red lighten-5" style="display: none">
+                            <div class="card-content red-text">
+                                <p>Parece que no hubieron ingresos en la última semana</p>
+                            </div>
+                            <button type="button" class="close red-text" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col s12 m8 l9">
+                        <div class="sample-chart-wrapper">
+                            <canvas id="bar-chart-week" height="120"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="chartjs-bar-chart-2" class="section">
+                <h4 class="header">Ingresos por mes</h4>
+                <div class="row">
+                    <div class="col s12 m4 l3">
+                        <p>A bar chart is a way of showing data as bars. It is sometimes used to show trend data, and the comparison of multiple data sets side by side.</p>
+                        <div class="input-field">
+                        <select class="browser-default">
+                        <option value="">Selecciona Mes</option>
+                            <option th:selected="${month} == 0" value="0">Enero</option>
+                            <option th:selected="${month} == 1" value="1">Febrero</option>
+                            <option th:selected="${month} == 2" value="2">Marzo</option>
+                            <option th:selected="${month} == 3" value="3">Abril</option>
+                            <option th:selected="${month} == 4" value="4">Mayo</option>
+                            <option th:selected="${month} == 5" value="5">Junio</option>
+                            <option th:selected="${month} == 6" value="6">Julio</option>
+                            <option th:selected="${month} == 7" value="7">Agosto</option>
+                            <option th:selected="${month} == 8" value="8">Septiembre</option>
+                            <option th:selected="${month} == 9" value="9">Octubre</option>
+                            <option th:selected="${month} == 10" value="10">Noviembre</option>
+                            <option th:selected="${month} == 11" value="11">Diciembre</option>
+                        </select>
+                        </div>
+                        <br/>
+                        <div id="card-alert" class="alert-month card red lighten-5" style="display: none">
+                            <div class="card-content red-text">
+                                <p>Parece que no hubieron ingresos en dicho mes</p>
+                            </div>
+                            <button type="button" class="close red-text" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col s12 m8 l9">
+                        <div class="sample-chart-wrapper">
+                            <canvas id="bar-chart-month" height="120"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+        </div>
+        <!-- Floating Action Button -->
+        <div class="fixed-action-btn" style="bottom: 50px; right: 19px;">
+            <a class="btn-floating btn-large">
+                <i class="mdi-action-stars"></i>
+            </a>
+            <ul>
+                <li><a href="css-helpers.html" class="btn-floating red"><i class="large mdi-communication-live-help"></i></a></li>
+                <li><a href="app-widget.html" class="btn-floating yellow darken-1"><i class="large mdi-device-now-widgets"></i></a></li>
+                <li><a href="app-calendar.html" class="btn-floating green"><i class="large mdi-editor-insert-invitation"></i></a></li>
+                <li><a href="app-email.html" class="btn-floating blue"><i class="large mdi-communication-email"></i></a></li>
+            </ul>
+        </div>
+        <!-- Floating Action Button -->
+    </div>
+    <!--end container-->
+
+</section>
+<!-- END CONTENT -->
+
+    <!-- chartjs -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
+    <!--<script type="text/javascript" th:src="@{js/plugins/chartjs/chartjs-sample-chart.js}"></script>-->
+
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var days = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"];
+        var week = ["Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"];
+        var currentMonthEntries = [[${currentMonthEntries}]];
+        var currentWeekEntries = [[${currentWeekEntries}]];
+        console.log(currentWeekEntries);
+        $(document).ready(function(){
+
+            var currentDay = new Date().getDay();
+            var labels_week = [];
+
+            for (var i = 1; i < (7 - currentDay); i++) {
+                labels_week.push(week[currentDay + i]);
+            }
+            for (i = 0; i <= currentDay; i++) {
+                labels_week.push(week[i]);
+            }
+
+            var BarChartWeekData = {
+                labels: labels_week,
+                datasets: [
+                    {
+                        label: "Hombres",
+                        data: currentWeekEntries.splice(0,7),
+                        backgroundColor: "rgba(220,220,220,0.5)",
+                        borderColor: "rgba(220,220,220,0.8)",
+                        borderWidth: 1
+                    },
+                    {
+                        label: "Mujeres",
+                        data: currentWeekEntries,
+                        backgroundColor: "rgba(151,187,205,0.5)",
+                        borderColor: "rgba(151,187,205,0.8)",
+                        borderWidth: 1
+                    }
+                ]
+            };
+
+            var BarChartMonthData = {
+                labels: days,
+                datasets: [
+                    {
+                        label: "Ingresos",
+                        data: currentMonthEntries,
+                        backgroundColor: "rgba(220,220,220,0.5)",
+                        borderColor: "rgba(220,220,220,0.8)",
+                        borderWidth: 1
+                    }
+                ]
+            };
+
+            var ctx = document.getElementById("bar-chart-week").getContext("2d");
+            var myWeekChart = new Chart(ctx, {
+                type: 'bar',
+                data: BarChartWeekData,
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero:true
+                            }
+                        }]
+                    }
+                }
+            });
+
+            var ctx = document.getElementById("bar-chart-month").getContext("2d");
+            var myMonthChart = new Chart(ctx, {
+                type: 'bar',
+                data: BarChartMonthData,
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero:true
+                            }
+                        }]
+                    }
+                }
+            });
+
+            $('select').on('change', function (e) {
+
+                var month = this.value;
+
+                $.ajax({
+                    type : "GET",
+                    contentType : "application/json",
+                    url : "entries-month/" + month + "/draw",
+                    success : function(data) {
+                        console.log("SUCCESS: ", data);
+                        display(data);
+                    },
+                    error : function(e) {
+                        console.log("ERROR: ", e);
+                    },
+                    done : function(e) {
+                        console.log("DONE");
+                    }
+                });
+
+            });
+
+            function display(users){
+                var empty = true;
+                for (var i=0; i<users.length; i++){
+                    if(users[i] != 0) {
+                        empty = false;
+                    }
+                }
+                if(empty){
+                    $('#card-alert').css('display','block');
+                }
+                myMonthChart.data.datasets[0].data = users;
+                myMonthChart.update();
+            }
+
+        });
+
+        /*]]>*/
+    </script>
+
+</th:block>
+</html>

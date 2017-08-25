@@ -133,7 +133,7 @@
                 $.ajax({
                     type : "GET",
                     contentType : "application/json",
-                    url : "stats/activities/" + idActivity + "/draw",
+                    url : "/stats/activities/" + idActivity + "/draw",
                     success : function(data) {
                         console.log("SUCCESS: ", data);
                         display(data);

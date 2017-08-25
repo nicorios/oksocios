@@ -17,12 +17,10 @@ import java.util.List;
 public class SubscriptionService {
 
     private final SubscriptionRepository subscriptionRepository;
-    private final EstablishmentService establishmentService;
 
     @Autowired
-    public SubscriptionService(SubscriptionRepository subscriptionRepository, EstablishmentService establishmentService){
+    public SubscriptionService(SubscriptionRepository subscriptionRepository){
         this.subscriptionRepository = subscriptionRepository;
-        this.establishmentService = establishmentService;
     }
 
     public List<Subscription> getAllSubscriptions(){
@@ -33,7 +31,7 @@ public class SubscriptionService {
 
     public List<Subscription> getAllSubscriptionsByEstablishmentId(Long idEstablishment){
         List<Subscription> subscriptions = new ArrayList<>();
-        subscriptionRepository.findByEstablishment_Id(idEstablishment).forEach(subscriptions :: add);
+        subscriptionRepository.findAllByEstablishmentIdAndExpirationDateIsAfter(idEstablishment, new Date()).forEach(subscriptions :: add);
         return subscriptions;
     }
 
