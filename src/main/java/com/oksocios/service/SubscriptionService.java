@@ -35,6 +35,12 @@ public class SubscriptionService {
         return subscriptions;
     }
 
+    public List<User> getAllUsersFromSubscriptionsByEstablishmentId(Long idEstablishment){
+        List<User> users = new ArrayList<>();
+        subscriptionRepository.findAllByEstablishmentIdAndExpirationDateIsAfter(idEstablishment, new Date()).forEach(subscription -> users.add(subscription.getUser()));
+        return users;
+    }
+
     public List<Subscription> getAllSubscriptionsByUserId(Long idUser){
         List<Subscription> subscriptions = new ArrayList<>();
         subscriptionRepository.findByUser_Id(idUser).forEach(subscriptions :: add);

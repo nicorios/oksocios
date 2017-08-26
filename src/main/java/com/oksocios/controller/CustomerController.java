@@ -39,6 +39,13 @@ public class CustomerController {
         return "subscriptions";
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "/customers/ajax")
+    @ResponseBody
+    public ResponseEntity<List<User>> getEntriesLastWeek(@SessionAttribute Long idEstablishment){
+        List<User> users = subscriptionService.getAllUsersFromSubscriptionsByEstablishmentId(idEstablishment);
+        return new ResponseEntity(users, HttpStatus.OK);
+    }
+
     @RequestMapping(method = RequestMethod.GET, value = "/new-customer")
     public String getNewCustomerView(Model model, @SessionAttribute Long idEstablishment){
         model.addAttribute("user", new User());

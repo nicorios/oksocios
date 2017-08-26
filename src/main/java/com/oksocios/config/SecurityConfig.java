@@ -40,7 +40,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .antMatchers("/css/**", "/index").permitAll()
-                .antMatchers("/users/**", "/establishments/**", "/home/**", "/stats/**").authenticated()
+                .antMatchers("/users/**", "/establishments/**", "/home/**", "/stats/**", "/new-customer").authenticated()
                 .and()
                 .formLogin()
                 .loginPage("/login").defaultSuccessUrl("/establishments", true).failureUrl("/login-error");
