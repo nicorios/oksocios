@@ -77,9 +77,9 @@ public class SubscriptionService {
                 cal.setTime(subscription.getSubscriptionDate());
                 int month = cal.get(Calendar.MONTH);
                 int diff = 11 - currentMonth;
-                if(month > currentMonth && user.getGender()) users[month-diff]++;
+                if(month > currentMonth && user.getGender()) users[month-currentMonth-1]++;
                 if(month <= currentMonth && user.getGender()) users[month+diff]++;
-                if(month > currentMonth && !user.getGender()) users[month-diff +12]++;
+                if(month > currentMonth && !user.getGender()) users[month-currentMonth-1 +12]++;
                 if(month <= currentMonth && !user.getGender()) users[month+diff +12]++;
             }
             else users[24]++;

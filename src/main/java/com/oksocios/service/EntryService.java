@@ -79,6 +79,8 @@ public class EntryService {
 
     public int[] getEntriesLastWeek(Long idEstablishment){
         Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
         cal.add(Calendar.DAY_OF_MONTH, 1);
         Date endDate = cal.getTime();
         cal.add(Calendar.DAY_OF_MONTH, -7);
@@ -97,11 +99,11 @@ public class EntryService {
             if(user.getGender() != null){
                 cal.setTime(entry.getEntryDate());
                 int entryDay = cal.get(Calendar.DAY_OF_WEEK);
-                int diff = Math.abs(6 - today);
-                if(entryDay > today && user.getGender()) users[entryDay+diff]++;
-                if(entryDay <= today && user.getGender()) users[entryDay-diff]++;
-                if(entryDay > today && !user.getGender()) users[entryDay+diff +7]++;
-                if(entryDay <= today && !user.getGender()) users[entryDay-diff +7]++;
+                int diff = 6 - today;
+                if(entryDay > today && user.getGender()) users[entryDay-today-1]++;
+                if(entryDay <= today && user.getGender()) users[entryDay+diff]++;
+                if(entryDay > today && !user.getGender()) users[entryDay-today-1 +7]++;
+                if(entryDay <= today && !user.getGender()) users[entryDay+diff +7]++;
             }else{
                 users[14]++;
             }
