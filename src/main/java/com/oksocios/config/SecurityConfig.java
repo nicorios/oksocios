@@ -43,7 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/users/**", "/establishments/**", "/home/**", "/stats/**").authenticated()
                 .and()
                 .formLogin()
-                .loginPage("/login").defaultSuccessUrl("/establishments").failureUrl("/login-error");
+                .loginPage("/login").defaultSuccessUrl("/establishments", true).failureUrl("/login-error");
 
 //        http.csrf().disable();
     }
