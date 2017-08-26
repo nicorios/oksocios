@@ -81,7 +81,7 @@ public class EntryService {
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DAY_OF_MONTH, 1);
         Date endDate = cal.getTime();
-        cal.add(Calendar.DAY_OF_MONTH, -8);
+        cal.add(Calendar.DAY_OF_MONTH, -7);
         Date startDate = cal.getTime();
         List<Entry> entries = entryRepository.findByEstablishmentIdAndEntryDateIsAfterAndEntryDateIsBefore(idEstablishment, startDate, endDate);
         return this.calculateEntriesFromLastWeek(entries);
@@ -97,11 +97,11 @@ public class EntryService {
             if(user.getGender() != null){
                 cal.setTime(entry.getEntryDate());
                 int entryDay = cal.get(Calendar.DAY_OF_WEEK);
-                int diff = 6 - today;
-                if(entryDay >= today && user.getGender()) users[entryDay-diff]++;
-                if(entryDay < today && user.getGender()) users[entryDay+diff]++;
-                if(entryDay >= today && !user.getGender()) users[entryDay-diff +7]++;
-                if(entryDay < today && !user.getGender()) users[entryDay+diff +7]++;
+                int diff = Math.abs(6 - today);
+                if(entryDay > today && user.getGender()) users[entryDay+diff]++;
+                if(entryDay <= today && user.getGender()) users[entryDay-diff]++;
+                if(entryDay > today && !user.getGender()) users[entryDay+diff +7]++;
+                if(entryDay <= today && !user.getGender()) users[entryDay-diff +7]++;
             }else{
                 users[14]++;
             }

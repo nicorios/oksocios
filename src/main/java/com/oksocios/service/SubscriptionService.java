@@ -68,14 +68,19 @@ public class SubscriptionService {
 
     public int[] calculateUsersActivitiesStat(List<Subscription> subscriptions){
         int[] users = new int[25];
+        User user;
         Calendar cal = Calendar.getInstance();
-        int month;
+        int currentMonth = cal.get(Calendar.MONTH);
         for (Subscription subscription : subscriptions){
-            cal.setTime(subscription.getSubscriptionDate());
-            month = cal.get(Calendar.MONTH);
-            if(subscription.getUser().getGender() != null){
-                if(subscription.getUser().getGender()) users[month]++;
-                else users[month+12]++;
+            user = subscription.getUser();
+            if(user.getGender() != null){
+                cal.setTime(subscription.getSubscriptionDate());
+                int month = cal.get(Calendar.MONTH);
+                int diff = 11 - currentMonth;
+                if(month > currentMonth && user.getGender()) users[month-diff]++;
+                if(month <= currentMonth && user.getGender()) users[month+diff]++;
+                if(month > currentMonth && !user.getGender()) users[month-diff +12]++;
+                if(month <= currentMonth && !user.getGender()) users[month+diff +12]++;
             }
             else users[24]++;
         }
