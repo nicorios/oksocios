@@ -46,7 +46,7 @@ public class CustomerController {
         return new ResponseEntity(users, HttpStatus.OK);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/new-customer")
+    @RequestMapping(method = RequestMethod.GET, value = "/customers/new")
     public String getNewCustomerView(Model model, @SessionAttribute Long idEstablishment){
         model.addAttribute("user", new User());
         model.addAttribute("subscription", new Subscription());

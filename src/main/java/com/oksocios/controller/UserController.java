@@ -6,6 +6,8 @@ import com.oksocios.model.User;
 import com.oksocios.service.EstablishmentService;
 import com.oksocios.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -60,6 +62,13 @@ public class UserController {
         model.addAttribute("hasEstablishments", establishments.size()>0? true : false);
         model.addAttribute("establishments", establishments);
         return "establishments";
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/establishments/ajax")
+    public ResponseEntity<List<Establishment>> getUserEstablishments(Principal principal){
+        User user =(User) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
+        List<Establishment> establishments = establishmentService.getEstablishmentsByUserId(user.getId());
+        return new ResponseEntity<>(establishments, HttpStatus.OK);
     }
 
 }

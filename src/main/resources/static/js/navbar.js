@@ -29,7 +29,6 @@ function createAutocomplete(users){
 }
 
 function display(array){
-    console.log(array);
     var users = [];
     for (var i in array) {
        var aux = array[i];
@@ -39,7 +38,6 @@ function display(array){
        };
        users.push(user);
     };
-    console.log(users);
     return users;
 }
 
