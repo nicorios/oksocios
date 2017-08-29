@@ -1,17 +1,16 @@
 package com.oksocios.controller;
 
 import com.oksocios.model.Activity;
+import com.oksocios.model.Establishment;
 import com.oksocios.service.ActivityService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Objects;
 
-/**
- * Created by Envy on 14/5/2017.
- */
-@RestController
+@Controller
 public class ActivityController {
 
     @Autowired
@@ -24,8 +23,10 @@ public class ActivityController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/activities")
-    public void addActivity(@RequestBody Activity activity){
+    public String addActivity(@ModelAttribute Activity activity, @SessionAttribute Long idEstablishment){
+        activity.setEstablishment(new Establishment(idEstablishment));
         activityService.addActivity(activity);
+        return "redirect:/settings";
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/activities/{id}")
@@ -34,12 +35,15 @@ public class ActivityController {
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = "/activities/{id}")
-    public void updateActivity(@RequestBody Activity activity){
+    public String updateActivity(@ModelAttribute Activity activity, @SessionAttribute Long idEstablishment){
+        activity.setEstablishment(new Establishment(idEstablishment));
         activityService.updateActivity(activity);
+        return "redirect:/settings";
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/activities/{id}")
-    public void deleteActivity(@PathVariable Long id){
+    public String deleteActivity(@PathVariable Long id){
         activityService.deleteActivity(id);
+        return "redirect:/settings";
     }
 }
