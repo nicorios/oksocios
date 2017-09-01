@@ -60,6 +60,7 @@ public class EntryService {
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.MONTH, month);
         cal.set(Calendar.DAY_OF_MONTH, 1);
+        cal.add(Calendar.DAY_OF_MONTH, -1);
         Date startDate = cal.getTime();
         cal.set(Calendar.MONTH, month +1);
         Date endDate = cal.getTime();
