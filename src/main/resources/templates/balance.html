@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml"  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layouts/default-ff">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml"  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layouts/default">
 <head>
 
 </head>
@@ -37,11 +37,10 @@
                               </thead>
                               <tbody>
                               <tr th:each="movement : ${movements}">
-                                  <td th:text="${#dates.format(entry.entryDate, 'HH:mm')}">Fecha</td>
-                                  <td th:text="${#dates.format(entry.entryDate, 'HH:mm')}">Hora</td>
-                                  <td th:text="${movement.concept.name}">Concepto</td>
-                                  <td th:text="${movement.amount}">Concepto</td>
-                                  <td>Acciones</td>
+                                  <td th:text="${#dates.format(movement.date, 'dd-MM-yyyy')}">Fecha</td>
+                                  <td th:text="${#dates.format(movement.date, 'HH:mm')}">Hora</td>
+                                  <td th:text="${movement.concept == null ? '-' : movement.concept.name}">Concepto</td>
+                                  <td th:text="${movement.amount}">Monto</td>
                                   <td>Acciones</td>
                               </tr>
                               </tbody>
@@ -51,7 +50,94 @@
               </div>
 
           </div>
-          <!-- Floating Action Button -->
+            <div class="row">
+                <div class="col s12 m6">
+                    <div class="card-panel">
+                        <h4 class="header2">Ingresos externos</h4>
+                        <div class="row">
+                            <form>
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="input-field col s12">
+                                            <label for="imonto">Monto [AR$]</label>
+                                            <input id="imonto" type="text" name="imonto"/>
+                                            <div class="errorTxt2"></div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col s12">
+                                            <label for="uconcept">Concepto</label>
+                                            <select class="error browser-default" id="uconcept" name="establishment" data-error=".errorTxt6">
+                                                <option value="">Seleccionar Concepto</option>
+                                                <option th:each="concept : ${concepts}" th:value="${concept.id}" th:text="${concept.name}">Concepts</option>
+                                            </select>
+                                            <div class="errorTxt6"></div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="input-field col s12">
+                                            <label for="idesc">Detalle</label>
+                                            <textarea id="idesc" type="text" name="idesc"></textarea>
+                                            <div class="errorTxt2"></div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="input-field col s12">
+                                            <button class="btn waves-effect waves-light right submit" type="submit" name="action">
+                                               Agregar
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col s12 m6">
+                    <div class="card-panel">
+                        <h4 class="header2">Egresos externos</h4>
+                        <div class="row">
+                            <form>
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="input-field col s12">
+                                            <label for="imonto-e">Monto [AR$]</label>
+                                            <input id="imonto-e" type="text" name="imonto"/>
+                                            <div class="errorTxt2"></div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col s12">
+                                            <label for="uconcept-e">Concepto</label>
+                                            <select class="error browser-default" id="uconcept-e" name="establishment" data-error=".errorTxt6">
+                                                <option value="">Seleccionar Concepto</option>
+                                                <option th:each="concept : ${concepts}" th:value="${concept.id}" th:text="${concept.name}">Concepts</option>
+                                            </select>
+                                            <div class="errorTxt6"></div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="input-field col s12">
+                                            <label for="idesc-e">Detalle</label>
+                                            <textarea id="idesc-e" type="text" name="idesc"></textarea>
+                                            <div class="errorTxt2"></div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="input-field col s12">
+                                            <button class="btn waves-effect waves-light right submit" type="submit" name="action">
+                                                Agregar
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Floating Action Button -->
             <div class="fixed-action-btn" style="bottom: 50px; right: 19px;">
                 <a href="/new-entry" class="btn-floating btn-large">
                   <i class="mdi-content-add"></i>
