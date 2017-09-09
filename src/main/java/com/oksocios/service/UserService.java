@@ -2,6 +2,7 @@ package com.oksocios.service;
 
 import com.oksocios.model.User;
 import com.oksocios.repository.UserRepository;
+import com.oksocios.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,12 +41,19 @@ public class UserService {
             if(user.getPassword() == null) user.setPassword(userResponse.getPassword());
             if(user.getRegistryDate() == null) user.setRegistryDate(userResponse.getRegistryDate());
         }else{
-            user.setStatus(User.STATUS_KEY_ACTIVE);
+            // todo set status 0 y confirm by email
+            user.setStatus(Constants.STATUS_KEY_ACTIVE);
             //todo definir tabla rol_establecimiento y agregar aca
             //user.setRol(?????);
             user.setRegistryDate(new Date());
         }
         userRepository.save(user);
+    }
+
+    public User addNewUser(User user){
+        user.setStatus(Constants.STATUS_KEY_PENDING);
+        user.setRegistryDate(new Date());
+        return userRepository.save(user);
     }
 
     public User getUser(Long id){

@@ -20,9 +20,6 @@ import java.util.List;
 @Table(name = "users")
 public class User implements UserDetails{
 
-    public static final String STATUS_NAME_ACTIVE = "Activo";
-    public static final int STATUS_KEY_ACTIVE = 1;
-
     @Id
     @Column(name = "id_user")
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -216,13 +213,6 @@ public class User implements UserDetails{
 
     public void setLongitude(Double longitude) {
         this.longitude = longitude;
-    }
-
-    public String getStatusName(){
-        switch(this.status){
-            case STATUS_KEY_ACTIVE : return STATUS_NAME_ACTIVE;
-            default: return "Sin definir";
-        }
     }
 
     @Override

@@ -7,7 +7,7 @@
   <meta name="msapplication-tap-highlight" content="no"/>
   <meta name="description" content="Materialize is a Material Design Admin Template,It's modern, responsive and based on Material Design by Google. "/>
   <meta name="keywords" content="materialize, admin template, dashboard template, flat admin template, responsive admin template,"/>
-  <title>Ingresar | OkSocios</title>
+  <title>Registrarme | OkSocios</title>
 
   <!-- Favicons-->
   <link rel="icon" href="images/favicon/logo-fav.png" sizes="32x32"/>
@@ -25,6 +25,7 @@
   <link th:href="@{css/style.css}" type="text/css" rel="stylesheet" media="screen,projection"/>
   <!-- Custome CSS-->
   <link th:href="@{css/custom/custom.css}" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link th:href="@{css/custom/validation.css}" type="text/css" rel="stylesheet" media="screen,projection"/>
 
   <!-- INCLUDED PLUGIN CSS ON THIS PAGE -->
   <link th:href="@{js/plugins/prism/prism.css}" type="text/css" rel="stylesheet" media="screen,projection"/>
@@ -46,14 +47,14 @@
   <div id="login-page" class="row">
     <div th:if="${error}" id="card-alert" class="card red lighten-5">
       <div class="card-content red-text">
-        <p>Usuario o contraseña incorrectos</p>
+        <p th:text="${message}">Mensaje error</p>
       </div>
       <button type="button" class="close red-text" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">×</span>
       </button>
     </div>
     <div class="col s12 z-depth-4 card-panel">
-      <form name="f" action="login" method="post" class="login-form">
+      <form id="form-register" th:object="${user}" action="/register" method="post" class="login-form">
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
         <div class="row">
           <div class="input-field col s12 center">
@@ -64,41 +65,49 @@
         <div class="row margin">
           <div class="input-field col s12">
             <i class="mdi-social-person-outline prefix"></i>
-            <input id="username" type="text" name="username"/>
-            <label for="username" class="center-align">Usuario</label>
+            <label for="uname">Nombre</label>
+            <input id="uname" th:field="*{name}" type="text" data-error=".errorTxt1"/>
+            <div class="errorTxt1"></div>
+          </div>
+        </div>
+        <div class="row margin">
+          <div class="input-field col s12">
+            <i class="mdi-social-person-outline prefix"></i>
+            <label for="ulastName">Apellido</label>
+            <input id="ulastName" th:field="*{lastName}" type="text" data-error=".errorTxt2"/>
+            <div class="errorTxt2"></div>
+          </div>
+        </div>
+        <div class="row margin">
+          <div class="input-field col s12">
+            <i class="mdi-content-mail prefix"></i>
+            <label for="uemail">Email</label>
+            <input id="uemail" type="email" th:field="*{email}" data-error=".errorTxt3"/>
+            <div class="errorTxt3"></div>
           </div>
         </div>
         <div class="row margin">
           <div class="input-field col s12">
             <i class="mdi-action-lock-outline prefix"></i>
-            <input id="password" type="password" name="password"/>
-            <label for="password">Clave</label>
-          </div>
-        </div>
-        <div class="row">          
-          <div class="input-field col s12 m12 l12  login-text">
-              <input type="checkbox" id="remember-me" />
-              <label for="remember-me">Recordarme</label>
+            <label for="upass">Clave</label>
+            <input id="upass" type="password" th:field="*{password}" data-error=".errorTxt4"/>
+            <div class="errorTxt4"></div>
           </div>
         </div>
         <div class="row">
           <div class="input-field col s12">
-            <button type="submit" class="btn waves-effect waves-light col s12">Ingresar</button>
+            <button type="submit" class="btn waves-effect waves-light col s12">Registrarme</button>
           </div>
         </div>
         <div class="row">
-          <div class="input-field col s6 m6 l6">
-            <p class="margin medium-small"><a href="/register">Registrarme!</a></p>
+          <div class="input-field col s12">
+            <p class="margin medium-small center-align">Ya tienes una cuenta? <a href="/register">Ingresar!</a></p>
           </div>
-          <div class="input-field col s6 m6 l6">
-              <p class="margin right-align medium-small"><a href="user-forgot-password.html">Olvid&oacute; Clave?</a></p>
-          </div>          
         </div>
 
       </form>
     </div>
   </div>
-
   <!--prism-->
   <script type="text/javascript" th:src="@{js/plugins/prism/prism.js}"></script>
 
@@ -115,6 +124,31 @@
   <script type="text/javascript" th:src="@{js/plugins.js}"></script>
   <!--custom-script.js - Add your own theme custom JS-->
   <script type="text/javascript" th:src="@{js/custom-script.js}"></script>
+  <script type="text/javascript" th:src="@{js/plugins/jquery-validation/jquery.validate.min.js}"></script>
+  <script>
+    $(document).ready(function () {
+
+        $("#uname").rules("add", { required: true, messages: { required: "Ingrese el nombre del nuevo socio"}});
+        $("#ulastName").rules("add", { required: true, messages: { required: "Ingrese el apellido del nuevo socio"}});
+        $("#uemail").rules("add", { required: true, email:true, messages: { required: "Ingrese el email del nuevo socio", email:"Ingrese un email válido"}});
+        $("#upass").rules("add", { required: true, minlength:6, messages: { required: "Ingrese la clave del nuevo socio", minlength:"Debe contener al menos 6 caracteres"}});
+    });
+
+    $("#form-register").validate({
+        errorElement : 'div',
+        errorPlacement: function(error, element) {
+            var placement = $(element).data('error');
+            if (placement) {
+                $(placement).append(error)
+            } else {
+                error.insertAfter(element);
+            }
+        },
+        submitHandler: function(form){
+            $('#form-register').submit();
+        }
+    });
+  </script>
 
 </body>
 

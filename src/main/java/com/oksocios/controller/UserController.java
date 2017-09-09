@@ -71,4 +71,16 @@ public class UserController {
         return new ResponseEntity<>(establishments, HttpStatus.OK);
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "/register")
+    public String register(Model model){
+        model.addAttribute("user", new User());
+        return "register";
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/register")
+    public String registerPost(@ModelAttribute User user){
+        userService.addNewUser(user);
+        return "redirect:/login";
+    }
+
 }
