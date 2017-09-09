@@ -3,9 +3,6 @@ package com.oksocios.model;
 import javax.persistence.*;
 import java.util.Date;
 
-/**
- * Created by Envy on 21/5/2017.
- */
 @Entity
 @Table(name = "subscription")
 public class Subscription {
