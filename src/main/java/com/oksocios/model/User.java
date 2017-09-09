@@ -48,8 +48,6 @@ public class User implements UserDetails{
     private Integer status;
     @Column(name = "picture")
     private String picture;
-    @Column(name = "rol")
-    private Integer rol;
     @Column(name = "password")
     private String password;
     @Column(name = "registry_date")
@@ -152,14 +150,6 @@ public class User implements UserDetails{
 
     public void setPicture(String picture) {
         this.picture = picture;
-    }
-
-    public Integer getRol() {
-        return rol;
-    }
-
-    public void setRol(Integer rol) {
-        this.rol = rol;
     }
 
     public String getPassword() {

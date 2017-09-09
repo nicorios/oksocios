@@ -37,7 +37,6 @@ public class UserService {
             if(user.getPhoneNumber() == null) user.setPhoneNumber(userResponse.getPhoneNumber());
             if(user.getStatus() == null) user.setStatus(userResponse.getStatus());
             if(user.getPicture() == null) user.setPicture(userResponse.getPicture());
-            if(user.getRol() == null) user.setRol(userResponse.getRol());
             if(user.getPassword() == null) user.setPassword(userResponse.getPassword());
             if(user.getRegistryDate() == null) user.setRegistryDate(userResponse.getRegistryDate());
         }else{
