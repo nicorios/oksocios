@@ -20,4 +20,12 @@ public class ConceptService {
     public List<Concept> getConceptsByEstablishmentId(Long idEstablishment){
         return conceptRepository.findAllByEstablishmentId(idEstablishment);
     }
+
+    public Concept saveConcept(Concept concept) {
+        return conceptRepository.save(concept);
+    }
+
+    public Concept updateConcept(Concept concept) {
+        return conceptRepository.save(concept);
+    }
 }
