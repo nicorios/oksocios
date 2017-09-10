@@ -268,23 +268,6 @@
             });
         });
 
-
-        $(function () {
-            var token = $("input[name='_csrf']").val();
-            var header = "X-CSRF-TOKEN";
-            $(document).ajaxSend(function(e, xhr, options) {
-                xhr.setRequestHeader(header, token);
-            });
-        });
-
-        function objectifyForm(formArray) {
-
-            var returnArray = {};
-            formArray.forEach(function(input, i){
-                returnArray[formArray[i]['name']] = formArray[i]['value'];
-            });
-            return returnArray;
-        }
         /*]]>*/
     </script>
 

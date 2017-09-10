@@ -1,13 +1,16 @@
 package com.oksocios.controller;
 
+import com.oksocios.model.Movement;
 import com.oksocios.service.ConceptService;
 import com.oksocios.service.MovementService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
 
 @Controller
 public class BalanceController {
@@ -26,5 +29,10 @@ public class BalanceController {
         model.addAttribute("concepts", conceptService.getConceptsByEstablishmentId(idEstablishment));
         model.addAttribute("movements", movementService.getMovements(idEstablishment));
         return "balance";
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/balance")
+    public ResponseEntity saveMovement(@RequestBody Movement movement, @SessionAttribute Long idEstablishment, Principal principal){
+        return new ResponseEntity(HttpStatus.OK);
     }
 }
