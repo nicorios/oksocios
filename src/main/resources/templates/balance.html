@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml"  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layouts/default">
 <head>
-
+    <link th:href="@{/css/custom/validation.css}" type="text/css" rel="stylesheet" media="screen,projection"/>
 </head>
 <th:block layout:fragment="content">
   <!-- Start Page Loading -->
@@ -40,7 +40,7 @@
                                   <td th:text="${#dates.format(movement.date, 'dd-MM-yyyy')}">Fecha</td>
                                   <td th:text="${#dates.format(movement.date, 'HH:mm')}">Hora</td>
                                   <td th:text="${movement.concept == null ? '-' : movement.concept.name}">Concepto</td>
-                                  <td th:text="${movement.amount}">Monto</td>
+                                  <td th:text="${movement.income? movement.amount : '- ' + movement.amount}">Monto</td>
                                   <td>Acciones</td>
                               </tr>
                               </tbody>
@@ -55,36 +55,34 @@
                     <div class="card-panel">
                         <h4 class="header2">Ingresos externos</h4>
                         <div class="row">
-                            <form id="form-income">
+                            <form class="formValidate" id="form-income">
                                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                                 <div class="container">
                                     <div class="row">
                                         <div class="input-field col s12">
-                                            <label for="imonto">Monto [AR$]</label>
-                                            <input id="imonto" type="text" name="amount"/>
-                                            <div class="errorTxt2"></div>
+                                            <label for="uamount">Monto [AR$]</label>
+                                            <input id="uamount" type="number" name="amount" data-error=".errorTxt1"/>
+                                            <div class="errorTxt1"></div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col s12">
                                             <label for="uconcept">Concepto</label>
-                                            <select class="error browser-default" id="uconcept" data-error=".errorTxt6">
+                                            <select class="error browser-default" id="uconcept">
                                                 <option value="">Seleccionar Concepto</option>
                                                 <option th:each="concept : ${concepts}" th:value="${concept.id}" th:text="${concept.name}">Concepts</option>
                                             </select>
-                                            <div class="errorTxt6"></div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="input-field col s12">
                                             <label for="idesc">Detalle</label>
                                             <textarea id="idesc" type="text" name="detail" class="materialize-textarea"></textarea>
-                                            <div class="errorTxt2"></div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="input-field col s12">
-                                            <button id="btn-income" class="btn waves-effect waves-light right submit" type="button" name="action">
+                                            <button class="btn waves-effect waves-light right submit" type="submit" name="action">
                                                Agregar
                                             </button>
                                         </div>
@@ -98,36 +96,34 @@
                     <div class="card-panel">
                         <h4 class="header2">Egresos externos</h4>
                         <div class="row">
-                            <form id="form-expense">
+                            <form class="formValidate" id="form-expense">
                                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                                 <div class="container">
                                     <div class="row">
                                         <div class="input-field col s12">
-                                            <label for="imonto-e">Monto [AR$]</label>
-                                            <input id="imonto-e" type="text" name="amount"/>
+                                            <label for="eamount">Monto [AR$]</label>
+                                            <input id="eamount" type="number" name="amount" data-error=".errorTxt2"/>
                                             <div class="errorTxt2"></div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col s12">
-                                            <label for="uconcept-e">Concepto</label>
-                                            <select class="error browser-default" id="uconcept-e" data-error=".errorTxt6">
+                                            <label for="econcept">Concepto</label>
+                                            <select class="error browser-default" id="econcept">
                                                 <option value="">Seleccionar Concepto</option>
                                                 <option th:each="concept : ${concepts}" th:value="${concept.id}" th:text="${concept.name}">Concepts</option>
                                             </select>
-                                            <div class="errorTxt6"></div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="input-field col s12">
                                             <label for="idesc-e">Detalle</label>
                                             <textarea id="idesc-e" type="text" name="detail" class="materialize-textarea"></textarea>
-                                            <div class="errorTxt2"></div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="input-field col s12">
-                                            <button id="btn-expense" class="btn waves-effect waves-light right submit" type="button" name="action">
+                                            <button class="btn waves-effect waves-light right submit" type="submit" name="action">
                                                 Agregar
                                             </button>
                                         </div>
@@ -150,15 +146,29 @@
         <!--end container-->
       </section>
       <!-- END CONTENT -->
-
-    <script>
+    <script type="text/javascript" th:src="@{/js/plugins/jquery-validation/jquery.validate.min.js}"></script>
+    <script type="text/javascript">
         $('#tbl-balance').DataTable({
             searching: false,
             lengthChange: false
         });
 
         $(document).ready(function () {
-            $('#btn-income').click(function () {
+            $("#uamount").rules("add", { required: true, messages: { required: "Ingrese el monto"}});
+            $("#eamount").rules("add", { required: true, messages: { required: "Ingrese el monto"}});
+        });
+
+        $("#form-income").validate({
+            errorElement : 'div',
+            errorPlacement: function(error, element) {
+                var placement = $(element).data('error');
+                if (placement) {
+                    $(placement).append(error)
+                } else {
+                    error.insertAfter(element);
+                }
+            },
+            submitHandler: function(form){
                 var movement = objectifyForm($('#form-income').serializeArray());
                 var concept = {};
                 concept["id"] = $('#uconcept').val();
@@ -173,38 +183,49 @@
                     dataType : 'json',
                     success : function(data) {
                         console.log("SUCCESS: ", data);
-                        display(data);
+                        swal("Éxito!", "Ingreso cargado correctamente", "success");
+                        //todo show new movement in datatable?
                     },
                     error : function(e) {
                         console.log("ERROR: ", e);
-                        display(e);
                     }
                 });
-            });
+            }
+        });
 
-            $('#btn-expense').click(function () {
-                var movement = objectifyForm($('#form-income').serializeArray());
+        $("#form-expense").validate({
+            errorElement : 'div',
+            errorPlacement: function(error, element) {
+                var placement = $(element).data('error');
+                if (placement) {
+                    $(placement).append(error)
+                } else {
+                    error.insertAfter(element);
+                }
+            },
+            submitHandler: function(form){
+                var movement = objectifyForm($('#form-expense').serializeArray());
                 var concept = {};
-                concept["id"] = $('#uconcept-e').val();
+                concept["id"] = $('#econcept').val();
                 movement["concept"] = concept;
-                movement["income"] = false;
-                console.log(movement);
-//                $.ajax({
-//                    type : "POST",
-//                    contentType : "application/json",
-//                    url : "/balance",
-//                    data : JSON.stringify(data),
-//                    dataType : 'json',
-//                    success : function(data) {
-//                        console.log("SUCCESS: ", data);
-//                        display(data);
-//                    },
-//                    error : function(e) {
-//                        console.log("ERROR: ", e);
-//                        display(e);
-//                    }
-//                });
-            });
+                movement["income"] = true;
+
+                $.ajax({
+                    type : "POST",
+                    contentType : "application/json",
+                    url : "/balance",
+                    data : JSON.stringify(movement),
+                    dataType : 'json',
+                    success : function(data) {
+                        console.log("SUCCESS: ", data);
+                        swal("Éxito!", "Egreso cargado correctamente", "success");
+                        //todo show new movement in datatable?
+                    },
+                    error : function(e) {
+                        console.log("ERROR: ", e);
+                    }
+                });
+            }
         });
     </script>
 </th:block>

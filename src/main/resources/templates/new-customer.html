@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml"  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layouts/default">
 <head>
-    <link th:href="@{css/custom/validation.css}" type="text/css" rel="stylesheet" media="screen,projection"/>
+    <link th:href="@{/css/custom/validation.css}" type="text/css" rel="stylesheet" media="screen,projection"/>
 </head>
 <th:block layout:fragment="content">
     <!-- Start Page Loading -->
@@ -168,7 +168,7 @@
         <!--end container-->
     </section>
     <!-- END CONTENT -->
-    <script type="text/javascript" th:src="@{js/plugins/jquery-validation/jquery.validate.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/plugins/jquery-validation/jquery.validate.min.js}"></script>
     <script type="text/javascript">
         $(document).ready(function(){
             var freePass = $('#freepass');

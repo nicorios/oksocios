@@ -1,11 +1,14 @@
 package com.oksocios.controller;
 
+import com.oksocios.model.Establishment;
 import com.oksocios.model.Movement;
+import com.oksocios.model.User;
 import com.oksocios.service.ConceptService;
 import com.oksocios.service.MovementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -33,6 +36,8 @@ public class BalanceController {
 
     @RequestMapping(method = RequestMethod.POST, value = "/balance")
     public ResponseEntity saveMovement(@RequestBody Movement movement, @SessionAttribute Long idEstablishment, Principal principal){
-        return new ResponseEntity(HttpStatus.OK);
+        User user = (User)((UsernamePasswordAuthenticationToken) principal).getPrincipal();
+        Movement movementResult = movementService.addMovement(movement, user, new Establishment(idEstablishment));
+        return new ResponseEntity( HttpStatus.OK);
     }
 }
