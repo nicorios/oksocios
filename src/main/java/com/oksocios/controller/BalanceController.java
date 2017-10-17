@@ -35,9 +35,9 @@ public class BalanceController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/balance")
-    public ResponseEntity saveMovement(@RequestBody Movement movement, @SessionAttribute Long idEstablishment, Principal principal){
+    public ResponseEntity<Movement> saveMovement(@RequestBody Movement movement, @SessionAttribute Long idEstablishment, Principal principal){
         User user = (User)((UsernamePasswordAuthenticationToken) principal).getPrincipal();
         Movement movementResult = movementService.addMovement(movement, user, new Establishment(idEstablishment));
-        return new ResponseEntity( HttpStatus.OK);
+        return new ResponseEntity(movementResult, HttpStatus.OK);
     }
 }

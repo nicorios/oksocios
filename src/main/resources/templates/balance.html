@@ -68,10 +68,13 @@
                                     <div class="row">
                                         <div class="col s12">
                                             <label for="uconcept">Concepto</label>
-                                            <select class="error browser-default" id="uconcept">
+                                            <select class="error browser-default" id="uconcept" data-error=".errorTxt2">
                                                 <option value="">Seleccionar Concepto</option>
                                                 <option th:each="concept : ${concepts}" th:value="${concept.id}" th:text="${concept.name}">Concepts</option>
                                             </select>
+                                            <div class="input-field">
+                                                <div class="errorTxt2"></div>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -94,7 +97,7 @@
                 </div>
                 <div class="col s12 m6">
                     <div class="card-panel">
-                        <h4 class="header2">Egresos externos</h4>
+                        <h4 class="header2">Gastos</h4>
                         <div class="row">
                             <form class="formValidate" id="form-expense">
                                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
@@ -102,17 +105,20 @@
                                     <div class="row">
                                         <div class="input-field col s12">
                                             <label for="eamount">Monto [AR$]</label>
-                                            <input id="eamount" type="number" name="amount" data-error=".errorTxt2"/>
-                                            <div class="errorTxt2"></div>
+                                            <input id="eamount" type="number" name="amount" data-error=".errorTxt3"/>
+                                            <div class="errorTxt3"></div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col s12">
                                             <label for="econcept">Concepto</label>
-                                            <select class="error browser-default" id="econcept">
+                                            <select class="error browser-default" id="econcept" data-error=".errorTxt4">
                                                 <option value="">Seleccionar Concepto</option>
                                                 <option th:each="concept : ${concepts}" th:value="${concept.id}" th:text="${concept.name}">Concepts</option>
                                             </select>
+                                            <div class="input-field">
+                                                <div class="errorTxt4"></div>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -156,6 +162,8 @@
         $(document).ready(function () {
             $("#uamount").rules("add", { required: true, messages: { required: "Ingrese el monto"}});
             $("#eamount").rules("add", { required: true, messages: { required: "Ingrese el monto"}});
+            $("#uconcept").rules("add", { required: true, messages: { required: "Seleccione el concepto"}});
+            $("#econcept").rules("add", { required: true, messages: { required: "Seleccione el concepto"}});
         });
 
         $("#form-income").validate({
