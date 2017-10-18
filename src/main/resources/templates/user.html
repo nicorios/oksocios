@@ -252,13 +252,7 @@
                     timeout : 100000,
                     success : function(data) {
                         if(data){
-                            swal({
-                                title: "¡Éxito!",
-                                text: "Email enviado correctamente",
-                                type: "success",
-                                timer: 1000,
-                                showConfirmButton: false
-                            });
+                            swal("¡Éxito!", "Email enviado correctamente", "success");
                         }
                     },
                     error : function(e) {
