@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface MovementRepository extends CrudRepository<Movement, Long> {
     List<Movement> findAllByEstablishmentId(Long idEstablishment);
-
+    List<Movement> findAllByConceptId(Long conceptId);
 }

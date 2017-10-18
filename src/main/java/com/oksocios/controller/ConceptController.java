@@ -34,11 +34,6 @@ public class ConceptController {
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/concepts/{id}")
     public ResponseEntity<Boolean> deleteConcept(@PathVariable Long id){
-        try{
-            conceptService.deleteConcept(id);
-        }catch(Exception e){
-            return new ResponseEntity<>(false, HttpStatus.OK);
-        }
-        return new ResponseEntity<>(true, HttpStatus.OK);
+        return new ResponseEntity<>(conceptService.deleteConcept(id), HttpStatus.OK);
     }
 }

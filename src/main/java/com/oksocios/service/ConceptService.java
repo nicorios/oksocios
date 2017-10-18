@@ -1,6 +1,7 @@
 package com.oksocios.service;
 
 import com.oksocios.model.Concept;
+import com.oksocios.model.Movement;
 import com.oksocios.repository.ConceptRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,10 +12,12 @@ import java.util.List;
 public class ConceptService {
 
     private final ConceptRepository conceptRepository;
+    private final MovementService movementService;
 
     @Autowired
-    public ConceptService(ConceptRepository conceptRepository) {
+    public ConceptService(ConceptRepository conceptRepository, MovementService movementService) {
         this.conceptRepository = conceptRepository;
+        this.movementService = movementService;
     }
 
     public List<Concept> getConceptsByEstablishmentId(Long idEstablishment){
@@ -29,7 +32,13 @@ public class ConceptService {
         return conceptRepository.save(concept);
     }
 
-    public void deleteConcept(Long id) {
-        conceptRepository.delete(id);
+    public Boolean deleteConcept(Long id) {
+        List<Movement> movements = movementService.getMovementsByConceptId(id);
+        if(movements.size() == 0){
+            conceptRepository.delete(id);
+            return true;
+        }
+        return false;
+
     }
 }

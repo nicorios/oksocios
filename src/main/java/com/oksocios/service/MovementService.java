@@ -30,4 +30,8 @@ public class MovementService {
         movement.setDate(new Date());
         return movementRepository.save(movement);
     }
+
+    public List<Movement> getMovementsByConceptId(Long conceptId){
+        return movementRepository.findAllByConceptId(conceptId);
+    }
 }
