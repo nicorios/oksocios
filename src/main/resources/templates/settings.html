@@ -34,10 +34,10 @@
                               <tr th:each="activity : ${activities}">
                                   <td th:id="activities- + ${activity.id}" th:text="${activity.name}">Nombre</td>
                                   <td width="20%">
-                                      <a href="#edit-modal" class="edit-activity modal-trigger" th:attr="data-id=${activity.id}" data-entity="activities" onclick="editModal(this);">
+                                      <a href="#edit-modal" class="edit-activity" th:attr="data-id=${activity.id}">
                                           <i style="font-size: x-large;" class="mdi-image-edit edit-activity"></i>
                                       </a>
-                                      <a href="#delete-modal" class="edit-activity modal-trigger" th:attr="data-id=${activity.id}" data-entity="activities" onclick="deleteModal(this);">
+                                      <a href="javascript:void(0)" class="delete-activity" th:attr="data-id=${activity.id}">
                                           <i style="font-size: x-large;" class="mdi-action-delete"></i>
                                       </a>
                                   </td>
@@ -87,10 +87,10 @@
                                 <tr th:each="concept : ${concepts}">
                                     <td th:id="concepts- + ${concept.id}" th:text="${concept.name}">Nombre</td>
                                     <td width="20%">
-                                        <a href="#edit-modal" class="edit-activity modal-trigger" th:attr="data-id=${concept.id}" data-entity="concepts" onclick="editModal(this);">
+                                        <a href="#edit-modal" class="edit-activity" th:attr="data-id=${concept.id}">
                                             <i style="font-size: x-large;" class="mdi-image-edit edit-activity"></i>
                                         </a>
-                                        <a href="#delete-modal" class="edit-activity modal-trigger" th:attr="data-id=${concept.id}" data-entity="concepts" onclick="deleteModal(this);">
+                                        <a href="javascript:void(0)" class="delete-concept" th:attr="data-id=${concept.id}">
                                             <i style="font-size: x-large;" class="mdi-action-delete"></i>
                                         </a>
                                     </td>
@@ -146,31 +146,15 @@
         </form>
     </div>
 
-    <!--Delete Modal-->
-    <div id="delete-modal" class="modal">
-        <div class="container">
-            <form class="formValidate" id="form-modal2" th:method="DELETE">
-                <div class="modal-content">
-                    <span class="right modal-close">&times;</span>
-                    <h5>Eliminar Actividad</h5>
-                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                    <p>¿Está seguro que desea eliminar ésta actividad?</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="waves-effect waves-light btn">Eliminar</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
     <script type="text/javascript" th:src="@{js/plugins/jquery-validation/jquery.validate.min.js}"></script>
     <script>
-        $('#tbl-activities').DataTable({
+
+        var tblActivities = $('#tbl-activities').DataTable({
             searching: false,
             lengthChange: false,
             pageLength: 3
         });
-        $('#tbl-concepts').DataTable({
+        var tblConcepts = $('#tbl-concepts').DataTable({
             searching: false,
             lengthChange: false,
             pageLength: 3
@@ -182,18 +166,79 @@
             $("#mname").rules("add",{required: true, maxlength: 30, messages: {required: "Ingrese el nombre", maxlength: "El valor ingresado es demasiado largo"}});
         });
 
-        function editModal(elem){
-            var id = $(elem).data('id');
-            var entity = $(elem).data('entity');
-            $('#modal-id').val(id);
-            $('#modal-name').val($('#'+entity+'-'+id).text());
-            $('#form-modal').attr('action','/'+entity+'/' + id);
-        }
+//        function editModal(elem){
+//            var id = $(elem).data('id');
+//            var entity = $(elem).data('entity');
+//            $('#modal-id').val(id);
+//            $('#modal-name').val($('#'+entity+'-'+id).text());
+//            $('#form-modal').attr('action','/'+entity+'/' + id);
+//        }
 
-        function deleteModal(elem){
-            var id = $(elem).data('id');
-            $('#form-modal2').attr('action','/activities/' + id);
-        }
+        $('#tbl-activities').on('click', '.delete-activity' , function(){
+            var id = $(this).data('id');
+            swal({
+                title: "¿Estás seguro?",
+                text: "Una vez eliminado, no podrá volver a ver esta actividad",
+                icon: "warning",
+                buttons: true
+            })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        var btn = $(this);
+
+                        $.ajax({
+                            type: 'DELETE',
+                            url: '/activities/' + id,
+                            contentType: 'application/json',
+                            success: function (data) {
+                                if(data){
+                                    tblActivities.row(btn.parents('tr')).remove().draw();
+                                    swal("Eliminado", "La actividad ha sido correctamente eliminada", "success");
+                                }else{
+                                    swal("Lo lamentamos", "No es posible eliminar una actividad con suscripciones asociadas", "error");
+                                }
+
+                            },
+                            error: function (e) {
+                                console.log(e);
+                            }
+                        });
+                    }
+                });
+        });
+
+        $('#tbl-concepts').on('click', '.delete-concept', function(){
+            var id = $(this).data('id');
+            swal({
+                title: "¿Estás seguro?",
+                text: "Una vez eliminado, no podrá volver a ver este concepto",
+                icon: "warning",
+                buttons: true
+            })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        var btn = $(this);
+
+                        $.ajax({
+                            type: 'DELETE',
+                            url: '/concepts/' + id,
+                            contentType: 'application/json',
+                            success: function (data) {
+                                if(data){
+                                    tblConcepts.row(btn.parents('tr')).remove().draw();
+                                    swal("Eliminado", "El concepto ha sido correctamente eliminado", "success");
+                                }else{
+                                    swal("Lo lamentamos", "No es posible eliminar un concepto con gastos asociados", "error");
+                                }
+
+                            },
+                            error: function (e) {
+                                console.log(e);
+                            }
+                        });
+                    }
+                });
+        });
 
         $("#form-activity").validate({
             errorElement : 'div',

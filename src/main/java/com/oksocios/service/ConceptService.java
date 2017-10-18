@@ -28,4 +28,8 @@ public class ConceptService {
     public Concept updateConcept(Concept concept) {
         return conceptRepository.save(concept);
     }
+
+    public void deleteConcept(Long id) {
+        conceptRepository.delete(id);
+    }
 }
