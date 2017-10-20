@@ -5,6 +5,6 @@ import com.oksocios.model.UserRoleId;
 import org.springframework.data.repository.CrudRepository;
 
 public interface UserRoleRepository extends CrudRepository<UserRole, UserRoleId> {
-    UserRole findFirstByIdUserIdAndIdRoleIdAndEstablishmentId(Long userId, Integer roleId, Long establishmentId);
+    UserRole findFirstByIdUserIdAndIdRoleIdAndIdEstablishmentId(Long userId, Integer roleId, Long establishmentId);
     UserRole findFirstByIdUserIdAndIdRoleId(Long userId, Long roleId);
 }

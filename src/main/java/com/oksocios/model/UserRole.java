@@ -10,16 +10,13 @@ public class UserRole {
     private UserRoleId id;
     @Column(name = "rol")
     private String rol;
-    @Column(name = "id_establishment")
-    private Long establishmentId;
 
     public UserRole() {
     }
 
-    public UserRole(UserRoleId id, String rol, Long establishmentId) {
+    public UserRole(UserRoleId id, String rol) {
         this.id = id;
         this.rol = rol;
-        this.establishmentId = establishmentId;
     }
 
     public UserRoleId getId() {
@@ -36,13 +33,5 @@ public class UserRole {
 
     public void setRol(String rol) {
         this.rol = rol;
-    }
-
-    public Long getEstablishmentId() {
-        return establishmentId;
-    }
-
-    public void setEstablishmentId(Long establishmentId) {
-        this.establishmentId = establishmentId;
     }
 }

@@ -65,8 +65,8 @@
       </div>
       <div class="row">
         <div class="col s12">
-          <p th:text="${'Te damos la bienvenida, ' + user.name}"></p>
-          <p>A continuación puedes registrar un nuevo establecimiento</p>
+          <p class="center" th:text="${'Te damos la bienvenida, ' + user.name}"></p>
+          <p class="center">A continuación puedes registrar un nuevo establecimiento</p>
         </div>
       </div>
       <div class="row margin">
@@ -80,17 +80,17 @@
       <div class="row margin">
         <div class="input-field col s12">
           <i class="mdi-social-person-outline prefix"></i>
-          <label for="uname">Nombre</label>
-          <input id="uname" th:field="*{name}" type="text" data-error=".errorTxt1"/>
-          <div class="errorTxt1"></div>
+          <label for="ustreet">Calle</label>
+          <input id="ustreet" th:field="*{Street}" type="text" data-error=".errorTxt2"/>
+          <div class="errorTxt2"></div>
         </div>
       </div>
       <div class="row margin">
         <div class="input-field col s12">
           <i class="mdi-social-person-outline prefix"></i>
-          <label for="uname">Nombre</label>
-          <input id="uname" th:field="*{name}" type="text" data-error=".errorTxt1"/>
-          <div class="errorTxt1"></div>
+          <label for="unumber">Número</label>
+          <input id="unumber" th:field="*{number}" type="number" data-error=".errorTxt3"/>
+          <div class="errorTxt3"></div>
         </div>
       </div>
       <div class="row">
@@ -100,7 +100,7 @@
       </div>
       <div class="row">
         <div class="input-field col s12">
-          <p class="margin medium-small center-align">Ya tienes una cuenta? <a href="/register">Ingresar!</a></p>
+          <p class="margin medium-small center-align">Ya tienes una cuenta? <a href="/login">Ingresar!</a></p>
         </div>
       </div>
 
@@ -127,10 +127,9 @@
 <script>
     $(document).ready(function () {
 
-        $("#uname").rules("add", { required: true, messages: { required: "Por favor, ingrese su nombre"}});
-        $("#ulastName").rules("add", { required: true, messages: { required: "Por favor, ingrese su apellido"}});
-        $("#uemail").rules("add", { required: true, email:true, messages: { required: "Por favor, ingrese su email", email:"Ingrese un email válido"}});
-        $("#upass").rules("add", { required: true, minlength:6, messages: { required: "Por favor, ingrese su clave", minlength:"Debe contener al menos 6 caracteres"}});
+        $("#uname").rules("add", { required: true, messages: { required: "Por favor, ingrese un nombre"}});
+        $("#ustreet").rules("add", { required: true, messages: { required: "Por favor, ingrese el domicilio"}});
+        $("#unumber").rules("add", { required: true, messages: { required: "Por favor, ingrese el domicilio"}});
     });
 
     $("#form-register").validate({

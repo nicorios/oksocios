@@ -41,6 +41,10 @@ public class UserService {
             userSaved = checkUserRole(user, userResponse, role, establishmentId);
         }else{
             userSaved = registerUser(user, role, establishmentId);
+            if(establishmentId != null){
+                UserRole ur = new UserRole(new UserRoleId(userSaved.getId(), role, establishmentId), Constants.getRoleName(role));
+                userRoleRepository.save(ur);
+            }
         }
         return userSaved;
     }
@@ -50,13 +54,11 @@ public class UserService {
         user.setStatus(Constants.STATUS_KEY_ACTIVE);
         user.setRegistryDate(new Date());
         User userSaved = userRepository.save(user);
-        UserRole ur = new UserRole(new UserRoleId(userSaved.getId(), role), Constants.getRoleName(role), establishmentId);
-        userRoleRepository.save(ur);
         return userSaved;
     }
 
     private User checkUserRole(User user, User userResponse, Integer role, Long establishmentId) throws ObjectAlreadyExistsException {
-        UserRole userRole = userRoleRepository.findFirstByIdUserIdAndIdRoleIdAndEstablishmentId(userResponse.getId(), role, establishmentId);
+        UserRole userRole = userRoleRepository.findFirstByIdUserIdAndIdRoleIdAndIdEstablishmentId(userResponse.getId(), role, establishmentId);
         if(userRole != null){
             throw new ObjectAlreadyExistsException("Ya existe un usuario con el email ingresado");
         }else{
@@ -76,11 +78,18 @@ public class UserService {
             if(user.getRegistryDate() == null) user.setRegistryDate(userResponse.getRegistryDate());
             User userSaved = userRepository.save(user);
 
-            UserRole ur = new UserRole(new UserRoleId(user.getId(), role), Constants.getRoleName(role), establishmentId);
+            UserRole ur = new UserRole(new UserRoleId(user.getId(), role, establishmentId), Constants.getRoleName(role));
             userRoleRepository.save(ur);
 
             return userSaved;
         }
+    }
+
+    public UserRole createUserRole(Long userId, Integer role, Long establishmentId){
+        return userRoleRepository.save(new UserRole(
+                new UserRoleId(userId, role, establishmentId),
+                Constants.getRoleName(role)
+        ));
     }
 
     public User getUser(Long id){

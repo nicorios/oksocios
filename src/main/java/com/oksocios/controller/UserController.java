@@ -51,23 +51,6 @@ public class UserController {
         userService.deleteUser(id);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/establishments")
-    public String selectEstablishments(Principal principal, Model model){
-        User user =(User) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
-        List<Establishment> establishments = establishmentService.getEstablishmentsByUserId(user.getId());
-        model.addAttribute("user", user);
-        model.addAttribute("hasEstablishments", establishments.size()>0? true : false);
-        model.addAttribute("establishments", establishments);
-        return "establishments";
-    }
-
-    @RequestMapping(method = RequestMethod.GET, value = "/establishments/ajax")
-    public ResponseEntity<List<Establishment>> getUserEstablishments(Principal principal){
-        User user =(User) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
-        List<Establishment> establishments = establishmentService.getEstablishmentsByUserId(user.getId());
-        return new ResponseEntity<>(establishments, HttpStatus.OK);
-    }
-
     @RequestMapping(method = RequestMethod.GET, value = "/register")
     public String register(Model model){
         model.addAttribute("user", new User());

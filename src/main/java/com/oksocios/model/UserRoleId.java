@@ -12,13 +12,16 @@ public class UserRoleId implements Serializable{
     private Long userId;
     @Column(name = "id_rol")
     private Integer roleId;
+    @Column(name = "id_establishment")
+    private Long establishmentId;
 
     public UserRoleId() {
     }
 
-    public UserRoleId(Long userId, Integer roleId) {
+    public UserRoleId(Long userId, Integer roleId, Long establishmentId) {
         this.userId = userId;
         this.roleId = roleId;
+        this.establishmentId = establishmentId;
     }
 
     public Long getUserId() {
@@ -37,9 +40,17 @@ public class UserRoleId implements Serializable{
         this.roleId = roleId;
     }
 
+    public Long getEstablishmentId() {
+        return establishmentId;
+    }
+
+    public void setEstablishmentId(Long establishmentId) {
+        this.establishmentId = establishmentId;
+    }
+
     @Override
     public int hashCode() {
-        return Objects.hash(userId, roleId);
+        return Objects.hash(userId, roleId, establishmentId);
     }
 
     @Override
@@ -48,6 +59,7 @@ public class UserRoleId implements Serializable{
         if (!(o instanceof UserRoleId)) return false;
         UserRoleId that = (UserRoleId) o;
         return Objects.equals(userId, that.getUserId()) &&
-                Objects.equals(roleId, that.getRoleId());
+                Objects.equals(roleId, that.getRoleId()) &&
+                Objects.equals(establishmentId, that.getEstablishmentId());
     }
 }
