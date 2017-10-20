@@ -6,5 +6,5 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface UserRoleRepository extends CrudRepository<UserRole, UserRoleId> {
     UserRole findFirstByIdUserIdAndIdRoleIdAndIdEstablishmentId(Long userId, Integer roleId, Long establishmentId);
-    UserRole findFirstByIdUserIdAndIdRoleId(Long userId, Long roleId);
+    UserRole findFirstByIdUserIdAndIdRoleId(Long userId, Integer roleId);
 }

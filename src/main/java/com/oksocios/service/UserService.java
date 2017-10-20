@@ -35,8 +35,8 @@ public class UserService {
 
     @Transactional
     public User addUser(User user, Integer role, Long establishmentId) throws ObjectAlreadyExistsException {
-        User userSaved;
-        User userResponse = userRepository.findByEmail(user.getEmail());
+        User userSaved, userResponse;
+        userResponse = userRepository.findByEmailOrDni(user.getEmail(), user.getDni());
         if(userResponse != null){
             userSaved = checkUserRole(user, userResponse, role, establishmentId);
         }else{
@@ -60,7 +60,7 @@ public class UserService {
     private User checkUserRole(User user, User userResponse, Integer role, Long establishmentId) throws ObjectAlreadyExistsException {
         UserRole userRole = userRoleRepository.findFirstByIdUserIdAndIdRoleIdAndIdEstablishmentId(userResponse.getId(), role, establishmentId);
         if(userRole != null){
-            throw new ObjectAlreadyExistsException("Ya existe un usuario con el email ingresado");
+            throw new ObjectAlreadyExistsException("Ya existe un usuario con el email o dni ingresado");
         }else{
             user.setId(userResponse.getId());
             if(user.getName() == null) user.setName(userResponse.getName());

@@ -61,7 +61,11 @@ public class CustomerController {
         if ((user.getDni() == null) || (user.getEmail() == null)){
             return new ResponseEntity<>("Por favor, Ingrese el DNI e Email del nuevo socio", HttpStatus.OK) ;
         }
-        userService.addUser(user, Constants.ROLE_KEY_CUSTOMER, idEstablishment);
+        try{
+            userService.addUser(user, Constants.ROLE_KEY_CUSTOMER, idEstablishment);
+        }catch(ObjectAlreadyExistsException e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.OK) ;
+        }
         return new ResponseEntity<>(true, HttpStatus.OK);
     }
 
