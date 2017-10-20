@@ -1,11 +1,16 @@
 package com.oksocios.service;
 
+import com.oksocios.exceptions.ObjectAlreadyExistsException;
 import com.oksocios.model.User;
+import com.oksocios.model.UserRole;
+import com.oksocios.model.UserRoleId;
 import com.oksocios.repository.UserRepository;
+import com.oksocios.repository.UserRoleRepository;
 import com.oksocios.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -13,8 +18,14 @@ import java.util.List;
 @Service
 public class UserService {
 
+    private final UserRepository userRepository;
+    private final UserRoleRepository userRoleRepository;
+
     @Autowired
-    private UserRepository userRepository;
+    public UserService(UserRepository userRepository, UserRoleRepository userRoleRepository) {
+        this.userRepository = userRepository;
+        this.userRoleRepository = userRoleRepository;
+    }
 
     public List<User> getAllUsers(){
         List<User> users = new ArrayList<>();
@@ -22,10 +33,15 @@ public class UserService {
         return users;
     }
 
-    public void addUser(User user){
-        User userResponse = userRepository.findFirstByDni(user.getDni());
-        //Actualizo los campos que no tengo, todos los campos menos DNI que es obligatorio
+    @Transactional
+    public User addUser(User user, Integer role, Long establishmentId) throws ObjectAlreadyExistsException {
+        User userResponse = userRepository.findByEmail(user.getEmail());
+        //Actualizo los campos que no tengo
         if(userResponse != null){
+            if(establishmentId != null){
+                checkUserRol(userResponse, role, establishmentId);
+            }
+
             user.setId(userResponse.getId());
             if(user.getName() == null) user.setName(userResponse.getName());
             if(user.getLastName() == null) user.setLastName(userResponse.getLastName());
@@ -33,6 +49,7 @@ public class UserService {
             if(user.getStreet() == null) user.setStreet(userResponse.getStreet());
             if(user.getNumber() == null) user.setNumber(userResponse.getNumber());
             if(user.getEmail() == null) user.setEmail(userResponse.getEmail());
+            if(user.getDni() == null) user.setDni(userResponse.getDni());
             if(user.getGender() == null) user.setGender(userResponse.getGender());
             if(user.getPhoneNumber() == null) user.setPhoneNumber(userResponse.getPhoneNumber());
             if(user.getStatus() == null) user.setStatus(userResponse.getStatus());
@@ -42,17 +59,26 @@ public class UserService {
         }else{
             // todo set status 0 y confirm by email
             user.setStatus(Constants.STATUS_KEY_ACTIVE);
-            //todo definir tabla rol_establecimiento y agregar aca
-            //user.setRol(?????);
             user.setRegistryDate(new Date());
         }
-        userRepository.save(user);
+        User userSaved = userRepository.save(user);
+        if(establishmentId != null){
+            userRoleRepository.save(new UserRole(
+                    new UserRoleId(userSaved.getId(), role),
+                    Constants.getRoleName(role),
+                    establishmentId));
+        }
+        return userSaved;
     }
 
-    public User addNewUser(User user){
-        user.setStatus(Constants.STATUS_KEY_PENDING);
-        user.setRegistryDate(new Date());
-        return userRepository.save(user);
+    private void checkUserRol(User user, Integer role, Long establishmentId) throws ObjectAlreadyExistsException {
+        UserRole userRole = userRoleRepository.findFirstByIdUserIdAndIdRoleIdAndEstablishmentId(user.getId(), role, establishmentId);
+        if(userRole != null){
+            throw new ObjectAlreadyExistsException(String.format("Ya existe un usuario con email: %s, en este establecimiento", user.getEmail()));
+        }else{
+            UserRole ur = new UserRole(new UserRoleId(user.getId(), role), Constants.getRoleName(role), establishmentId);
+            userRoleRepository.save(ur);
+        }
     }
 
     public User getUser(Long id){

@@ -1,10 +1,12 @@
 package com.oksocios.controller;
 
 
+import com.oksocios.exceptions.ObjectAlreadyExistsException;
 import com.oksocios.model.Establishment;
 import com.oksocios.model.User;
 import com.oksocios.service.EstablishmentService;
 import com.oksocios.service.UserService;
+import com.oksocios.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,11 +33,6 @@ public class UserController {
     @RequestMapping(method = RequestMethod.GET, value = "/users")
     public List<User> getAllUsers(){
         return userService.getAllUsers();
-    }
-
-    @RequestMapping(method = RequestMethod.POST, value = "/users")
-    public void addUser(@RequestBody User user){
-        userService.addUser(user);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/users/{id}")
@@ -78,8 +75,9 @@ public class UserController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/register")
-    public String registerPost(@ModelAttribute User user){
-        userService.addNewUser(user);
+    public String registerPost(@ModelAttribute User user, Model model) throws ObjectAlreadyExistsException {
+        User userResponse = userService.addUser(user, Constants.ROLE_KEY_ADMIN, null);
+        model.addAttribute("user", userResponse);
         return "redirect:/login";
     }
 

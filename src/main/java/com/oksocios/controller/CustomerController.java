@@ -1,10 +1,12 @@
 package com.oksocios.controller;
 
+import com.oksocios.exceptions.ObjectAlreadyExistsException;
 import com.oksocios.model.Email;
 import com.oksocios.model.Entry;
 import com.oksocios.model.Subscription;
 import com.oksocios.model.User;
 import com.oksocios.service.*;
+import com.oksocios.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -55,9 +57,11 @@ public class CustomerController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/customers")
-    public ResponseEntity<?> addCustomer(@RequestBody User user, @SessionAttribute Long idEstablishment){
-        if (user.getDni() == null) return new ResponseEntity<>("Por favor, Ingrese el DNI del nuevo socio", HttpStatus.OK) ;
-        userService.addUser(user);
+    public ResponseEntity<?> addCustomer(@RequestBody User user, @SessionAttribute Long idEstablishment) throws ObjectAlreadyExistsException {
+        if ((user.getDni() == null) || (user.getEmail() == null)){
+            return new ResponseEntity<>("Por favor, Ingrese el DNI e Email del nuevo socio", HttpStatus.OK) ;
+        }
+        userService.addUser(user, Constants.ROLE_KEY_CUSTOMER, idEstablishment);
         return new ResponseEntity<>(true, HttpStatus.OK);
     }
 
