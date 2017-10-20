@@ -7,7 +7,7 @@
   <meta name="msapplication-tap-highlight" content="no"/>
   <meta name="description" content="Materialize is a Material Design Admin Template,It's modern, responsive and based on Material Design by Google. "/>
   <meta name="keywords" content="materialize, admin template, dashboard template, flat admin template, responsive admin template,"/>
-  <title>Registrarme | OkSocios</title>
+  <title>Registrar Establecimiento | OkSocios</title>
 
   <!-- Favicons-->
   <link rel="icon" href="images/favicon/logo-fav.png" sizes="32x32"/>
@@ -30,102 +30,101 @@
   <!-- INCLUDED PLUGIN CSS ON THIS PAGE -->
   <link th:href="@{js/plugins/prism/prism.css}" type="text/css" rel="stylesheet" media="screen,projection"/>
   <link th:href="@{js/plugins/perfect-scrollbar/perfect-scrollbar.css}" type="text/css" rel="stylesheet" media="screen,projection"/>
-  
+
 </head>
 
 <body class="cyan">
-  <!-- Start Page Loading -->
-  <div id="loader-wrapper">
-      <div id="loader"></div>        
-      <div class="loader-section section-left"></div>
-      <div class="loader-section section-right"></div>
+<!-- Start Page Loading -->
+<div id="loader-wrapper">
+  <div id="loader"></div>
+  <div class="loader-section section-left"></div>
+  <div class="loader-section section-right"></div>
+</div>
+<!-- End Page Loading -->
+
+
+
+<div id="login-page" class="row">
+  <div th:if="${error}" id="card-alert" class="card red lighten-5">
+    <div class="card-content red-text">
+      <p th:text="${message}">Mensaje error</p>
+    </div>
+    <button type="button" class="close red-text" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">×</span>
+    </button>
   </div>
-  <!-- End Page Loading -->
-
-
-
-  <div id="login-page" class="row">
-    <div th:if="${error}" id="card-alert" class="card red lighten-5">
-      <div class="card-content red-text">
-        <p th:text="${message}">Mensaje error</p>
+  <div class="col s12 z-depth-4 card-panel">
+    <form id="form-register" th:object="${establishment}" action="/establishments" method="post" class="login-form">
+      <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+      <input type="hidden" th:field="${establishment.user.id}" />
+      <div class="row">
+        <div class="input-field col s12 center">
+          <img th:src="@{images/OkSociosLogo.png}" alt="" class=" responsive-img valign"/>
+          <!-- <p class="center login-form-text">OkSocios</p> -->
+        </div>
       </div>
-      <button type="button" class="close red-text" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">×</span>
-      </button>
-    </div>
-    <div class="col s12 z-depth-4 card-panel">
-      <form id="form-register" th:object="${user}" action="/register" method="post" class="login-form">
-        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-        <div class="row">
-          <div class="input-field col s12 center">
-            <img th:src="@{images/OkSociosLogo.png}" alt="" class=" responsive-img valign"/>
-            <!-- <p class="center login-form-text">OkSocios</p> -->
-          </div>
+      <div class="row">
+        <div class="col s12">
+          <p th:text="${'Te damos la bienvenida, ' + user.name}"></p>
+          <p>A continuación puedes registrar un nuevo establecimiento</p>
         </div>
-        <div class="row margin">
-          <div class="input-field col s12">
-            <i class="mdi-social-person-outline prefix"></i>
-            <label for="uname">Nombre</label>
-            <input id="uname" th:field="*{name}" type="text" data-error=".errorTxt1"/>
-            <div class="errorTxt1"></div>
-          </div>
+      </div>
+      <div class="row margin">
+        <div class="input-field col s12">
+          <i class="mdi-social-person-outline prefix"></i>
+          <label for="uname">Nombre</label>
+          <input id="uname" th:field="*{name}" type="text" data-error=".errorTxt1"/>
+          <div class="errorTxt1"></div>
         </div>
-        <div class="row margin">
-          <div class="input-field col s12">
-            <i class="mdi-social-person-outline prefix"></i>
-            <label for="ulastName">Apellido</label>
-            <input id="ulastName" th:field="*{lastName}" type="text" data-error=".errorTxt2"/>
-            <div class="errorTxt2"></div>
-          </div>
+      </div>
+      <div class="row margin">
+        <div class="input-field col s12">
+          <i class="mdi-social-person-outline prefix"></i>
+          <label for="uname">Nombre</label>
+          <input id="uname" th:field="*{name}" type="text" data-error=".errorTxt1"/>
+          <div class="errorTxt1"></div>
         </div>
-        <div class="row margin">
-          <div class="input-field col s12">
-            <i class="mdi-content-mail prefix"></i>
-            <label for="uemail">Email</label>
-            <input id="uemail" type="email" th:field="*{email}" data-error=".errorTxt3"/>
-            <div class="errorTxt3"></div>
-          </div>
+      </div>
+      <div class="row margin">
+        <div class="input-field col s12">
+          <i class="mdi-social-person-outline prefix"></i>
+          <label for="uname">Nombre</label>
+          <input id="uname" th:field="*{name}" type="text" data-error=".errorTxt1"/>
+          <div class="errorTxt1"></div>
         </div>
-        <div class="row margin">
-          <div class="input-field col s12">
-            <i class="mdi-action-lock-outline prefix"></i>
-            <label for="upass">Clave</label>
-            <input id="upass" type="password" th:field="*{password}" data-error=".errorTxt4"/>
-            <div class="errorTxt4"></div>
-          </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s12">
+          <button type="submit" class="btn waves-effect waves-light col s12">Agregar</button>
         </div>
-        <div class="row">
-          <div class="input-field col s12">
-            <button type="submit" class="btn waves-effect waves-light col s12">Registrarme</button>
-          </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s12">
+          <p class="margin medium-small center-align">Ya tienes una cuenta? <a href="/register">Ingresar!</a></p>
         </div>
-        <div class="row">
-          <div class="input-field col s12">
-            <p class="margin medium-small center-align">Ya tienes una cuenta? <a href="/register">Ingresar!</a></p>
-          </div>
-        </div>
+      </div>
 
-      </form>
-    </div>
+    </form>
   </div>
-  <!--prism-->
-  <script type="text/javascript" th:src="@{js/plugins/prism/prism.js}"></script>
+</div>
+<!--prism-->
+<script type="text/javascript" th:src="@{js/plugins/prism/prism.js}"></script>
 
-  <!-- jQuery Library -->
-  <script type="text/javascript" th:src="@{js/plugins/jquery-1.11.2.min.js}"></script>
-  <!--materialize js-->
-  <script type="text/javascript" th:src="@{js/materialize.js}"></script>
-  <!--prism
-  <script type="text/javascript" src="js/prism/prism.js"></script>-->
-  <!--scrollbar-->
-  <script type="text/javascript" th:src="@{js/plugins/perfect-scrollbar/perfect-scrollbar.min.js}"></script>
+<!-- jQuery Library -->
+<script type="text/javascript" th:src="@{js/plugins/jquery-1.11.2.min.js}"></script>
+<!--materialize js-->
+<script type="text/javascript" th:src="@{js/materialize.js}"></script>
+<!--prism
+<script type="text/javascript" src="js/prism/prism.js"></script>-->
+<!--scrollbar-->
+<script type="text/javascript" th:src="@{js/plugins/perfect-scrollbar/perfect-scrollbar.min.js}"></script>
 
-  <!--plugins.js - Some Specific JS codes for Plugin Settings-->
-  <script type="text/javascript" th:src="@{js/plugins.js}"></script>
-  <!--custom-script.js - Add your own theme custom JS-->
-  <script type="text/javascript" th:src="@{js/custom-script.js}"></script>
-  <script type="text/javascript" th:src="@{js/plugins/jquery-validation/jquery.validate.min.js}"></script>
-  <script>
+<!--plugins.js - Some Specific JS codes for Plugin Settings-->
+<script type="text/javascript" th:src="@{js/plugins.js}"></script>
+<!--custom-script.js - Add your own theme custom JS-->
+<script type="text/javascript" th:src="@{js/custom-script.js}"></script>
+<script type="text/javascript" th:src="@{js/plugins/jquery-validation/jquery.validate.min.js}"></script>
+<script>
     $(document).ready(function () {
 
         $("#uname").rules("add", { required: true, messages: { required: "Por favor, ingrese su nombre"}});
@@ -148,7 +147,7 @@
             $('#form-register').submit();
         }
     });
-  </script>
+</script>
 
 </body>
 

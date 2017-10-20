@@ -49,9 +49,6 @@
       <div class="card-content red-text">
         <p th:text="${message}">Mensaje error</p>
       </div>
-      <button type="button" class="close red-text" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">×</span>
-      </button>
     </div>
     <div class="col s12 z-depth-4 card-panel">
       <form id="form-register" th:object="${user}" action="/register" method="post" class="login-form">

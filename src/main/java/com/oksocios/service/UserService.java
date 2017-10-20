@@ -35,13 +35,31 @@ public class UserService {
 
     @Transactional
     public User addUser(User user, Integer role, Long establishmentId) throws ObjectAlreadyExistsException {
+        User userSaved;
         User userResponse = userRepository.findByEmail(user.getEmail());
-        //Actualizo los campos que no tengo
         if(userResponse != null){
-            if(establishmentId != null){
-                checkUserRol(userResponse, role, establishmentId);
-            }
+            userSaved = checkUserRole(user, userResponse, role, establishmentId);
+        }else{
+            userSaved = registerUser(user, role, establishmentId);
+        }
+        return userSaved;
+    }
 
+    private User registerUser(User user, Integer role, Long establishmentId){
+        // todo set status 0 y confirm by email
+        user.setStatus(Constants.STATUS_KEY_ACTIVE);
+        user.setRegistryDate(new Date());
+        User userSaved = userRepository.save(user);
+        UserRole ur = new UserRole(new UserRoleId(userSaved.getId(), role), Constants.getRoleName(role), establishmentId);
+        userRoleRepository.save(ur);
+        return userSaved;
+    }
+
+    private User checkUserRole(User user, User userResponse, Integer role, Long establishmentId) throws ObjectAlreadyExistsException {
+        UserRole userRole = userRoleRepository.findFirstByIdUserIdAndIdRoleIdAndEstablishmentId(userResponse.getId(), role, establishmentId);
+        if(userRole != null){
+            throw new ObjectAlreadyExistsException("Ya existe un usuario con el email ingresado");
+        }else{
             user.setId(userResponse.getId());
             if(user.getName() == null) user.setName(userResponse.getName());
             if(user.getLastName() == null) user.setLastName(userResponse.getLastName());
@@ -56,28 +74,12 @@ public class UserService {
             if(user.getPicture() == null) user.setPicture(userResponse.getPicture());
             if(user.getPassword() == null) user.setPassword(userResponse.getPassword());
             if(user.getRegistryDate() == null) user.setRegistryDate(userResponse.getRegistryDate());
-        }else{
-            // todo set status 0 y confirm by email
-            user.setStatus(Constants.STATUS_KEY_ACTIVE);
-            user.setRegistryDate(new Date());
-        }
-        User userSaved = userRepository.save(user);
-        if(establishmentId != null){
-            userRoleRepository.save(new UserRole(
-                    new UserRoleId(userSaved.getId(), role),
-                    Constants.getRoleName(role),
-                    establishmentId));
-        }
-        return userSaved;
-    }
+            User userSaved = userRepository.save(user);
 
-    private void checkUserRol(User user, Integer role, Long establishmentId) throws ObjectAlreadyExistsException {
-        UserRole userRole = userRoleRepository.findFirstByIdUserIdAndIdRoleIdAndEstablishmentId(user.getId(), role, establishmentId);
-        if(userRole != null){
-            throw new ObjectAlreadyExistsException(String.format("Ya existe un usuario con email: %s, en este establecimiento", user.getEmail()));
-        }else{
             UserRole ur = new UserRole(new UserRoleId(user.getId(), role), Constants.getRoleName(role), establishmentId);
             userRoleRepository.save(ur);
+
+            return userSaved;
         }
     }
 
@@ -93,5 +95,9 @@ public class UserService {
 
     public void deleteUser(Long id){
         userRepository.delete(id);
+    }
+
+    public User getUserByEmail(String email) {
+        return userRepository.findByEmail(email);
     }
 }

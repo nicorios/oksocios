@@ -75,10 +75,20 @@ public class UserController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/register")
-    public String registerPost(@ModelAttribute User user, Model model) throws ObjectAlreadyExistsException {
-        User userResponse = userService.addUser(user, Constants.ROLE_KEY_ADMIN, null);
+    public String registerPost(@ModelAttribute User user, Model model){
+        User userResponse;
+        try{
+            userResponse = userService.addUser(user, Constants.ROLE_KEY_ADMIN, null);
+        }catch(ObjectAlreadyExistsException e){
+            model.addAttribute("error", true);
+            model.addAttribute("message", e.getMessage());
+            return "register";
+        }
+        Establishment establishment = new Establishment();
+        establishment.setUser(userResponse);
+        model.addAttribute("establishment", establishment);
         model.addAttribute("user", userResponse);
-        return "redirect:/login";
+        return "new-establishment";
     }
 
 }
