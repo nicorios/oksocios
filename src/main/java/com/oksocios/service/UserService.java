@@ -40,7 +40,7 @@ public class UserService {
         if(userResponse != null){
             userSaved = checkUserRole(user, userResponse, role, establishmentId);
         }else{
-            userSaved = registerUser(user, role, establishmentId);
+            userSaved = registerUser(user);
             if(establishmentId != null){
                 UserRole ur = new UserRole(new UserRoleId(userSaved.getId(), role, establishmentId), Constants.getRoleName(role));
                 userRoleRepository.save(ur);
@@ -49,7 +49,20 @@ public class UserService {
         return userSaved;
     }
 
-    private User registerUser(User user, Integer role, Long establishmentId){
+    public User registerAdmin(User user) throws ObjectAlreadyExistsException {
+        User userResponse = userRepository.findByEmail(user.getEmail());
+        if(userResponse != null){
+            UserRole userRole = userRoleRepository.findFirstByIdUserIdAndIdRoleId(userResponse.getId(), Constants.ROLE_KEY_ADMIN);
+            if(userRole != null){
+                throw new ObjectAlreadyExistsException("Ya existe un admin con el email ingresado");
+            }
+            return userResponse;
+        }
+        user.setStatus(Constants.STATUS_KEY_ACTIVE);
+        return registerUser(user);
+    }
+
+    private User registerUser(User user){
         // todo set status 0 y confirm by email
         user.setStatus(Constants.STATUS_KEY_ACTIVE);
         user.setRegistryDate(new Date());
@@ -63,20 +76,22 @@ public class UserService {
             throw new ObjectAlreadyExistsException("Ya existe un usuario con el email o dni ingresado");
         }else{
             user.setId(userResponse.getId());
-            if(user.getName() == null) user.setName(userResponse.getName());
-            if(user.getLastName() == null) user.setLastName(userResponse.getLastName());
-            if(user.getBirthDate() == null) user.setBirthDate(userResponse.getBirthDate());
-            if(user.getStreet() == null) user.setStreet(userResponse.getStreet());
-            if(user.getNumber() == null) user.setNumber(userResponse.getNumber());
-            if(user.getEmail() == null) user.setEmail(userResponse.getEmail());
-            if(user.getDni() == null) user.setDni(userResponse.getDni());
-            if(user.getGender() == null) user.setGender(userResponse.getGender());
-            if(user.getPhoneNumber() == null) user.setPhoneNumber(userResponse.getPhoneNumber());
-            if(user.getStatus() == null) user.setStatus(userResponse.getStatus());
-            if(user.getPicture() == null) user.setPicture(userResponse.getPicture());
-            if(user.getPassword() == null) user.setPassword(userResponse.getPassword());
-            if(user.getRegistryDate() == null) user.setRegistryDate(userResponse.getRegistryDate());
-            User userSaved = userRepository.save(user);
+            if(userResponse.getName() == null) userResponse.setName(user.getName());
+            if(userResponse.getLastName() == null) userResponse.setLastName(user.getLastName());
+            if(userResponse.getBirthDate() == null) userResponse.setBirthDate(user.getBirthDate());
+            if(userResponse.getStreet() == null) userResponse.setStreet(user.getStreet());
+            if(userResponse.getNumber() == null) userResponse.setNumber(user.getNumber());
+            if(userResponse.getEmail() == null) userResponse.setEmail(user.getEmail());
+            if(userResponse.getDni() == null) userResponse.setDni(user.getDni());
+            if(userResponse.getGender() == null) userResponse.setGender(user.getGender());
+            if(userResponse.getPhoneNumber() == null) userResponse.setPhoneNumber(user.getPhoneNumber());
+            if(userResponse.getStatus() == null) userResponse.setStatus(user.getStatus());
+            if(userResponse.getPicture() == null) userResponse.setPicture(user.getPicture());
+            if(userResponse.getPassword() == null) userResponse.setPassword(user.getPassword());
+            if(userResponse.getRegistryDate() == null) userResponse.setRegistryDate(user.getRegistryDate());
+            if(userResponse.getLatitude() == null) userResponse.setLatitude(user.getLatitude());
+            if(userResponse.getLongitude() == null) userResponse.setLongitude(user.getLongitude());
+            User userSaved = userRepository.save(userResponse);
 
             UserRole ur = new UserRole(new UserRoleId(user.getId(), role, establishmentId), Constants.getRoleName(role));
             userRoleRepository.save(ur);

@@ -218,13 +218,7 @@
                     timeout : 100000,
                     success : function(data) {
                         if(data){
-                            swal({
-                                title: "¡Éxito!",
-                                text: "Socio creado correctamente",
-                                type: "success",
-                                timer: 1000,
-                                showConfirmButton: false
-                            });
+                            swal("¡Éxito!", "Socio creado correctamente", "success");
                         }
                     },
                     error : function(e) {
@@ -263,13 +257,7 @@
                     timeout : 100000,
                     success : function(data) {
                         if(data){
-                            swal({
-                                title: "¡Éxito!",
-                                text: "Nueva subscripción agregada",
-                                type: "success",
-                                timer: 1000,
-                                showConfirmButton: false
-                            });
+                            swal("¡Éxito!", "Nueva subscripción agregada", "success");
                         }
                     },
                     error : function(e) {

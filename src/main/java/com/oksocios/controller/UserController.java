@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -61,12 +63,15 @@ public class UserController {
     public String registerPost(@ModelAttribute User user, Model model){
         User userResponse;
         try{
-            userResponse = userService.addUser(user, Constants.ROLE_KEY_ADMIN, null);
+            userResponse = userService.registerAdmin(user);
         }catch(ObjectAlreadyExistsException e){
             model.addAttribute("error", true);
             model.addAttribute("message", e.getMessage());
             return "register";
         }
+        Authentication auth = new UsernamePasswordAuthenticationToken(userResponse, null, userResponse.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(auth);
+
         Establishment establishment = new Establishment();
         establishment.setUser(userResponse);
         model.addAttribute("establishment", establishment);
