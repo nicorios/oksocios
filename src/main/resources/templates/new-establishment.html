@@ -55,7 +55,7 @@
   </div>
   <div class="col s12 z-depth-4 card-panel">
     <form id="form-register" th:object="${establishment}" action="/establishments" method="post" class="login-form">
-      <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+      <!--<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />-->
       <input type="hidden" th:field="${establishment.user.id}" />
       <div class="row">
         <div class="input-field col s12 center">

@@ -98,7 +98,7 @@ public class SubscriptionService {
         return calculateAgesUsersStat(subscriptions);
     }
 
-    public int[] calculateAgesUsersStat(List<Subscription> subscriptions){
+    private int[] calculateAgesUsersStat(List<Subscription> subscriptions){
         int[] users = new int[54];
         User customer;
         Integer age;
@@ -120,5 +120,14 @@ public class SubscriptionService {
             else users[54]++;
         }
         return users;
+    }
+
+    public Boolean deleteSubscription(Long id) {
+        try{
+            subscriptionRepository.delete(id);
+        }catch(Exception e){
+            return false;
+        }
+        return true;
     }
 }

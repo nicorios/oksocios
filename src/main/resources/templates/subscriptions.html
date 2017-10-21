@@ -25,7 +25,7 @@
                   <h4 class="header">Suscripciones Activas</h4>
                   <div class="row">
                       <div class="col s12">
-                          <table id="tbl-entries" class="responsive-table display" cellspacing="0">
+                          <table id="tbl-subscriptions" class="responsive-table display" cellspacing="0">
                               <thead>
                               <tr>
                                   <th>Nombre</th>
@@ -45,7 +45,7 @@
                                       <a th:href="@{'/customers/' + ${subscription.user.id}}">
                                           <i style="font-size: x-large;" class="mdi-image-edit"></i>
                                       </a>
-                                      <a href="javascript:void(0)">
+                                      <a href="javascript:void(0)" class="delete-subscription" th:attr="data-id=${subscription.id}">
                                           <i style="font-size: x-large;" class="mdi-action-delete"></i>
                                       </a>
                                   </td>
@@ -70,9 +70,42 @@
       <!-- END CONTENT -->
 
     <script>
-        $('#tbl-entries').DataTable({
+        var tblSubscriptions = $('#tbl-subscriptions').DataTable({
             searching: false,
             lengthChange: false
+        });
+
+        $('#tbl-subscriptions').on('click', '.delete-subscription' , function(){
+            var id = $(this).data('id');
+            swal({
+                title: "¿Estás seguro?",
+                text: "Una vez eliminada, no podrá volver a ver esta suscripción",
+                icon: "warning",
+                buttons: true
+            })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        var btn = $(this);
+
+                        $.ajax({
+                            type: 'DELETE',
+                            url: '/subscriptions/' + id,
+                            contentType: 'application/json',
+                            success: function (data) {
+                                if(data){
+                                    tblSubscriptions.row(btn.parents('tr')).remove().draw();
+                                    swal("Eliminado", "La suscripción ha sido correctamente eliminada", "success");
+                                }else{
+                                    swal("Lo lamentamos", "No es posible eliminar esta suscripción. Por favor, comúniquese con oksocios.consultas@gmail.com", "error");
+                                }
+
+                            },
+                            error: function (e) {
+                                console.log(e);
+                            }
+                        });
+                    }
+                });
         });
     </script>
 </th:block>

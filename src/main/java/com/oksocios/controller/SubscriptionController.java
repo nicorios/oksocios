@@ -44,4 +44,9 @@ public class SubscriptionController {
         subscriptionService.addSubscription(subscription, user, idEstablishment);
         return new ResponseEntity<Object>(true, HttpStatus.OK);
     }
+
+    @RequestMapping(method = RequestMethod.DELETE, value = "/subscriptions/{id}")
+    public ResponseEntity<Boolean> deleteSubscription(@PathVariable Long id){
+        return new ResponseEntity<>(subscriptionService.deleteSubscription(id), HttpStatus.OK);
+    }
 }

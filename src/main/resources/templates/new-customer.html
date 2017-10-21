@@ -38,7 +38,7 @@
                                             <div class="row">
                                                 <form class="formValidate" id="form-customer" method="post" th:object="${user}" action="/customers">
                                                 <div class="container">
-                                                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                                                    <!--<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />-->
                                                     <div class="input-field col s12">
                                                         <label for="uname">Nombre*</label>
                                                         <input id="uname" th:field="*{name}" type="text" data-error=".errorTxt1"/>
@@ -115,7 +115,7 @@
                                     <div class="row">
                                         <form class="formValidate" id="form-subscription" method="post" th:object="${subscription}" action="/subscriptions">
                                         <div class="container">
-                                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                                            <!--<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />-->
                                             <div class="row">
                                                 <div class="input-field col s12">
                                                     <label for="udni2">DNI *</label>
