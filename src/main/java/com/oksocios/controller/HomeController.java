@@ -23,6 +23,11 @@ public class HomeController {
         this.entryService = entryService;
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "/")
+    public String getLanding(){
+        return "index";
+    }
+
     @RequestMapping(method = RequestMethod.GET, value = "/login")
     public String loginUser() {
         return "login";

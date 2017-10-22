@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+	<head>
+    	<!-- 
+    	Boxer Template
+    	http://www.templatemo.com/tm-446-boxer
+    	-->
+		<meta charset="utf-8"/>
+		<title>OkSocios - Software Landing Page</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1"/>
+		<meta name="keywords" content=""/>
+		<meta name="description" content=""/>
+
+		<!-- animate css -->
+		<link rel="stylesheet" th:href="@{css/landing/animate.min.css}" href="css/animate.min.css"/>
+		<!-- bootstrap css -->
+		<link rel="stylesheet" th:href="@{css/landing/bootstrap.min.css}" href="css/bootstrap.min.css"/>
+		<!-- font-awesome -->
+		<link rel="stylesheet" th:href="@{css/landing/font-awesome.min.css}" href="css/font-awesome.min.css"/>
+		<!-- google font -->
+		<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,400italic,700,800' rel='stylesheet' type='text/css'/>
+
+		<!-- custom css -->
+		<link rel="stylesheet" th:href="@{css/landing/templatemo-style.css}" href="css/templatemo-style.css"/>
+
+	</head>
+	<body>
+		<!-- start preloader -->
+		<div class="preloader">
+			<div class="sk-spinner sk-spinner-rotating-plane"></div>
+    	 </div>
+		<!-- end preloader -->
+		<!-- start navigation -->
+		<nav class="navbar navbar-default navbar-fixed-top templatemo-nav" role="navigation">
+			<div class="container">
+				<div class="navbar-header">
+					<button class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+						<span class="icon icon-bar"></span>
+						<span class="icon icon-bar"></span>
+						<span class="icon icon-bar"></span>
+					</button>
+					<!-- <a href="#" class="navbar-brand">OKSOCIOS</a> -->
+				</div>
+				<div class="collapse navbar-collapse">
+					<ul class="nav navbar-nav navbar-right text-uppercase">
+						<li><a href="#home">Principal</a></li>
+						<li><a href="#feature">Características</a></li>
+						<li><a href="#contact">Contáctanos</a></li>
+						<li><a th:href="@{/login}">Ingresar</a></li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+		<!-- end navigation -->
+		<!-- start home -->
+		<section id="home">
+			<div class="overlay">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-1"></div>
+						<div class="col-md-10 wow fadeIn" data-wow-delay="0.3s">
+							<!-- <h1 class="text-upper">Software Landing Page</h1> -->
+							<img src="images/landing/oks-blue-m.png"/>
+							<p class="tm-white">OkSocios es un sistema multiplataforma que busca dar una solución a cada entidad que tenga a su cargo un grupo de socios. Así mediante nuestra herramienta dar orden en la gestión y ayudar a mejorar según los resultados. </p>
+							<img src="images/landing/pc-1.png" class="hidden-xs hidden-sm img-responsive" alt="home img"/>
+							<img src="images/landing/mobile-1.png" class="hidden-md hidden-lg img-responsive" alt="home img"/>
+						</div>
+						<div class="col-md-1"></div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- end home -->
+		<!-- start divider -->
+		<section id="divider">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-4 wow fadeInUp templatemo-box" data-wow-delay="0.3s">
+						<i class="fa fa-cloud"></i>
+						<h3 class="text-uppercase">ALOJADO EN LA NUBE</h3>
+						<p>Facilitamos el acceso a la información para que puedas concentrarte en los aspectos más importantes de tu negocio. </p>
+					</div>
+					<div class="col-md-4 wow fadeInUp templatemo-box" data-wow-delay="0.3s">
+						<i class="fa fa-laptop"></i>
+						<h3 class="text-uppercase">DISEÑO RESPONSIVE</h3>
+						<p>Adaptable a todo tipo de pantalla, te invitamos a comprimir el tamaño de esta pantalla para que lo descubras. </p>
+					</div>
+					<div class="col-md-4 wow fadeInUp templatemo-box" data-wow-delay="0.3s">
+						<i class="fa fa-bar-chart"></i>
+						<h3 class="text-uppercase">ESTADÍSTICAS ACTUALIZADAS</h3>
+						<p>Utilizamos la información disponible para brindarte un conjunto de estadísticas que te permitirán potenciar tu negocio. </p>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- end divider -->
+
+		<!-- start feature -->
+		<section id="feature">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-6 wow fadeInLeft" data-wow-delay="0.6s">
+						<h2 class="text-uppercase">Algunas características</h2>
+						<p>Un buen analisis de datos puede potenciar cualquier negocio a niveles totalmente nuevos. Para eso ofrecemos estádisticas tales como,</p>
+						<p><span><i class="fa fa-line-chart"></i></span>Ingresos de socios semanal y mensualmente, cantidad de suscripciones por actividad.</p>
+						<p><i class="fa fa-map-marker"></i>Integración con Google Maps.</p>
+					</div>
+					<div class="col-md-6 wow fadeInRight" data-wow-delay="0.6s">
+						<img src="images/landing/pc-2.png" class="hidden-xs hidden-sm img-responsive" alt="home img"/>
+						<img src="images/landing/mobile-2.png" class="hidden-md hidden-lg img-responsive" alt="home img"/>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- end feature -->
+
+		<!-- start feature1 -->
+		<section id="feature1">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-6 wow fadeInUp" data-wow-delay="0.6s">
+						<img src="images/landing/pc-3.png" class="hidden-xs hidden-sm img-responsive" alt="home img"/>
+						<img src="images/landing/mobile-3.png" class="hidden-md hidden-lg img-responsive" alt="home img"/>
+					</div>
+					<div class="col-md-6 wow fadeInUp" data-wow-delay="0.6s">
+						<h2 class="text-uppercase">Aún hay más</h2>
+						<p>Permitimos llevar registro de otros ingresos y egresos económicos convieriendo a nuestra plataforma en una solución de mercado.</p>
+						<p><span><i class="fa fa-users"></i></span>Diferenciando roles protejemos información sencible sólo accesible para administradores.</p>
+						<p><i class="fa fa-dollar"></i>Agrega nuevos conceptos y descripciones a tus transacciones.</p>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- end feature1 -->
+
+		<!-- start contact -->
+		<section id="contact">
+			<div class="overlay">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-6 wow fadeInUp" data-wow-delay="0.6s">
+							<h2 class="text-uppercase">Contáctanos</h2>
+							<p>Cualquier consulta es bienvenida, para obtener más información o comenzar a utilizar OkSocios, envíanos un correo el cual será respondido a la brevedad. </p>
+							<address>
+								<p><i class="fa fa-map-marker"></i> Salto 555, Córdoba, Argentina</p>
+								<p><i class="fa fa-phone"></i> +54 9 351 370-1199 | +54 9 351 308-9107</p>
+								<p><i class="fa fa-envelope-o"></i> oksocios.consultas@gmail.com</p>
+							</address>
+						</div>
+						<div class="col-md-6 wow fadeInUp" data-wow-delay="0.6s">
+							<div class="contact-form">
+								<form action="#" method="post">
+									<div class="col-md-6">
+										<input type="text" class="form-control" placeholder="Nombre"/>
+									</div>
+									<div class="col-md-6">
+										<input type="email" class="form-control" placeholder="Email"/>
+									</div>
+									<div class="col-md-12">
+										<input type="text" class="form-control" placeholder="Asunto"/>
+									</div>
+									<div class="col-md-12">
+										<textarea class="form-control" placeholder="Mensaje" rows="4"></textarea>
+									</div>
+									<div class="col-md-8">
+										<input type="submit" class="form-control text-uppercase" value="Enviar"/>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- end contact -->
+
+		<!-- start footer -->
+		<footer>
+			<div class="container">
+				<div class="row">
+					<p>Copyright © 2017 OkSocios</p>
+				</div>
+			</div>
+		</footer>
+		<!-- end footer -->
+        
+		<script th:src="@{js/landing/jquery.js}" src="js/jquery.js"></script>
+		<script th:src="@{js/landing/bootstrap.min.js}" src="js/bootstrap.min.js"></script>
+		<script th:src="@{js/landing/wow.min.js}" src="js/wow.min.js"></script>
+		<script th:src="@{js/landing/jquery.singlePageNav.min.js}" src="js/jquery.singlePageNav.min.js"></script>
+		<script th:src="@{js/landing/custom.js}" src="js/custom.js"></script>
+	</body>
+</html>

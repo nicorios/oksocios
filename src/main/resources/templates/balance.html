@@ -32,7 +32,7 @@
                                   <th>Hora</th>
                                   <th>Concepto</th>
                                   <th>Monto</th>
-                                  <th>Acciones</th>
+                                  <!--<th>Acciones</th>-->
                               </tr>
                               </thead>
                               <tbody>
@@ -41,7 +41,7 @@
                                   <td th:text="${#dates.format(movement.date, 'HH:mm')}">Hora</td>
                                   <td th:text="${movement.concept == null ? '-' : movement.concept.name}">Concepto</td>
                                   <td th:text="${movement.income? movement.amount : '- ' + movement.amount}">Monto</td>
-                                  <td>Acciones</td>
+                                  <!--<td>Acciones</td>-->
                               </tr>
                               </tbody>
                           </table>
@@ -141,13 +141,13 @@
                 </div>
             </div>
 
-            <!-- Floating Action Button -->
-            <div class="fixed-action-btn" style="bottom: 50px; right: 19px;">
-                <a href="/new-entry" class="btn-floating btn-large">
-                  <i class="mdi-content-add"></i>
-                </a>
-            </div>
-            <!-- Floating Action Button -->
+            <!--&lt;!&ndash; Floating Action Button &ndash;&gt;-->
+            <!--<div class="fixed-action-btn" style="bottom: 50px; right: 19px;">-->
+                <!--<a href="/new-entry" class="btn-floating btn-large">-->
+                  <!--<i class="mdi-content-add"></i>-->
+                <!--</a>-->
+            <!--</div>-->
+            <!--&lt;!&ndash; Floating Action Button &ndash;&gt;-->
         </div>
         <!--end container-->
       </section>
