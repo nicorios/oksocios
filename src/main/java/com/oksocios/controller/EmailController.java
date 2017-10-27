@@ -24,4 +24,10 @@ public class EmailController {
         emailService.mailContactUs(email);
         return new ResponseEntity<Object>(true, HttpStatus.OK);
     }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/customers/email")
+    public ResponseEntity<?> sendEmailToCustomer(@RequestBody Email email) throws MessagingException {
+        emailService.mailContactUs(email);
+        return new ResponseEntity<Object>(true, HttpStatus.OK);
+    }
 }

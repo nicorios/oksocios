@@ -56,6 +56,7 @@ public class EmailService {
         return content.toString();
     }
 
+
     public void mailContactUs(Email email) throws MessagingException {
         Map<String,Object> model = new LinkedHashMap<>();
         email.setEmailTo(oksEmail);
@@ -64,6 +65,6 @@ public class EmailService {
         model.put("email",email.getEmailFrom());
         model.put("message",email.getMessage());
         email.setModel(model);
-        sendMail(email,"email/contact-us.ftl");
+        sendMail(email,"email/simple-mail.ftl");
     }
 }
