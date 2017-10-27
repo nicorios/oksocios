@@ -107,6 +107,11 @@ public class UserService {
         ));
     }
 
+    public boolean checkMembership(Long userId, Long establishmentId) {
+        UserRole userRole = userRoleRepository.findFirstByIdUserIdAndIdRoleIdAndIdEstablishmentId(userId, Constants.ROLE_KEY_CUSTOMER, establishmentId);
+        return userRole != null;
+    }
+
     public User getUser(Long id){
         return userRepository.findOne(id);
     }

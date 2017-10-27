@@ -1,10 +1,8 @@
 package com.oksocios.controller;
 
 import com.oksocios.exceptions.ObjectAlreadyExistsException;
-import com.oksocios.model.Email;
-import com.oksocios.model.Entry;
-import com.oksocios.model.Subscription;
-import com.oksocios.model.User;
+import com.oksocios.exceptions.ObjectNotAccesibleException;
+import com.oksocios.model.*;
 import com.oksocios.service.*;
 import com.oksocios.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,7 +66,10 @@ public class CustomerController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/customers/{id}")
-    public String getCustomer(Model model, @PathVariable Long id, @SessionAttribute Long idEstablishment){
+    public String getCustomer(Model model, @PathVariable Long id, @SessionAttribute Long idEstablishment) throws ObjectNotAccesibleException {
+        if(!userService.checkMembership(id, idEstablishment)){
+            throw new ObjectNotAccesibleException("No está autorizado a ver dicho perfil");
+        }
         User user = userService.getUser(id);
         Subscription subscription = subscriptionService.checkSubscription(user.getDni(), idEstablishment);
         List<Entry> entries = entryService.getAllEntriesByEstablishmentIdInLastMonth(user.getDni(), idEstablishment);
