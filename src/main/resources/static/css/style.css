@@ -1514,7 +1514,6 @@ tr.group:hover {
 .browser-window .content {
   margin: 0;
   width: 100%;
-  display: inline-block;
   border-radius: 0 0 5px 5px;
   background-color: #fafafa;
 }
