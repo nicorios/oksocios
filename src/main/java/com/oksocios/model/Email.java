@@ -1,27 +1,26 @@
 package com.oksocios.model;
 
+import java.util.Map;
+
 public class Email {
 
-    private User to;
+    private String nameFrom;
+    private String emailFrom;
     private String emailTo;
     private String subject;
     private String message;
+    private String contentType;
+    private Map< String, Object > model;
 
-    public Email(){}
+    public Email() {
+        contentType = "text/plain";
+    }
 
-    public Email(User to, String emailTo, String subject, String message) {
-        this.to = to;
+    public Email(String emailTo, String subject, String message) {
         this.emailTo = emailTo;
         this.subject = subject;
         this.message = message;
-    }
-
-    public User getTo() {
-        return to;
-    }
-
-    public void setTo(User to) {
-        this.to = to;
+        this.contentType = "text/plain";
     }
 
     public String getSubject() {
@@ -46,5 +45,37 @@ public class Email {
 
     public void setEmailTo(String emailTo) {
         this.emailTo = emailTo;
+    }
+
+    public String getContentType() {
+        return contentType;
+    }
+
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
+    }
+
+    public Map<String, Object> getModel() {
+        return model;
+    }
+
+    public void setModel(Map<String, Object> model) {
+        this.model = model;
+    }
+
+    public String getNameFrom() {
+        return nameFrom;
+    }
+
+    public void setNameFrom(String nameFrom) {
+        this.nameFrom = nameFrom;
+    }
+
+    public String getEmailFrom() {
+        return emailFrom;
+    }
+
+    public void setEmailFrom(String emailFrom) {
+        this.emailFrom = emailFrom;
     }
 }

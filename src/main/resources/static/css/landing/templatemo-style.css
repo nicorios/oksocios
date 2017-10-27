@@ -455,3 +455,11 @@ footer
         }
 }
 /* end media 360 */
+
+/*Custom*/
+.contact-us{
+    background: #28a7e9;
+    color: #fff;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}

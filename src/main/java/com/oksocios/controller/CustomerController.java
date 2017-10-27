@@ -24,15 +24,13 @@ public class CustomerController {
     private final ActivityService activityService;
     private final UserService userService;
     private final EntryService entryService;
-    private final EmailService emailService;
 
     @Autowired
-    public CustomerController(SubscriptionService subscriptionService, ActivityService activityService, UserService userService, EntryService entryService, EmailService emailService){
+    public CustomerController(SubscriptionService subscriptionService, ActivityService activityService, UserService userService, EntryService entryService){
         this.subscriptionService = subscriptionService;
         this.activityService = activityService;
         this.userService = userService;
         this.entryService = entryService;
-        this.emailService = emailService;
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/customers")
@@ -82,11 +80,5 @@ public class CustomerController {
         model.addAttribute("hasEntries", entries.size()>0? true : false);
         model.addAttribute("entries", entries);
         return "user";
-    }
-
-    @RequestMapping(method = RequestMethod.POST, value = "customers/{id}/email")
-    public ResponseEntity<?> sendEmail(@PathVariable Long id, @RequestBody Email email){
-        emailService.sendMail(email);
-        return new ResponseEntity<Object>(true, HttpStatus.OK);
     }
 }
