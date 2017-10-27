@@ -47,7 +47,7 @@
 						<li><a href="#home">Principal</a></li>
 						<li><a href="#feature">Características</a></li>
 						<li><a href="#contact">Contáctanos</a></li>
-						<li><a th:href="@{/login}">Ingresar</a></li>
+						<li><a id="login" href="javascript:void(0)">Ingresar</a></li>
 					</ul>
 				</div>
 			</div>
@@ -190,5 +190,12 @@
 		<script th:src="@{js/landing/wow.min.js}" src="js/wow.min.js"></script>
 		<script th:src="@{js/landing/jquery.singlePageNav.min.js}" src="js/jquery.singlePageNav.min.js"></script>
 		<script th:src="@{js/landing/custom.js}" src="js/custom.js"></script>
+		<script>
+			$(document).ready(function(){
+			    $('#login').on('click', function(){
+			        window.location.href = "/login";
+				});
+			});
+		</script>
 	</body>
 </html>
