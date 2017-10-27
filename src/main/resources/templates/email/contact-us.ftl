@@ -18,9 +18,8 @@
                     <tbody>
                     <tr>
                         <td>
-                            <p>${'Hola ' + name + ', '}</p>
-                            <p>${'Parece que tienes un nuevo correo enviado desde el establecimiento ' + establishment + ': '}</p>
-                            <br/>
+                            <p>Contáctanos: ${name + ' - ' + email}</p>
+                            <hr/>
                             <p>${message}</p>
                             <hr/>
                         </td>

@@ -79,6 +79,6 @@ public class CustomerController {
         model.addAttribute("subscription", subscription);
         model.addAttribute("hasEntries", entries.size()>0? true : false);
         model.addAttribute("entries", entries);
-        return "user";
+        return "customer";
     }
 }

@@ -25,9 +25,9 @@ public class EmailController {
         return new ResponseEntity<Object>(true, HttpStatus.OK);
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/customers/email")
-    public ResponseEntity<?> sendEmailToCustomer(@RequestBody Email email) throws MessagingException {
-        emailService.mailContactUs(email);
+    @RequestMapping(method = RequestMethod.POST, value = "/customers/{id}/email")
+    public ResponseEntity<?> sendEmailToCustomer(@PathVariable Long id, @RequestBody Email email, @SessionAttribute Long idEstablishment) throws MessagingException {
+        emailService.mailToCustomer(email, id, idEstablishment);
         return new ResponseEntity<Object>(true, HttpStatus.OK);
     }
 }
