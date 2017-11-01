@@ -46,3 +46,7 @@ nbdist/
 hs_err_pid*
 
 otros/
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
