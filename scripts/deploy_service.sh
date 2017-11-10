@@ -1,1 +1,1 @@
-nohup java -jar src-oksocios/target/oksocios-api-1.0.0.jar
+nohup java -jar /target/oksocios-api-1.0.0.jar
