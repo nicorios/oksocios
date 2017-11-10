@@ -15,6 +15,17 @@ deploy:
     repo: nicorios/oksocios-private
   bucket: oksocios
   region: sa-east-1
+- provider: codedeploy
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_KEY
+  bucket: oksocios
+  key: latest.zip
+  bundle_type: zip
+  application: oksocios
+  deployment_group: codedeploy-oksocios
+  region: sa-east-1
+  on: *2
+
 script:
   - mvn test
   - zip -r latest *
