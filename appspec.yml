@@ -3,3 +3,8 @@ os: linux
 files:
   - source: ./
     destination: /home/ubuntu/src-oksocios
+
+hooks:
+  AfterInstall:
+    - location: scripts/deploy_service.sh
+      runas: root
