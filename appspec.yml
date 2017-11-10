@@ -5,6 +5,6 @@ files:
     destination: /home/ubuntu/src-oksocios
 
 hooks:
-  AfterInstall:
+  ApplicationStart:
     - location: scripts/deploy_service.sh
       runas: root
