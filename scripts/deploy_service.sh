@@ -1,1 +1,1 @@
-java -jar ./target/oksocios-api-1.0.0.jar
+java -jar ../oksocios-api-1.0.0.jar
