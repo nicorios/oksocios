@@ -5,4 +5,4 @@ kill -9 $(ps -aux | grep 'java -jar' | grep 'oksocios-api' | awk '{print $2}')
 sleep 2
 
 #Start oksocios
-(nohup java -jar "/home/ubuntu/src-oksocios/target/oksocios-api-1.0.0.jar") > /dev/null 2>&1
+(nohup java -jar "/home/ubuntu/src-oksocios/target/oksocios-api-1.0.0.jar" > logs.log 2>&1 &) > /dev/null 2>&1
