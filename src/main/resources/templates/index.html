@@ -24,8 +24,12 @@
 		<link rel="stylesheet" th:href="@{css/landing/animate.min.css}" href="css/animate.min.css"/>
 		<link rel="stylesheet" th:href="@{css/landing/bootstrap.min.css}" href="css/bootstrap.min.css"/>
 		<link rel="stylesheet" th:href="@{css/landing/font-awesome.min.css}" href="css/font-awesome.min.css"/>
-		<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,400italic,700,800' rel='stylesheet' type='text/css'/>
+		<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,400italic,700,800' rel='stylesheet' type='text/css'/>
 		<link rel="stylesheet" th:href="@{css/landing/templatemo-style.css}" href="css/templatemo-style.css"/>
+		<link rel="stylesheet" th:href="@{js/plugins/ladda/dist/ladda-themeless.min.css}" href="css/templatemo-style.css"/>
+
+		<script th:src="@{js/plugins/ladda/dist/spin.min.js}" src="js/custom.js"></script>
+		<script th:src="@{js/plugins/ladda/dist/ladda.min.js}" src="js/custom.js"></script>
 		<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 	</head>
@@ -165,7 +169,7 @@
 										<textarea class="form-control" placeholder="Mensaje" rows="4" name="message"></textarea>
 									</div>
 									<div class="col-md-8">
-										<input id="btn-contact-us" type="button" class="form-control text-uppercase contact-us" value="Enviar"/>
+										<button id="btn-contact-us" type="button" class="btn btn-primary btn-lg ladda-button" data-style="zoom-in">Enviar</button>
 									</div>
 								</form>
 							</div>
@@ -199,6 +203,8 @@
 				});
 
 			    $('#btn-contact-us').on('click', function(){
+                    var l = Ladda.create(this);
+                    l.start();
                     var email = objectifyForm($('#form-contact-us').serializeArray());
                     $.ajax({
                         type : "POST",
@@ -211,6 +217,7 @@
                             if(data){
                                 swal("¡Éxito!", "Tu correo será respondido a la brevedad", "success");
                             }
+                            l.stop();
                         },
                         error : function(e) {
                             console.log("ERROR: ", e);
