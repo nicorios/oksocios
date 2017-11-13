@@ -2,6 +2,8 @@ package com.oksocios.controller;
 
 import com.oksocios.service.EntryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
@@ -37,6 +39,16 @@ public class HomeController {
     public String loginError(Model model) {
         model.addAttribute("error", true);
         return "login";
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/recovery-password")
+    public String recoveryPasswordView(){
+        return "user-forgot-password";
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/recovery-password")
+    public ResponseEntity<String> recoveryPassword(@RequestBody String email){
+        return new ResponseEntity<>(email, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
