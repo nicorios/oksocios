@@ -46,6 +46,6 @@ nbdist/
 hs_err_pid*
 
 #Application.properties
-application.properties
+#application.properties
 
 otros/
