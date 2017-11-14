@@ -7,9 +7,11 @@ import com.oksocios.model.UserRoleId;
 import com.oksocios.repository.UserRepository;
 import com.oksocios.repository.UserRoleRepository;
 import com.oksocios.utils.Constants;
+import com.oksocios.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Date;
@@ -20,11 +22,13 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UserRoleRepository userRoleRepository;
+    private final EmailService emailService;
 
     @Autowired
-    public UserService(UserRepository userRepository, UserRoleRepository userRoleRepository) {
+    public UserService(UserRepository userRepository, UserRoleRepository userRoleRepository, EmailService emailService) {
         this.userRepository = userRepository;
         this.userRoleRepository = userRoleRepository;
+        this.emailService = emailService;
     }
 
     public List<User> getAllUsers(){
@@ -128,5 +132,17 @@ public class UserService {
 
     public User getUserByEmail(String email) {
         return userRepository.findByEmail(email);
+    }
+
+    public User recoveryPassword(String email) throws MessagingException {
+        User user = userRepository.findByEmail(email);
+        if(user != null){
+            String newPass = Utils.getRandomString(20);
+            user.setPassword(newPass);
+            userRepository.save(user);
+            emailService.mailRecoveryPassword(user);
+            return user;
+        }
+        return null;
     }
 }
