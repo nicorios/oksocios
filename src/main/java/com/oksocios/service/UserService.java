@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import javax.mail.MessagingException;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -51,7 +52,7 @@ public class UserService {
         }else{
             userSaved = registerUser(user);
             if(establishmentId != null){
-                UserRole ur = new UserRole(new UserRoleId(userSaved.getId(), role, establishmentId), Constants.getRoleName(role));
+                UserRole ur = new UserRole(new UserRoleId(userSaved, role, establishmentId), Constants.getRoleName(role));
                 userRoleRepository.save(ur);
             }
         }
@@ -103,7 +104,7 @@ public class UserService {
             if(userResponse.getLongitude() == null) userResponse.setLongitude(user.getLongitude());
             User userSaved = userRepository.save(userResponse);
 
-            UserRole ur = new UserRole(new UserRoleId(user.getId(), role, establishmentId), Constants.getRoleName(role));
+            UserRole ur = new UserRole(new UserRoleId(user, role, establishmentId), Constants.getRoleName(role));
             userRoleRepository.save(ur);
 
             return userSaved;
@@ -112,7 +113,7 @@ public class UserService {
 
     public UserRole createUserRole(Long userId, Integer role, Long establishmentId){
         return userRoleRepository.save(new UserRole(
-                new UserRoleId(userId, role, establishmentId),
+                new UserRoleId(new User(userId), role, establishmentId),
                 Constants.getRoleName(role)
         ));
     }
@@ -150,5 +151,11 @@ public class UserService {
             return user;
         }
         return null;
+    }
+
+    public List<UserRole> getStaff(Long idEstablishment) {
+        return userRoleRepository.findAllByIdEstablishmentIdAndIdRoleIdIsIn(
+                idEstablishment,
+                new ArrayList<>(Arrays.asList(Constants.ROLE_KEY_ADMIN, Constants.ROLE_KEY_EMPLOYEE)));
     }
 }

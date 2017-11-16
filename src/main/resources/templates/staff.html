@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml"  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layouts/default-ff">
+<head>
+
+</head>
+<th:block layout:fragment="content">
+  <!-- Start Page Loading -->
+  <div id="loader-wrapper">
+      <div id="loader"></div>        
+      <div class="loader-section section-left"></div>
+      <div class="loader-section section-right"></div>
+  </div>
+  <!-- End Page Loading -->
+
+      <!-- START CONTENT -->
+      <section id="content">
+        
+
+        <!--start container-->
+        <div class="container">
+          <div class="section">
+
+              <!--DataTables example-->
+              <div id="table-datatables">
+                  <h4 class="header">Personal</h4>
+                  <div class="row">
+                      <div class="col s12">
+                          <table id="tbl-staff" class="responsive-table display" cellspacing="0">
+                              <thead>
+                              <tr>
+                                  <th>Nombre</th>
+                                  <th>Rol</th>
+                                  <th>Miembro Desde</th>
+                                  <th>Email</th>
+                                  <th>Teléfono</th>
+                                  <th>Acciones</th>
+                              </tr>
+                              </thead>
+                              <tbody>
+                              <tr th:each="staff : ${staffPeople}">
+                                  <td th:text="${staff.id.user.name + ' ' + staff.id.user.lastName}">Nombre</td>
+                                  <td th:text="${staff.getRoleName()}">Nombre</td>
+                                  <td th:text="${staff.id.user.registryDate != null? #dates.format(staff.id.user.registryDate, 'dd-MM-yyyy') : '-'}">Fecha Nacimiento</td>
+                                  <td th:text="${staff.id.user.email != null? staff.id.user.email : '-'}">Email</td>
+                                  <td th:text="${staff.id.user.phoneNumber != null? staff.id.user.phoneNumber : '-'}">Teléfono</td>
+                                  <td>
+                                      <a href="javascript:void(0)">
+                                          <i style="font-size: x-large;" class="mdi-image-edit"></i>
+                                      </a>
+                                      <a href="javascript:void(0)" class="delete-staff" th:attr="data-id=${staff.id.user.id}">
+                                          <i style="font-size: x-large;" class="mdi-action-delete"></i>
+                                      </a>
+                                  </td>
+                              </tr>
+                              </tbody>
+                          </table>
+                      </div>
+                  </div>
+              </div>
+
+          </div>
+          <!-- Floating Action Button -->
+            <!--<div class="fixed-action-btn" style="bottom: 50px; right: 19px;">-->
+                <!--<a href="/customers/new" class="btn-floating btn-large">-->
+                  <!--<i class="mdi-social-person-add"></i>-->
+                <!--</a>-->
+            <!--</div>-->
+            <!-- Floating Action Button -->
+        </div>
+        <!--end container-->
+      </section>
+      <!-- END CONTENT -->
+
+    <script>
+        var tblStaff = $('#tbl-staff').DataTable({
+            searching: false,
+            lengthChange: false
+        });
+
+        $('#tbl-staff').on('click', '.delete-staff' , function(){
+            var id = $(this).data('id');
+            swal({
+                title: "¿Estás seguro?",
+                text: "El registro será eliminado permanentemente",
+                icon: "warning",
+                buttons: true
+            })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        var btn = $(this);
+
+                        $.ajax({
+                            type: 'DELETE',
+                            url: '/staff/' + id,
+                            contentType: 'application/json',
+                            success: function (data) {
+                                if(data){
+                                    tblSubscriptions.row(btn.parents('tr')).remove().draw();
+                                    swal("Eliminado", "El registro ha sido correctamente eliminado", "success");
+                                }else{
+                                    swal("Lo lamentamos", "No es posible eliminar este registro. Por favor, comúniquese con oksocios.consultas@gmail.com", "error");
+                                }
+
+                            },
+                            error: function (e) {
+                                console.log(e);
+                            }
+                        });
+                    }
+                });
+        });
+    </script>
+</th:block>
+
+</html>

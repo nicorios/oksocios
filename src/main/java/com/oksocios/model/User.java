@@ -31,8 +31,6 @@ public class User implements UserDetails{
     @Column(name = "dni")
     private Long dni;
     @Column(name = "birth_date")
-    @Temporal(TemporalType.DATE)
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date birthDate;
     @Column(name = "street")
     private String street;
@@ -51,8 +49,6 @@ public class User implements UserDetails{
     @Column(name = "password")
     private String password;
     @Column(name = "registry_date")
-    @Temporal(TemporalType.DATE)
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date registryDate;
     @Column(name = "latitude")
     private Double latitude;
@@ -63,6 +59,13 @@ public class User implements UserDetails{
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     @JsonIdentityReference(alwaysAsId = true)
     private List<Establishment> establishments;
+
+    public User(Long userId) {
+    }
+
+    public User() {
+
+    }
 
     public Long getId() {
         return id;
