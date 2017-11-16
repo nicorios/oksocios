@@ -3,6 +3,7 @@ package com.oksocios.utils;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Random;
 
 public class Constants {
 
@@ -29,6 +30,29 @@ public class Constants {
 
     public static String getRoleName(int key){
         return roleMap.get(key);
+    }
+
+    private static final Map<Integer, String> defaultProfilePictures;
+    static
+    {
+        defaultProfilePictures = new HashMap<>();
+        defaultProfilePictures.put(1, "https://s3-sa-east-1.amazonaws.com/oksocios/utils/avatars/U-1.png");
+        defaultProfilePictures.put(2, "https://s3-sa-east-1.amazonaws.com/oksocios/utils/avatars/U-2.png");
+        defaultProfilePictures.put(3, "https://s3-sa-east-1.amazonaws.com/oksocios/utils/avatars/U-3.png");
+        defaultProfilePictures.put(4, "https://s3-sa-east-1.amazonaws.com/oksocios/utils/avatars/U-4.png");
+        defaultProfilePictures.put(5, "https://s3-sa-east-1.amazonaws.com/oksocios/utils/avatars/U-5.png");
+        defaultProfilePictures.put(6, "https://s3-sa-east-1.amazonaws.com/oksocios/utils/avatars/U-6.png");
+        defaultProfilePictures.put(7, "https://s3-sa-east-1.amazonaws.com/oksocios/utils/avatars/U-7.png");
+        defaultProfilePictures.put(8, "https://s3-sa-east-1.amazonaws.com/oksocios/utils/avatars/U-8.png");
+        defaultProfilePictures.put(9, "https://s3-sa-east-1.amazonaws.com/oksocios/utils/avatars/U-9.png");
+    }
+
+    public static String getRandomImage(){
+        Random r = new Random();
+        int Low = 1;
+        int High = 10;
+        int result = r.nextInt(High-Low) + Low;
+        return defaultProfilePictures.get(result);
     }
     
 }

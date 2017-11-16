@@ -69,6 +69,7 @@ public class UserService {
     private User registerUser(User user){
         // todo set status 0 y confirm by email
         user.setStatus(Constants.STATUS_KEY_ACTIVE);
+        user.setPicture(Constants.getRandomImage());
         user.setRegistryDate(new Date());
         User userSaved = userRepository.save(user);
         return userSaved;
