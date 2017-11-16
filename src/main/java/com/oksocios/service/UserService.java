@@ -40,7 +40,12 @@ public class UserService {
     @Transactional
     public User addUser(User user, Integer role, Long establishmentId) throws ObjectAlreadyExistsException {
         User userSaved, userResponse;
-        userResponse = userRepository.findByEmailOrDni(user.getEmail(), user.getDni());
+        try{
+            userResponse = userRepository.findByEmailOrDni(user.getEmail(), user.getDni());
+        }
+        catch(Exception e){
+            throw new ObjectAlreadyExistsException("Ya existe un usuario con el email y dni ingresados");
+        }
         if(userResponse != null){
             userSaved = checkUserRole(user, userResponse, role, establishmentId);
         }else{

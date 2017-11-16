@@ -38,7 +38,7 @@
                               <tbody>
                               <tr th:each="subscription : ${subscriptions}">
                                   <td th:text="${subscription.user.name + ' ' + subscription.user.lastName}">Nombre</td>
-                                  <td th:text="${#dates.format(subscription.user.birthDate, 'dd-MM-yyyy')}">Fecha Nacimiento</td>
+                                  <td th:text="${subscription.user.birthDate != null? #dates.format(subscription.user.birthDate, 'dd-MM-yyyy') : '-'}">Fecha Nacimiento</td>
                                   <td th:text="${subscription.activity.name}">Actividad</td>
                                   <td th:text="${#dates.format(subscription.expirationDate, 'dd-MM-yyyy')}"></td>
                                   <td>
