@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml"  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layouts/default-ff">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml"  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layouts/default">
 <head>
-
+    <link th:href="@{/css/custom/validation.css}" type="text/css" rel="stylesheet" media="screen,projection"/>
 </head>
 <th:block layout:fragment="content">
   <!-- Start Page Loading -->
@@ -24,12 +24,11 @@
               <div id="table-datatables">
                   <h4 class="header">Personal</h4>
                   <div class="row">
-                      <div class="col s12">
+                      <div class="col s6">
                           <table id="tbl-staff" class="responsive-table display" cellspacing="0">
                               <thead>
                               <tr>
                                   <th>Nombre</th>
-                                  <th>Rol</th>
                                   <th>Miembro Desde</th>
                                   <th>Email</th>
                                   <th>Teléfono</th>
@@ -39,7 +38,6 @@
                               <tbody>
                               <tr th:each="staff : ${staffPeople}">
                                   <td th:text="${staff.id.user.name + ' ' + staff.id.user.lastName}">Nombre</td>
-                                  <td th:text="${staff.getRoleName()}">Nombre</td>
                                   <td th:text="${staff.id.user.registryDate != null? #dates.format(staff.id.user.registryDate, 'dd-MM-yyyy') : '-'}">Fecha Nacimiento</td>
                                   <td th:text="${staff.id.user.email != null? staff.id.user.email : '-'}">Email</td>
                                   <td th:text="${staff.id.user.phoneNumber != null? staff.id.user.phoneNumber : '-'}">Teléfono</td>
@@ -54,6 +52,95 @@
                               </tr>
                               </tbody>
                           </table>
+                      </div>
+                      <div class="col s12 m12 l6">
+                          <div id="div-new-staff" class="card-panel">
+                              <div style="display: none" id="card-alert" class="card red lighten-5">
+                                  <div class="card-content red-text">
+                                      <p id="alert1"></p>
+                                  </div>
+                                  <button type="button" class="close red-text" data-dismiss="alert" aria-label="Close">
+                                      <span aria-hidden="true">×</span>
+                                  </button>
+                              </div>
+                              <h4 class="header2">Nuevo</h4>
+                              <div class="row">
+                                  <div class="row">
+                                      <form class="formValidate" id="form-staff" method="post" th:object="${user}" action="/customers">
+                                          <div class="container">
+                                              <!--<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />-->
+                                              <div class="input-field col s12">
+                                                  <label for="uname">Nombre*</label>
+                                                  <input id="uname" th:field="*{name}" type="text" data-error=".errorTxt1"/>
+                                                  <div class="errorTxt1"></div>
+                                              </div>
+                                              <div class="input-field col s12">
+                                                  <label for="ulastname">Apellido*</label>
+                                                  <input id="ulastname" th:field="*{lastName}" type="text" data-error=".errorTxt2"/>
+                                                  <div class="errorTxt2"></div>
+                                              </div>
+                                              <div class="input-field col s12">
+                                                  <label for="udni">DNI *</label>
+                                                  <input id="udni" type="number" th:field="*{dni}" data-error=".errorTxt3"/>
+                                                  <div class="errorTxt3"></div>
+                                              </div>
+                                              <div class="input-field col s12">
+                                                  <label for="uemail">E-Mail *</label>
+                                                  <input id="uemail" type="email" th:field="*{email}" data-error=".errorTxt4"/>
+                                                  <div class="errorTxt4"></div>
+                                              </div>
+                                              <div class="input-field col s12">
+                                                  <label for="uphone">Número de teléfono</label>
+                                                  <input id="uphone" type="number" th:field="*{phoneNumber}" data-error=".errorTxt5"/>
+                                                  <div class="errorTxt5"></div>
+                                              </div>
+                                              <div class="col s12">
+                                                  <label for="ubirthdate">Fecha de Nacimiento</label>
+                                                  <input id="ubirthdate" type="date" th:field="*{birthDate}" data-error=".errorTxt6"/>
+                                                  <div class="errorTxt6"></div>
+                                              </div>
+                                              <div class="input-field col s12">
+                                                  <label for="ustreet">Calle de Domicilio</label>
+                                                  <input id="ustreet" type="text" th:field="*{street}" data-error=".errorTxt7"/>
+                                                  <div class="errorTxt7"></div>
+                                              </div>
+                                              <div class="input-field col s12">
+                                                  <label for="unumber">Número de Domicilio</label>
+                                                  <input id="unumber" type="number" th:field="*{number}" data-error=".errorTxt8"/>
+                                                  <div class="errorTxt8"></div>
+                                              </div>
+                                              <div class="col s12">
+                                                  <label for="ugender">Sexo *</label>
+                                                  <select class="error browser-default" id="ugender" th:field="*{gender}" data-error=".errorTxt9">
+                                                      <option value="">Seleccionar Sexo</option>
+                                                      <option value="true">Masculino</option>
+                                                      <option value="false">Femenino</option>
+                                                  </select>
+                                                  <div class="input-field">
+                                                      <div class="errorTxt9"></div>
+                                                  </div>
+                                              </div>
+                                              <div class="col s12">
+                                                  <label for="urole">Rol *</label>
+                                                  <select class="error browser-default" id="urole" name="role" data-error=".errorTxt10">
+                                                      <option value="">Seleccionar Rol</option>
+                                                      <option value="0">Administrador</option>
+                                                      <option value="2">Empleado</option>
+                                                  </select>
+                                                  <div class="input-field">
+                                                      <div class="errorTxt10"></div>
+                                                  </div>
+                                              </div>
+                                              <div class="input-field col s12">
+                                                  <button id="btn-new-staff" class="btn waves-effect waves-light right submit" type="submit" name="action">Enviar
+                                                      <i class="mdi-content-send right"></i>
+                                                  </button>
+                                              </div>
+                                          </div>
+                                      </form>
+                                  </div>
+                              </div>
+                          </div>
                       </div>
                   </div>
               </div>
@@ -70,7 +157,7 @@
         <!--end container-->
       </section>
       <!-- END CONTENT -->
-
+    <script type="text/javascript" th:src="@{/js/plugins/jquery-validation/jquery.validate.min.js}"></script>
     <script>
         var tblStaff = $('#tbl-staff').DataTable({
             searching: false,
@@ -108,6 +195,49 @@
                         });
                     }
                 });
+        });
+
+        $(document).ready(function(){
+            $("#uname").rules("add", { required: true, messages: { required: "Ingrese el nombre del nuevo socio"}});
+            $("#ulastname").rules("add", { required: true, messages: { required: "Ingrese el apellido del nuevo socio"}});
+            $("#udni").rules("add", { required: true, messages: { required: "Ingrese el número de documento del nuevo socio"}});
+            $("#uemail").rules("add", { required: true, email:true, messages: { required: "Ingrese el email del nuevo socio", email:"Ingrese un email válido"}});
+            $("#urole").rules("add", { required: true, messages: { required: "Ingrese el rol de documento del nuevo socio"}});
+        });
+
+        $("#form-staff").validate({
+            errorElement : 'div',
+            errorPlacement: function(error, element) {
+                var placement = $(element).data('error');
+                if (placement) {
+                    $(placement).append(error)
+                } else {
+                    error.insertAfter(element);
+                }
+            },
+            submitHandler: function(form){
+                var user = objectifyForm($('#form-staff').serializeArray());
+                console.log(user);
+                $.ajax({
+                    type : "POST",
+                    contentType : "application/json",
+                    url : "/staff",
+                    data : JSON.stringify(user),
+                    dataType : 'json',
+                    timeout : 100000,
+                    success : function(data) {
+                        if(data){
+                            swal("¡Éxito!", "Se ha añadido un nuevo integrante al equipo.", "success");
+                        }
+                        //Paint user in table or reload the page
+                    },
+                    error : function(e) {
+                        console.log("ERROR: ", e);
+                        $('#alert1').text(e.responseText);
+                        $('#div-new-staff > div').css('display', 'block');
+                    }
+                });
+            }
         });
     </script>
 </th:block>

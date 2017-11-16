@@ -60,6 +60,9 @@ public class User implements UserDetails{
     @JsonIdentityReference(alwaysAsId = true)
     private List<Establishment> establishments;
 
+    @Transient
+    private Integer role;
+
     public User(Long userId) {
     }
 
@@ -206,6 +209,14 @@ public class User implements UserDetails{
 
     public void setLongitude(Double longitude) {
         this.longitude = longitude;
+    }
+
+    public Integer getRole() {
+        return role;
+    }
+
+    public void setRole(Integer role) {
+        this.role = role;
     }
 
     @Override
