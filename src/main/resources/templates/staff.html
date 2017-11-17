@@ -33,7 +33,6 @@
                                       <th>Miembro Desde</th>
                                       <th>Email</th>
                                       <th>Teléfono</th>
-                                      <th>Acciones</th>
                                   </tr>
                                   </thead>
                                   <tbody>
@@ -42,11 +41,6 @@
                                       <td th:text="${admin.id.user.registryDate != null? #dates.format(admin.id.user.registryDate, 'dd-MM-yyyy') : '-'}">Fecha Nacimiento</td>
                                       <td th:text="${admin.id.user.email != null? admin.id.user.email : '-'}">Email</td>
                                       <td th:text="${admin.id.user.phoneNumber != null? admin.id.user.phoneNumber : '-'}">Teléfono</td>
-                                      <td>
-                                          <a href="javascript:void(0)">
-                                              <i style="font-size: x-large;" class="mdi-image-edit"></i>
-                                          </a>
-                                      </td>
                                   </tr>
                                   </tbody>
                               </table>
@@ -120,45 +114,50 @@
                                                   <div class="errorTxt4"></div>
                                               </div>
                                               <div class="input-field col s12">
-                                                  <label for="uphone">Número de teléfono</label>
-                                                  <input id="uphone" type="number" th:field="*{phoneNumber}" data-error=".errorTxt5"/>
+                                                  <label for="upass">Password *</label>
+                                                  <input id="upass" type="text" th:field="*{password}" data-error=".errorTxt5"/>
                                                   <div class="errorTxt5"></div>
+                                              </div>
+                                              <div class="input-field col s12">
+                                                  <label for="uphone">Número de teléfono</label>
+                                                  <input id="uphone" type="number" th:field="*{phoneNumber}" data-error=".errorTxt6"/>
+                                                  <div class="errorTxt6"></div>
                                               </div>
                                               <div class="col s12">
                                                   <label for="ubirthdate">Fecha de Nacimiento</label>
-                                                  <input id="ubirthdate" type="date" th:field="*{birthDate}" data-error=".errorTxt6"/>
-                                                  <div class="errorTxt6"></div>
-                                              </div>
-                                              <div class="input-field col s12">
-                                                  <label for="ustreet">Calle de Domicilio</label>
-                                                  <input id="ustreet" type="text" th:field="*{street}" data-error=".errorTxt7"/>
+                                                  <input id="ubirthdate" type="date" th:field="*{birthDate}" data-error=".errorTxt7"/>
                                                   <div class="errorTxt7"></div>
                                               </div>
                                               <div class="input-field col s12">
-                                                  <label for="unumber">Número de Domicilio</label>
-                                                  <input id="unumber" type="number" th:field="*{number}" data-error=".errorTxt8"/>
+                                                  <label for="ustreet">Calle de Domicilio</label>
+                                                  <input id="ustreet" type="text" th:field="*{street}" data-error=".errorTxt8"/>
                                                   <div class="errorTxt8"></div>
+                                              </div>
+                                              <div class="input-field col s12">
+                                                  <label for="unumber">Número de Domicilio</label>
+                                                  <input id="unumber" type="number" th:field="*{number}" data-error=".errorTxt9"/>
+                                                  <div class="errorTxt9"></div>
                                               </div>
                                               <div class="col s12">
                                                   <label for="ugender">Sexo *</label>
-                                                  <select class="error browser-default" id="ugender" th:field="*{gender}" data-error=".errorTxt9">
+                                                  <select class="error browser-default" id="ugender" th:field="*{gender}" data-error=".errorTxt10">
                                                       <option value="">Seleccionar Sexo</option>
                                                       <option value="true">Masculino</option>
                                                       <option value="false">Femenino</option>
                                                   </select>
                                                   <div class="input-field">
-                                                      <div class="errorTxt9"></div>
+                                                      <div class="errorTxt10"></div>
                                                   </div>
                                               </div>
                                               <div class="col s12">
                                                   <label for="urole">Rol *</label>
-                                                  <select class="error browser-default" id="urole" name="role" data-error=".errorTxt10">
+                                                  <select class="error browser-default" id="urole" name="role" data-error=".errorTxt11">
                                                       <option value="">Seleccionar Rol</option>
                                                       <option value="0">Administrador</option>
                                                       <option value="2">Empleado</option>
                                                   </select>
                                                   <div class="input-field">
-                                                      <div class="errorTxt10"></div>
+                                                      <div class="errorTxt11"></div>
                                                   </div>
                                               </div>
                                               <div class="input-field col s12">
@@ -237,6 +236,7 @@
             $("#ulastname").rules("add", { required: true, messages: { required: "Ingrese el apellido del nuevo socio"}});
             $("#udni").rules("add", { required: true, messages: { required: "Ingrese el número de documento del nuevo socio"}});
             $("#uemail").rules("add", { required: true, email:true, messages: { required: "Ingrese el email del nuevo socio", email:"Ingrese un email válido"}});
+            $("#upass").rules("add", { required: true, minlength:6, messages: { required: "Ingrese la clave del nuevo socio", minlength:"Debe contener al menos 6 caracteres"}});
             $("#urole").rules("add", { required: true, messages: { required: "Ingrese el rol de documento del nuevo socio"}});
         });
 
@@ -265,6 +265,7 @@
                         if(userResponse){
                             swal("¡Éxito!", "Se ha añadido un nuevo integrante al equipo.", "success");
                         }
+                        $('#form-staff').trigger("reset");
                         addRowToTable(userResponse, role);
                     },
                     error : function(e) {
