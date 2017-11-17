@@ -217,7 +217,6 @@
             },
             submitHandler: function(form){
                 var user = objectifyForm($('#form-staff').serializeArray());
-                console.log(user);
                 $.ajax({
                     type : "POST",
                     contentType : "application/json",
@@ -225,11 +224,11 @@
                     data : JSON.stringify(user),
                     dataType : 'json',
                     timeout : 100000,
-                    success : function(data) {
-                        if(data){
+                    success : function(userResponse) {
+                        if(userResponse){
                             swal("¡Éxito!", "Se ha añadido un nuevo integrante al equipo.", "success");
                         }
-                        //Paint user in table or reload the page
+                        addRowToTable(userResponse);
                     },
                     error : function(e) {
                         console.log("ERROR: ", e);
@@ -239,6 +238,22 @@
                 });
             }
         });
+
+        addRowToTable = function(user){
+            let date = new Date(user.registryDate);
+            tblStaff.row.add([
+                user.name + " " + user.lastName,
+                date.getDate() + 1 + '-' + date.getMonth() + '-' +  date.getFullYear(),
+                user.email,
+                user.phoneNumber,
+                '<a href="javascript:void(0)">\n' +
+                '<i style="font-size: x-large;" class="mdi-image-edit"></i>\n' +
+                '</a>\n' +
+                '<a href="javascript:void(0)" class="delete-staff">\n' +
+                '<i style="font-size: x-large;" class="mdi-action-delete"></i>\n' +
+                '</a>'
+            ]).draw(false);
+        }
     </script>
 </th:block>
 

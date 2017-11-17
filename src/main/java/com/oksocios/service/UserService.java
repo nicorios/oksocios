@@ -45,6 +45,9 @@ public class UserService {
             userResponse = userRepository.findByEmailOrDni(user.getEmail(), user.getDni());
         }
         catch(Exception e){
+            //This exception is thrown when user's dni and email are from two diferrents users
+            //The method findByEmailOrDni returns more than one element
+            //Is there any other case????
             throw new ObjectAlreadyExistsException("Ya existe un usuario con el email y dni ingresados");
         }
         if(userResponse != null){
