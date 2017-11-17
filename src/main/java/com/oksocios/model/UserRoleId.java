@@ -2,14 +2,17 @@ package com.oksocios.model;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import java.io.Serializable;
 import java.util.Objects;
 
 @Embeddable
 public class UserRoleId implements Serializable{
 
-    @Column(name = "id_user")
-    private Long userId;
+    @ManyToOne
+    @JoinColumn(name = "id_user")
+    private User user;
     @Column(name = "id_rol")
     private Integer roleId;
     @Column(name = "id_establishment")
@@ -18,18 +21,18 @@ public class UserRoleId implements Serializable{
     public UserRoleId() {
     }
 
-    public UserRoleId(Long userId, Integer roleId, Long establishmentId) {
-        this.userId = userId;
+    public UserRoleId(User user, Integer roleId, Long establishmentId) {
+        this.user = user;
         this.roleId = roleId;
         this.establishmentId = establishmentId;
     }
 
-    public Long getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Integer getRoleId() {
@@ -50,7 +53,7 @@ public class UserRoleId implements Serializable{
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, roleId, establishmentId);
+        return Objects.hash(user.getId(), roleId, establishmentId);
     }
 
     @Override
@@ -58,7 +61,7 @@ public class UserRoleId implements Serializable{
         if (this == o) return true;
         if (!(o instanceof UserRoleId)) return false;
         UserRoleId that = (UserRoleId) o;
-        return Objects.equals(userId, that.getUserId()) &&
+        return Objects.equals(user.getId(), that.getUser().getId()) &&
                 Objects.equals(roleId, that.getRoleId()) &&
                 Objects.equals(establishmentId, that.getEstablishmentId());
     }

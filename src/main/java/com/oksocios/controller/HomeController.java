@@ -1,7 +1,11 @@
 package com.oksocios.controller;
 
+import com.oksocios.model.User;
 import com.oksocios.service.EntryService;
+import com.oksocios.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
@@ -9,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -17,10 +22,12 @@ import javax.servlet.http.HttpServletResponse;
 public class HomeController {
 
     private final EntryService entryService;
+    private final UserService userService;
 
     @Autowired
-    public HomeController(EntryService entryService){
+    public HomeController(EntryService entryService, UserService userService){
         this.entryService = entryService;
+        this.userService = userService;
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/")
@@ -37,6 +44,17 @@ public class HomeController {
     public String loginError(Model model) {
         model.addAttribute("error", true);
         return "login";
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/recovery-password")
+    public String recoveryPasswordView(){
+        return "user-forgot-password";
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/recovery-password")
+    public ResponseEntity<Boolean> recoveryPassword(@RequestBody String email) throws MessagingException {
+        User user = userService.recoveryPassword(email);
+        return new ResponseEntity<>(user != null, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/logout", method = RequestMethod.GET)

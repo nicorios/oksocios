@@ -48,11 +48,6 @@ public class UserController {
         userService.updateUser(user);
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, value = "users/{id}")
-    public void deleteUser(@PathVariable Long id){
-        userService.deleteUser(id);
-    }
-
     @RequestMapping(method = RequestMethod.GET, value = "/register")
     public String register(Model model){
         model.addAttribute("user", new User());

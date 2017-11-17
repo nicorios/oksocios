@@ -7,11 +7,15 @@ import com.oksocios.model.UserRoleId;
 import com.oksocios.repository.UserRepository;
 import com.oksocios.repository.UserRoleRepository;
 import com.oksocios.utils.Constants;
+import com.oksocios.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
+import javax.management.BadAttributeValueExpException;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -20,11 +24,13 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UserRoleRepository userRoleRepository;
+    private final EmailService emailService;
 
     @Autowired
-    public UserService(UserRepository userRepository, UserRoleRepository userRoleRepository) {
+    public UserService(UserRepository userRepository, UserRoleRepository userRoleRepository, EmailService emailService) {
         this.userRepository = userRepository;
         this.userRoleRepository = userRoleRepository;
+        this.emailService = emailService;
     }
 
     public List<User> getAllUsers(){
@@ -36,13 +42,21 @@ public class UserService {
     @Transactional
     public User addUser(User user, Integer role, Long establishmentId) throws ObjectAlreadyExistsException {
         User userSaved, userResponse;
-        userResponse = userRepository.findByEmailOrDni(user.getEmail(), user.getDni());
+        try{
+            userResponse = userRepository.findByEmailOrDni(user.getEmail(), user.getDni());
+        }
+        catch(Exception e){
+            //This exception is thrown when user's dni and email are from two diferrents users
+            //The method findByEmailOrDni returns more than one element
+            //Is there any other case????
+            throw new ObjectAlreadyExistsException("Ya existe un usuario con el email y dni ingresados");
+        }
         if(userResponse != null){
             userSaved = checkUserRole(user, userResponse, role, establishmentId);
         }else{
             userSaved = registerUser(user);
             if(establishmentId != null){
-                UserRole ur = new UserRole(new UserRoleId(userSaved.getId(), role, establishmentId), Constants.getRoleName(role));
+                UserRole ur = new UserRole(new UserRoleId(userSaved, role, establishmentId), Constants.getRoleName(role));
                 userRoleRepository.save(ur);
             }
         }
@@ -65,26 +79,27 @@ public class UserService {
     private User registerUser(User user){
         // todo set status 0 y confirm by email
         user.setStatus(Constants.STATUS_KEY_ACTIVE);
+        user.setPicture(Constants.getRandomImage());
         user.setRegistryDate(new Date());
         User userSaved = userRepository.save(user);
         return userSaved;
     }
 
     private User checkUserRole(User user, User userResponse, Integer role, Long establishmentId) throws ObjectAlreadyExistsException {
-        UserRole userRole = userRoleRepository.findFirstByIdUserIdAndIdRoleIdAndIdEstablishmentId(userResponse.getId(), role, establishmentId);
+        UserRole userRole = userRoleRepository.findFirstByIdUserIdAndIdEstablishmentId(userResponse.getId(), establishmentId);
         if(userRole != null){
             throw new ObjectAlreadyExistsException("Ya existe un usuario con el email o dni ingresado");
         }else{
             user.setId(userResponse.getId());
-            if(userResponse.getName() == null) userResponse.setName(user.getName());
-            if(userResponse.getLastName() == null) userResponse.setLastName(user.getLastName());
+            if(userResponse.getName() == null || userResponse.getName().isEmpty()) userResponse.setName(user.getName());
+            if(userResponse.getLastName() == null || userResponse.getLastName().isEmpty()) userResponse.setLastName(user.getLastName());
             if(userResponse.getBirthDate() == null) userResponse.setBirthDate(user.getBirthDate());
-            if(userResponse.getStreet() == null) userResponse.setStreet(user.getStreet());
+            if(userResponse.getStreet() == null || userResponse.getStreet().isEmpty()) userResponse.setStreet(user.getStreet());
             if(userResponse.getNumber() == null) userResponse.setNumber(user.getNumber());
             if(userResponse.getEmail() == null) userResponse.setEmail(user.getEmail());
             if(userResponse.getDni() == null) userResponse.setDni(user.getDni());
             if(userResponse.getGender() == null) userResponse.setGender(user.getGender());
-            if(userResponse.getPhoneNumber() == null) userResponse.setPhoneNumber(user.getPhoneNumber());
+            if(userResponse.getPhoneNumber() == null || userResponse.getPhoneNumber().isEmpty()) userResponse.setPhoneNumber(user.getPhoneNumber());
             if(userResponse.getStatus() == null) userResponse.setStatus(user.getStatus());
             if(userResponse.getPicture() == null) userResponse.setPicture(user.getPicture());
             if(userResponse.getPassword() == null) userResponse.setPassword(user.getPassword());
@@ -93,7 +108,7 @@ public class UserService {
             if(userResponse.getLongitude() == null) userResponse.setLongitude(user.getLongitude());
             User userSaved = userRepository.save(userResponse);
 
-            UserRole ur = new UserRole(new UserRoleId(user.getId(), role, establishmentId), Constants.getRoleName(role));
+            UserRole ur = new UserRole(new UserRoleId(user, role, establishmentId), Constants.getRoleName(role));
             userRoleRepository.save(ur);
 
             return userSaved;
@@ -102,7 +117,7 @@ public class UserService {
 
     public UserRole createUserRole(Long userId, Integer role, Long establishmentId){
         return userRoleRepository.save(new UserRole(
-                new UserRoleId(userId, role, establishmentId),
+                new UserRoleId(new User(userId), role, establishmentId),
                 Constants.getRoleName(role)
         ));
     }
@@ -122,11 +137,30 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void deleteUser(Long id){
-        userRepository.delete(id);
+    public void deleteUser(Long id, Long idEstablishment) throws BadAttributeValueExpException {
+
+        userRoleRepository.delete(new UserRoleId(new User(id), Constants.ROLE_KEY_EMPLOYEE, idEstablishment));
     }
 
     public User getUserByEmail(String email) {
         return userRepository.findByEmail(email);
+    }
+
+    public User recoveryPassword(String email) throws MessagingException {
+        User user = userRepository.findByEmail(email);
+        if(user != null){
+            String newPass = Utils.getRandomString(20);
+            user.setPassword(newPass);
+            userRepository.save(user);
+            emailService.mailRecoveryPassword(user);
+            return user;
+        }
+        return null;
+    }
+
+    public List<UserRole> getStaff(Long idEstablishment) {
+        return userRoleRepository.findAllByIdEstablishmentIdAndIdRoleIdIsIn(
+                idEstablishment,
+                new ArrayList<>(Arrays.asList(Constants.ROLE_KEY_ADMIN, Constants.ROLE_KEY_EMPLOYEE)));
     }
 }

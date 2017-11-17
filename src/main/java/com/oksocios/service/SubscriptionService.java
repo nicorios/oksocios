@@ -99,7 +99,7 @@ public class SubscriptionService {
     }
 
     private int[] calculateAgesUsersStat(List<Subscription> subscriptions){
-        int[] users = new int[54];
+        int[] users = new int[55];
         User customer;
         Integer age;
         for(Subscription subscription: subscriptions){
@@ -107,13 +107,13 @@ public class SubscriptionService {
             age = customer.calculateAge();
             if(subscription.getUser().getGender() != null){
                 if(subscription.getUser().getGender()) {
-                    if(age>16) users[0]++;
-                    if(age<40) users[26]++;
+                    if(age<16) users[0]++;
+                    if(age>40) users[26]++;
                     if(age >= 16 && age <= 40)users[age-15]++;
                 }
                 else {
-                    if(age>16) users[27]++;
-                    if(age<40) users[53]++;
+                    if(age<16) users[27]++;
+                    if(age>40) users[53]++;
                     if(age >= 16 && age <= 40)users[age+12]++;
                 }
             }

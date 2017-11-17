@@ -53,7 +53,7 @@ public class CustomerController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/customers")
-    public ResponseEntity<?> addCustomer(@RequestBody User user, @SessionAttribute Long idEstablishment) throws ObjectAlreadyExistsException {
+    public ResponseEntity<?> addCustomer(@RequestBody User user, @SessionAttribute Long idEstablishment) {
         if ((user.getDni() == null) || (user.getEmail() == null)){
             return new ResponseEntity<>("Por favor, Ingrese el DNI e Email del nuevo socio", HttpStatus.OK) ;
         }
