@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
+import javax.management.BadAttributeValueExpException;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -85,20 +86,20 @@ public class UserService {
     }
 
     private User checkUserRole(User user, User userResponse, Integer role, Long establishmentId) throws ObjectAlreadyExistsException {
-        UserRole userRole = userRoleRepository.findFirstByIdUserIdAndIdRoleIdAndIdEstablishmentId(userResponse.getId(), role, establishmentId);
+        UserRole userRole = userRoleRepository.findFirstByIdUserIdAndIdEstablishmentId(userResponse.getId(), establishmentId);
         if(userRole != null){
             throw new ObjectAlreadyExistsException("Ya existe un usuario con el email o dni ingresado");
         }else{
             user.setId(userResponse.getId());
-            if(userResponse.getName() == null) userResponse.setName(user.getName());
-            if(userResponse.getLastName() == null) userResponse.setLastName(user.getLastName());
+            if(userResponse.getName() == null || userResponse.getName().isEmpty()) userResponse.setName(user.getName());
+            if(userResponse.getLastName() == null || userResponse.getLastName().isEmpty()) userResponse.setLastName(user.getLastName());
             if(userResponse.getBirthDate() == null) userResponse.setBirthDate(user.getBirthDate());
-            if(userResponse.getStreet() == null) userResponse.setStreet(user.getStreet());
+            if(userResponse.getStreet() == null || userResponse.getStreet().isEmpty()) userResponse.setStreet(user.getStreet());
             if(userResponse.getNumber() == null) userResponse.setNumber(user.getNumber());
             if(userResponse.getEmail() == null) userResponse.setEmail(user.getEmail());
             if(userResponse.getDni() == null) userResponse.setDni(user.getDni());
             if(userResponse.getGender() == null) userResponse.setGender(user.getGender());
-            if(userResponse.getPhoneNumber() == null) userResponse.setPhoneNumber(user.getPhoneNumber());
+            if(userResponse.getPhoneNumber() == null || userResponse.getPhoneNumber().isEmpty()) userResponse.setPhoneNumber(user.getPhoneNumber());
             if(userResponse.getStatus() == null) userResponse.setStatus(user.getStatus());
             if(userResponse.getPicture() == null) userResponse.setPicture(user.getPicture());
             if(userResponse.getPassword() == null) userResponse.setPassword(user.getPassword());
@@ -136,8 +137,9 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void deleteUser(Long id){
-        userRepository.delete(id);
+    public void deleteUser(Long id, Long idEstablishment) throws BadAttributeValueExpException {
+
+        userRoleRepository.delete(new UserRoleId(new User(id), Constants.ROLE_KEY_EMPLOYEE, idEstablishment));
     }
 
     public User getUserByEmail(String email) {

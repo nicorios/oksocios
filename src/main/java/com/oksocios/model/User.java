@@ -63,7 +63,8 @@ public class User implements UserDetails{
     @Transient
     private Integer role;
 
-    public User(Long userId) {
+    public User(Long id) {
+        this.id = id;
     }
 
     public User() {

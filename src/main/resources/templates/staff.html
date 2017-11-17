@@ -22,36 +22,66 @@
 
               <!--DataTables example-->
               <div id="table-datatables">
-                  <h4 class="header">Personal</h4>
                   <div class="row">
                       <div class="col s6">
-                          <table id="tbl-staff" class="responsive-table display" cellspacing="0">
-                              <thead>
-                              <tr>
-                                  <th>Nombre</th>
-                                  <th>Miembro Desde</th>
-                                  <th>Email</th>
-                                  <th>Teléfono</th>
-                                  <th>Acciones</th>
-                              </tr>
-                              </thead>
-                              <tbody>
-                              <tr th:each="staff : ${staffPeople}">
-                                  <td th:text="${staff.id.user.name + ' ' + staff.id.user.lastName}">Nombre</td>
-                                  <td th:text="${staff.id.user.registryDate != null? #dates.format(staff.id.user.registryDate, 'dd-MM-yyyy') : '-'}">Fecha Nacimiento</td>
-                                  <td th:text="${staff.id.user.email != null? staff.id.user.email : '-'}">Email</td>
-                                  <td th:text="${staff.id.user.phoneNumber != null? staff.id.user.phoneNumber : '-'}">Teléfono</td>
-                                  <td>
-                                      <a href="javascript:void(0)">
-                                          <i style="font-size: x-large;" class="mdi-image-edit"></i>
-                                      </a>
-                                      <a href="javascript:void(0)" class="delete-staff" th:attr="data-id=${staff.id.user.id}">
-                                          <i style="font-size: x-large;" class="mdi-action-delete"></i>
-                                      </a>
-                                  </td>
-                              </tr>
-                              </tbody>
-                          </table>
+                          <div class="section">
+                              <h5>Administradores</h5>
+                              <table id="tbl-admins" class="responsive-table display" cellspacing="0">
+                                  <thead>
+                                  <tr>
+                                      <th>Nombre</th>
+                                      <th>Miembro Desde</th>
+                                      <th>Email</th>
+                                      <th>Teléfono</th>
+                                      <th>Acciones</th>
+                                  </tr>
+                                  </thead>
+                                  <tbody>
+                                  <tr th:each="admin : ${admins}">
+                                      <td th:text="${admin.id.user.name + ' ' + admin.id.user.lastName}">Nombre</td>
+                                      <td th:text="${admin.id.user.registryDate != null? #dates.format(admin.id.user.registryDate, 'dd-MM-yyyy') : '-'}">Fecha Nacimiento</td>
+                                      <td th:text="${admin.id.user.email != null? admin.id.user.email : '-'}">Email</td>
+                                      <td th:text="${admin.id.user.phoneNumber != null? admin.id.user.phoneNumber : '-'}">Teléfono</td>
+                                      <td>
+                                          <a href="javascript:void(0)">
+                                              <i style="font-size: x-large;" class="mdi-image-edit"></i>
+                                          </a>
+                                      </td>
+                                  </tr>
+                                  </tbody>
+                              </table>
+                          </div>
+                          <br/>
+                          <div class="section">
+                              <h5>Empleados</h5>
+                              <table id="tbl-employees" class="responsive-table display" cellspacing="0">
+                                  <thead>
+                                  <tr>
+                                      <th>Nombre</th>
+                                      <th>Miembro Desde</th>
+                                      <th>Email</th>
+                                      <th>Teléfono</th>
+                                      <th>Acciones</th>
+                                  </tr>
+                                  </thead>
+                                  <tbody>
+                                  <tr th:each="employee : ${employees}">
+                                      <td th:text="${employee.id.user.name + ' ' + employee.id.user.lastName}">Nombre</td>
+                                      <td th:text="${employee.id.user.registryDate != null? #dates.format(employee.id.user.registryDate, 'dd-MM-yyyy') : '-'}">Fecha Nacimiento</td>
+                                      <td th:text="${employee.id.user.email != null? employee.id.user.email : '-'}">Email</td>
+                                      <td th:text="${employee.id.user.phoneNumber != null? employee.id.user.phoneNumber : '-'}">Teléfono</td>
+                                      <td>
+                                          <a href="javascript:void(0)">
+                                              <i style="font-size: x-large;" class="mdi-image-edit"></i>
+                                          </a>
+                                          <a href="javascript:void(0)" class="delete-employee" th:attr="data-id=${employee.id.user.id}">
+                                              <i style="font-size: x-large;" class="mdi-action-delete"></i>
+                                          </a>
+                                      </td>
+                                  </tr>
+                                  </tbody>
+                              </table>
+                          </div>
                       </div>
                       <div class="col s12 m12 l6">
                           <div id="div-new-staff" class="card-panel">
@@ -159,12 +189,17 @@
       <!-- END CONTENT -->
     <script type="text/javascript" th:src="@{/js/plugins/jquery-validation/jquery.validate.min.js}"></script>
     <script>
-        var tblStaff = $('#tbl-staff').DataTable({
+        var tblAdmins = $('#tbl-admins').DataTable({
             searching: false,
             lengthChange: false
         });
 
-        $('#tbl-staff').on('click', '.delete-staff' , function(){
+        var tblEmployees = $('#tbl-employees').DataTable({
+            searching: false,
+            lengthChange: false
+        });
+
+        $('#tbl-employees').on('click', '.delete-employee' , function(){
             var id = $(this).data('id');
             swal({
                 title: "¿Estás seguro?",
@@ -182,7 +217,7 @@
                             contentType: 'application/json',
                             success: function (data) {
                                 if(data){
-                                    tblSubscriptions.row(btn.parents('tr')).remove().draw();
+                                    tblEmployees.row(btn.parents('tr')).remove().draw();
                                     swal("Eliminado", "El registro ha sido correctamente eliminado", "success");
                                 }else{
                                     swal("Lo lamentamos", "No es posible eliminar este registro. Por favor, comúniquese con oksocios.consultas@gmail.com", "error");
@@ -217,6 +252,8 @@
             },
             submitHandler: function(form){
                 var user = objectifyForm($('#form-staff').serializeArray());
+                let role = user.role;
+                console.log(role);
                 $.ajax({
                     type : "POST",
                     contentType : "application/json",
@@ -228,31 +265,46 @@
                         if(userResponse){
                             swal("¡Éxito!", "Se ha añadido un nuevo integrante al equipo.", "success");
                         }
-                        addRowToTable(userResponse);
+                        addRowToTable(userResponse, role);
                     },
                     error : function(e) {
                         console.log("ERROR: ", e);
                         $('#alert1').text(e.responseText);
                         $('#div-new-staff > div').css('display', 'block');
+                        swal('Oops...', e.responseText, 'error');
                     }
                 });
             }
         });
 
-        addRowToTable = function(user){
+        addRowToTable = function(user, role){
             let date = new Date(user.registryDate);
-            tblStaff.row.add([
-                user.name + " " + user.lastName,
-                date.getDate() + 1 + '-' + date.getMonth() + '-' +  date.getFullYear(),
-                user.email,
-                user.phoneNumber,
-                '<a href="javascript:void(0)">\n' +
-                '<i style="font-size: x-large;" class="mdi-image-edit"></i>\n' +
-                '</a>\n' +
-                '<a href="javascript:void(0)" class="delete-staff">\n' +
-                '<i style="font-size: x-large;" class="mdi-action-delete"></i>\n' +
-                '</a>'
-            ]).draw(false);
+            if(role == 0){
+                tblAdmins.row.add([
+                    user.name + " " + user.lastName,
+                    date.getDate() + 1 + '-' + date.getMonth() + '-' +  date.getFullYear(),
+                    user.email,
+                    user.phoneNumber,
+                    '<a href="javascript:void(0)">\n' +
+                    '<i style="font-size: x-large;" class="mdi-image-edit"></i>\n' +
+                    '</a>'
+                ]).draw(false);
+            }
+            if(role == 2){
+                tblEmployees.row.add([
+                    user.name + " " + user.lastName,
+                    date.getDate() + 1 + '-' + date.getMonth() + '-' +  date.getFullYear(),
+                    user.email,
+                    user.phoneNumber,
+                    '<a href="javascript:void(0)">\n' +
+                    '<i style="font-size: x-large;" class="mdi-image-edit"></i>\n' +
+                    '</a>\n' +
+                    '<a href="javascript:void(0)" class="delete-employee" data-id="'+ user.id +'">\n' +
+                    '<i style="font-size: x-large;" class="mdi-action-delete"></i>\n' +
+                    '</a>'
+                ]).draw(false);
+            }
+
         }
     </script>
 </th:block>
