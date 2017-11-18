@@ -1,6 +1,7 @@
 package com.oksocios.controller;
 
 import com.oksocios.exceptions.ObjectAlreadyExistsException;
+import com.oksocios.exceptions.ObjectNotAccesibleException;
 import com.oksocios.model.User;
 import com.oksocios.model.UserRole;
 import com.oksocios.service.UserService;
@@ -52,9 +53,13 @@ public class StaffController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/staff")
-    public ResponseEntity<?> addCustomer(@RequestBody User user, @SessionAttribute Long idEstablishment) {
+    public ResponseEntity<?> addCustomer(@RequestBody User user, @SessionAttribute Long idEstablishment) throws ObjectNotAccesibleException {
         if ((user.getDni() == null) || (user.getEmail().isEmpty())) {
             return new ResponseEntity<>("Por favor, Ingrese el DNI e Email del nuevo socio", HttpStatus.OK);
+        }
+        if(user.getId()!=null){
+            userService.updateUser(user, idEstablishment);
+            return new ResponseEntity<>(HttpStatus.OK);
         }
         try {
             userService.addUser(user, user.getRole(), idEstablishment);

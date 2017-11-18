@@ -1,6 +1,7 @@
 package com.oksocios.service;
 
 import com.oksocios.exceptions.ObjectAlreadyExistsException;
+import com.oksocios.exceptions.ObjectNotAccesibleException;
 import com.oksocios.model.User;
 import com.oksocios.model.UserRole;
 import com.oksocios.model.UserRoleId;
@@ -133,8 +134,29 @@ public class UserService {
 
     public User getUserByDni(Long dni){ return userRepository.findFirstByDni(dni);}
 
-    public void updateUser(User user){
+    public void updateUser(User user, Long idEstablishment) throws ObjectNotAccesibleException {
+        UserRole userRole = hasAuthorityToEdit(user.getId(), idEstablishment);
+        if(userRole.getId().getRoleId() != user.getRole()){
+            //Update role for this user;
+            UserRole userRoleUpdate = new UserRole(
+                    new UserRoleId(new User(user.getId()), user.getRole(), idEstablishment),
+                    Constants.getRoleName(user.getRole()),
+                    userRole.getDate()
+            );
+            userRoleRepository.delete(new UserRoleId(new User(user.getId()), userRole.getId().getRoleId(), idEstablishment));
+            userRoleRepository.save(userRoleUpdate);
+
+        }
         userRepository.save(user);
+    }
+
+    public UserRole hasAuthorityToEdit(Long id, Long idEstablishment) throws ObjectNotAccesibleException {
+        UserRole userRole = userRoleRepository.findFirstByIdUserIdAndIdEstablishmentId(id, idEstablishment);
+        //Role > 0 means that it is Customer or Employee
+        if(userRole.getId().getRoleId() > 0){
+            throw new ObjectNotAccesibleException("No tiene autorización para acceder a éste registro");
+        }
+        return userRole;
     }
 
     public void deleteUser(Long id, Long idEstablishment) throws BadAttributeValueExpException {

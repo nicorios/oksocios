@@ -23,6 +23,12 @@ public class UserRole {
         this.date = new Date();
     }
 
+    public UserRole(UserRoleId id, String rol, Date date) {
+        this.id = id;
+        this.rol = rol;
+        this.date = date;
+    }
+
     public UserRoleId getId() {
         return id;
     }
@@ -37,5 +43,13 @@ public class UserRole {
 
     public void setRol(String rol) {
         this.rol = rol;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 }

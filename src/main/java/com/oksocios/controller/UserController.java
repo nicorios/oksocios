@@ -42,12 +42,6 @@ public class UserController {
         return userService.getUser(id);
     }
 
-    @RequestMapping(method = RequestMethod.PUT, value = "users/{id}")
-    public void updateUser(@RequestBody User user, @PathVariable Long id){
-        user.setId(id);
-        userService.updateUser(user);
-    }
-
     @RequestMapping(method = RequestMethod.GET, value = "/register")
     public String register(Model model){
         model.addAttribute("user", new User());
