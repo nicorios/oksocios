@@ -46,6 +46,11 @@ public class StaffController {
         return "staff";
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "/staff/{id}")
+    public ResponseEntity<UserRole> getStaff(@PathVariable Long id, @SessionAttribute Long idEstablishment){
+        return new ResponseEntity<>(userService.getStaffById(id, idEstablishment), HttpStatus.OK);
+    }
+
     @RequestMapping(method = RequestMethod.POST, value = "/staff")
     public ResponseEntity<?> addCustomer(@RequestBody User user, @SessionAttribute Long idEstablishment) {
         if ((user.getDni() == null) || (user.getEmail().isEmpty())) {

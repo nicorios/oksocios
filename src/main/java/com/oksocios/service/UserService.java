@@ -163,4 +163,8 @@ public class UserService {
                 idEstablishment,
                 new ArrayList<>(Arrays.asList(Constants.ROLE_KEY_ADMIN, Constants.ROLE_KEY_EMPLOYEE)));
     }
+
+    public UserRole getStaffById(Long id, Long idEstablishment){
+        return userRoleRepository.findFirstByIdUserIdAndIdEstablishmentId(id, idEstablishment);
+    }
 }
