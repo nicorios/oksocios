@@ -4,6 +4,7 @@ import com.oksocios.exceptions.ObjectAlreadyExistsException;
 import com.oksocios.exceptions.ObjectNotAccesibleException;
 import com.oksocios.model.User;
 import com.oksocios.model.UserRole;
+import com.oksocios.model.UserRoleId;
 import com.oksocios.service.UserService;
 import com.oksocios.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.management.BadAttributeValueExpException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 @Controller
@@ -53,21 +55,27 @@ public class StaffController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/staff")
-    public ResponseEntity<?> addCustomer(@RequestBody User user, @SessionAttribute Long idEstablishment) throws ObjectNotAccesibleException {
+    public ResponseEntity<Object> addCustomer(@RequestBody User user, @SessionAttribute Long idEstablishment) throws ObjectNotAccesibleException {
+        HashMap<String, Object> response = new HashMap<>();
         if ((user.getDni() == null) || (user.getEmail().isEmpty())) {
             return new ResponseEntity<>("Por favor, Ingrese el DNI e Email del nuevo socio", HttpStatus.OK);
         }
-        if(user.getId()!=null){
-            userService.updateUser(user, idEstablishment);
-            return new ResponseEntity<>(HttpStatus.OK);
-        }
         try {
+            if(user.getId()!=null){
+                UserRole userRole = userService.updateUser(user, idEstablishment);
+                response.put("userRole", userRole);
+                response.put("update", true);
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            }
             userService.addUser(user, user.getRole(), idEstablishment);
-        } catch (ObjectAlreadyExistsException e) {
+        } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.OK);
         }
-        user.setRegistryDate(new Date());
-        return new ResponseEntity<>(user, HttpStatus.OK);
+        UserRole userRole = new UserRole(new UserRoleId(user, user.getRole(), idEstablishment),
+                Constants.getRoleName(user.getRole()));
+        response.put("userRole", userRole);
+        response.put("update", false);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/staff/{id}")

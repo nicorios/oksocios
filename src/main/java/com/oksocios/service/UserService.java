@@ -9,6 +9,7 @@ import com.oksocios.repository.UserRepository;
 import com.oksocios.repository.UserRoleRepository;
 import com.oksocios.utils.Constants;
 import com.oksocios.utils.Utils;
+import org.hibernate.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -134,7 +135,7 @@ public class UserService {
 
     public User getUserByDni(Long dni){ return userRepository.findFirstByDni(dni);}
 
-    public void updateUser(User user, Long idEstablishment) throws ObjectNotAccesibleException {
+    public UserRole updateUser(User user, Long idEstablishment) throws ObjectNotAccesibleException {
         UserRole userRole = hasAuthorityToEdit(user.getId(), idEstablishment);
         if(userRole.getId().getRoleId() != user.getRole()){
             //Update role for this user;
@@ -144,16 +145,17 @@ public class UserService {
                     userRole.getDate()
             );
             userRoleRepository.delete(new UserRoleId(new User(user.getId()), userRole.getId().getRoleId(), idEstablishment));
-            userRoleRepository.save(userRoleUpdate);
+            userRole = userRoleRepository.save(userRoleUpdate);
 
         }
         userRepository.save(user);
+        return userRole;
     }
 
     public UserRole hasAuthorityToEdit(Long id, Long idEstablishment) throws ObjectNotAccesibleException {
         UserRole userRole = userRoleRepository.findFirstByIdUserIdAndIdEstablishmentId(id, idEstablishment);
         //Role > 0 means that it is Customer or Employee
-        if(userRole.getId().getRoleId() > 0){
+        if((userRole == null) || (userRole.getId().getRoleId() == 0)){
             throw new ObjectNotAccesibleException("No tiene autorización para acceder a éste registro");
         }
         return userRole;
