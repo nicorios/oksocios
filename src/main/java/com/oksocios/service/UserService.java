@@ -1,6 +1,7 @@
 package com.oksocios.service;
 
 import com.oksocios.exceptions.ObjectAlreadyExistsException;
+import com.oksocios.exceptions.ObjectNotAccesibleException;
 import com.oksocios.model.User;
 import com.oksocios.model.UserRole;
 import com.oksocios.model.UserRoleId;
@@ -8,6 +9,7 @@ import com.oksocios.repository.UserRepository;
 import com.oksocios.repository.UserRoleRepository;
 import com.oksocios.utils.Constants;
 import com.oksocios.utils.Utils;
+import org.hibernate.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -133,8 +135,30 @@ public class UserService {
 
     public User getUserByDni(Long dni){ return userRepository.findFirstByDni(dni);}
 
-    public void updateUser(User user){
+    public UserRole updateUser(User user, Long idEstablishment) throws ObjectNotAccesibleException {
+        UserRole userRole = hasAuthorityToEdit(user.getId(), idEstablishment);
+        if(userRole.getId().getRoleId() != user.getRole()){
+            //Update role for this user;
+            UserRole userRoleUpdate = new UserRole(
+                    new UserRoleId(new User(user.getId()), user.getRole(), idEstablishment),
+                    Constants.getRoleName(user.getRole()),
+                    userRole.getDate()
+            );
+            userRoleRepository.delete(new UserRoleId(new User(user.getId()), userRole.getId().getRoleId(), idEstablishment));
+            userRole = userRoleRepository.save(userRoleUpdate);
+
+        }
         userRepository.save(user);
+        return userRole;
+    }
+
+    public UserRole hasAuthorityToEdit(Long id, Long idEstablishment) throws ObjectNotAccesibleException {
+        UserRole userRole = userRoleRepository.findFirstByIdUserIdAndIdEstablishmentId(id, idEstablishment);
+        //Role > 0 means that it is Customer or Employee
+        if((userRole == null) || (userRole.getId().getRoleId() == 0)){
+            throw new ObjectNotAccesibleException("No tiene autorización para acceder a éste registro");
+        }
+        return userRole;
     }
 
     public void deleteUser(Long id, Long idEstablishment) throws BadAttributeValueExpException {
@@ -162,5 +186,9 @@ public class UserService {
         return userRoleRepository.findAllByIdEstablishmentIdAndIdRoleIdIsIn(
                 idEstablishment,
                 new ArrayList<>(Arrays.asList(Constants.ROLE_KEY_ADMIN, Constants.ROLE_KEY_EMPLOYEE)));
+    }
+
+    public UserRole getStaffById(Long id, Long idEstablishment){
+        return userRoleRepository.findFirstByIdUserIdAndIdEstablishmentId(id, idEstablishment);
     }
 }
