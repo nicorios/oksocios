@@ -23,7 +23,7 @@
                   <h4 class="header">Actividades</h4>
                   <div class="row">
                       <div class="col s12 m6">
-                          <table id="tbl-activities" class="responsive-table display" cellspacing="0">
+                          <table id="tbl-activities" class="mdl-data-table" cellspacing="0" width="100%">
                               <thead>
                               <tr>
                                   <th>Nombre</th>
@@ -76,7 +76,7 @@
                     <h4 class="header">Conceptos de Gastos/Ingresos</h4>
                     <div class="row">
                         <div class="col s12 m6">
-                            <table id="tbl-concepts" class="responsive-table display" cellspacing="0">
+                            <table id="tbl-concepts" class="mdl-data-table" cellspacing="0" width="100%">
                                 <thead>
                                 <tr>
                                     <th>Nombre</th>
@@ -152,12 +152,20 @@
         var tblActivities = $('#tbl-activities').DataTable({
             searching: false,
             lengthChange: false,
-            pageLength: 3
+            pageLength: 3,
+            language: {
+                "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
+            },
+            bInfo : false
         });
         var tblConcepts = $('#tbl-concepts').DataTable({
             searching: false,
             lengthChange: false,
-            pageLength: 3
+            pageLength: 3,
+            language: {
+                "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
+            },
+            bInfo : false
         });
 
         $(document).ready(function(){
