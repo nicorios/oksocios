@@ -23,7 +23,6 @@
 
     <!-- CORE CSS-->
     <link th:href="@{../css/materialize.css}" type="text/css" rel="stylesheet" media="screen,projection"/>
-    <link th:href="@{../js/plugins/data-tables/css/jquery.dataTables.min.css}" type="text/css" rel="stylesheet" media="screen,projection"/>
     <link th:href="@{../css/style.css}" type="text/css" rel="stylesheet" media="screen,projection"/>
     <!-- Custome CSS-->
     <link th:href="@{../css/custom/custom.css}" type="text/css" rel="stylesheet" media="screen,projection"/>
@@ -46,8 +45,10 @@
     <!--scrollbar-->
     <script type="text/javascript" th:src="@{../js/plugins/perfect-scrollbar/perfect-scrollbar.min.js}"></script>
     <!-- data-tables -->
-    <script type="text/javascript" th:src="@{../js/plugins/data-tables/js/jquery.dataTables.min.js}"></script>
-    <script type="text/javascript" th:src="@{../js/plugins/data-tables/data-tables-script.js}"></script>
+    <link href='https://cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.1.0/material.min.css' rel='stylesheet' type='text/css'/>
+    <link href='https://cdn.datatables.net/1.10.16/css/dataTables.material.min.css' rel='stylesheet' type='text/css'/>
+    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.16/js/dataTables.material.min.js"></script>
 
     <!--plugins.js - Some Specific JS codes for Plugin Settings-->
     <script type="text/javascript" th:src="@{../js/plugins.js}"></script>

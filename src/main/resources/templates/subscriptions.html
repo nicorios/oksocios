@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml"  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layouts/default-ff">
 <head>
-
 </head>
 <th:block layout:fragment="content">
   <!-- Start Page Loading -->
@@ -25,7 +24,7 @@
                   <h4 class="header">Suscripciones Activas</h4>
                   <div class="row">
                       <div class="col s12">
-                          <table id="tbl-subscriptions" class="responsive-table display" cellspacing="0">
+                          <table id="tbl-subscriptions" class="mdl-data-table" cellspacing="0" width="100%">
                               <thead>
                               <tr>
                                   <th>Nombre</th>
@@ -72,7 +71,10 @@
     <script>
         var tblSubscriptions = $('#tbl-subscriptions').DataTable({
             searching: false,
-            lengthChange: false
+            lengthChange: false,
+            language: {
+                "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
+            }
         });
 
         $('#tbl-subscriptions').on('click', '.delete-subscription' , function(){
