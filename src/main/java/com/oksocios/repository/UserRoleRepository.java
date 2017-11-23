@@ -11,4 +11,5 @@ public interface UserRoleRepository extends CrudRepository<UserRole, UserRoleId>
     UserRole findFirstByIdUserIdAndIdRoleId(Long userId, Integer roleId);
     List<UserRole> findAllByIdEstablishmentIdAndIdRoleIdIsIn(Long establishmentId, List<Integer> roles);
     UserRole findFirstByIdUserIdAndIdEstablishmentId(Long id, Long idEstablishment);
+    List<UserRole> findAllByIdUserId(Long userId);
 }

@@ -15,8 +15,9 @@ public class UserRoleId implements Serializable{
     private User user;
     @Column(name = "id_rol")
     private Integer roleId;
-    @Column(name = "id_establishment")
-    private Long establishmentId;
+    @ManyToOne
+    @JoinColumn(name = "id_establishment")
+    private Establishment establishment;
 
     public UserRoleId() {
     }
@@ -24,7 +25,7 @@ public class UserRoleId implements Serializable{
     public UserRoleId(User user, Integer roleId, Long establishmentId) {
         this.user = user;
         this.roleId = roleId;
-        this.establishmentId = establishmentId;
+        this.establishment = new Establishment(establishmentId);
     }
 
     public User getUser() {
@@ -43,17 +44,17 @@ public class UserRoleId implements Serializable{
         this.roleId = roleId;
     }
 
-    public Long getEstablishmentId() {
-        return establishmentId;
+    public Establishment getEstablishment() {
+        return establishment;
     }
 
-    public void setEstablishmentId(Long establishmentId) {
-        this.establishmentId = establishmentId;
+    public void setEstablishment(Establishment establishment) {
+        this.establishment = establishment;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(user.getId(), roleId, establishmentId);
+        return Objects.hash(user.getId(), roleId, establishment.getId());
     }
 
     @Override
@@ -63,6 +64,6 @@ public class UserRoleId implements Serializable{
         UserRoleId that = (UserRoleId) o;
         return Objects.equals(user.getId(), that.getUser().getId()) &&
                 Objects.equals(roleId, that.getRoleId()) &&
-                Objects.equals(establishmentId, that.getEstablishmentId());
+                Objects.equals(establishment.getId(), that.getEstablishment().getId());
     }
 }

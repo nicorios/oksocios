@@ -191,4 +191,8 @@ public class UserService {
     public UserRole getStaffById(Long id, Long idEstablishment){
         return userRoleRepository.findFirstByIdUserIdAndIdEstablishmentId(id, idEstablishment);
     }
+
+    public List<UserRole> getUserRoleByUserId(Long userId){
+        return userRoleRepository.findAllByIdUserId(userId);
+    }
 }

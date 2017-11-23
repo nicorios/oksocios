@@ -54,6 +54,8 @@ public class EstablishmentService {
     }
 
     public List<Establishment> getEstablishmentsByUserId(Long userId){
-        return establishmentRepository.findByUserId(userId);
+        List<Establishment> establishments = new ArrayList<>();
+        userService.getUserRoleByUserId(userId).forEach(userRole -> establishments.add(userRole.getId().getEstablishment()));
+        return establishments;
     }
 }
