@@ -2,6 +2,7 @@ package com.oksocios.config;
 
 import com.oksocios.repository.UserRepository;
 import com.oksocios.service.UserDetailsServiceImpl;
+import com.oksocios.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -40,7 +41,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .antMatchers("/css/**", "/index").permitAll()
-                .antMatchers("/users/**", "/establishments/**", "/home/**", "/stats/**", "/customers/**", "/settings/**", "/balance").authenticated()
+                .antMatchers("/users/**", "/establishments/**", "/home/**", "/stats/**", "/customers/**", "/settings/**", "/balance").hasAuthority(Constants.ROLE_NAME_ADMIN)
+                .antMatchers("/users/**", "/establishments/**", "/home/**", "/customers/**").hasAnyAuthority(Constants.ROLE_NAME_ADMIN, Constants.ROLE_NAME_EMPLOYEE)
                 .and()
                 .formLogin()
                 .loginPage("/login").defaultSuccessUrl("/establishments", true).failureUrl("/login-error");

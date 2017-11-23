@@ -2,6 +2,7 @@ package com.oksocios.service;
 
 import com.oksocios.model.User;
 import com.oksocios.repository.UserRepository;
+import com.oksocios.utils.Constants;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -21,6 +22,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if (user == null) {
             throw new UsernameNotFoundException(email);
         }
+        user.setRoleName(Constants.ROLE_NAME_ADMIN);
         return user;
     }
 }

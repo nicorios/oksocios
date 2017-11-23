@@ -6,12 +6,14 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.apache.tomcat.jni.Local;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.Year;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -62,6 +64,8 @@ public class User implements UserDetails{
 
     @Transient
     private Integer role;
+    @Transient
+    private String roleName;
 
     public User(Long id) {
         this.id = id;
@@ -220,9 +224,19 @@ public class User implements UserDetails{
         this.role = role;
     }
 
+    public String getRoleName() {
+        return roleName;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return new ArrayList<GrantedAuthority>() {{
+            add(new SimpleGrantedAuthority(roleName));
+        }};
     }
 
     @Override
