@@ -11,6 +11,11 @@ import com.oksocios.utils.Constants;
 import com.oksocios.utils.Utils;
 import org.hibernate.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
@@ -194,5 +199,14 @@ public class UserService {
 
     public List<UserRole> getUserRoleByUserId(Long userId){
         return userRoleRepository.findAllByIdUserId(userId);
+    }
+
+    public void updateRole(Long userId, Long idEstablishment) {
+        UserRole userRole = userRoleRepository.findFirstByIdUserIdAndIdEstablishmentId(userId, idEstablishment);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        List<GrantedAuthority> updatedAuthorities = new ArrayList<>(auth.getAuthorities());
+        updatedAuthorities.add(new SimpleGrantedAuthority(userRole.getRol())); //add your role here [e.g., new SimpleGrantedAuthority("ROLE_NEW_ROLE")]
+        Authentication newAuth = new UsernamePasswordAuthenticationToken(auth.getPrincipal(), auth.getCredentials(), updatedAuthorities);
+        SecurityContextHolder.getContext().setAuthentication(newAuth);
     }
 }

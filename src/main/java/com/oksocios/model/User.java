@@ -234,9 +234,10 @@ public class User implements UserDetails{
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return new ArrayList<GrantedAuthority>() {{
-            add(new SimpleGrantedAuthority(roleName));
-        }};
+//        return new ArrayList<GrantedAuthority>() {{
+//            add(new SimpleGrantedAuthority(roleName));
+//        }};
+        return null;
     }
 
     @Override

@@ -3,10 +3,14 @@ package com.oksocios.controller;
 import com.oksocios.model.User;
 import com.oksocios.service.EntryService;
 import com.oksocios.service.UserService;
+import com.oksocios.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
@@ -16,6 +20,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @SessionAttributes("idEstablishment")
@@ -67,7 +74,9 @@ public class HomeController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/get-entries")
-    public String setSessionIdEstablishment(Model model, @RequestParam(name = "establishment") Long idEstablishment){
+    public String setSessionIdEstablishment(Model model, @RequestParam(name = "establishment") Long idEstablishment, Principal principal){
+        User user =(User) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
+        userService.updateRole(user.getId(), idEstablishment);
         model.addAttribute("idEstablishment", idEstablishment);
         return "redirect:/home";
     }

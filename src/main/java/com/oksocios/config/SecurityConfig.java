@@ -41,8 +41,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .antMatchers("/css/**", "/index").permitAll()
-                .antMatchers("/users/**", "/establishments/**", "/home/**", "/stats/**", "/customers/**", "/settings/**", "/balance").hasAuthority(Constants.ROLE_NAME_ADMIN)
-                .antMatchers("/users/**", "/establishments/**", "/home/**", "/customers/**").hasAnyAuthority(Constants.ROLE_NAME_ADMIN, Constants.ROLE_NAME_EMPLOYEE)
+                .antMatchers("/users/**", "/home/**", "/stats/**", "/customers/**", "/settings/**", "/balance").hasAuthority(Constants.ROLE_NAME_ADMIN)
+                .antMatchers("/users/**", "/home/**", "/customers/**").hasAnyAuthority(Constants.ROLE_NAME_ADMIN, Constants.ROLE_NAME_EMPLOYEE)
+                .antMatchers("/establishments/**").authenticated()
                 .and()
                 .formLogin()
                 .loginPage("/login").defaultSuccessUrl("/establishments", true).failureUrl("/login-error");

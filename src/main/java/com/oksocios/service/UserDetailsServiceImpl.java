@@ -22,7 +22,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if (user == null) {
             throw new UsernameNotFoundException(email);
         }
-        user.setRoleName(Constants.ROLE_NAME_ADMIN);
         return user;
     }
 }
