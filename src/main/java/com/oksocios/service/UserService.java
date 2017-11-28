@@ -204,7 +204,7 @@ public class UserService {
     public void updateRole(Long userId, Long idEstablishment) {
         UserRole userRole = userRoleRepository.findFirstByIdUserIdAndIdEstablishmentId(userId, idEstablishment);
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        List<GrantedAuthority> updatedAuthorities = new ArrayList<>(auth.getAuthorities());
+        List<GrantedAuthority> updatedAuthorities = new ArrayList<>();
         updatedAuthorities.add(new SimpleGrantedAuthority(userRole.getRol())); //add your role here [e.g., new SimpleGrantedAuthority("ROLE_NEW_ROLE")]
         Authentication newAuth = new UsernamePasswordAuthenticationToken(auth.getPrincipal(), auth.getCredentials(), updatedAuthorities);
         SecurityContextHolder.getContext().setAuthentication(newAuth);
