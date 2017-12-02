@@ -5,6 +5,7 @@ import com.oksocios.service.EntryService;
 import com.oksocios.service.UserService;
 import com.oksocios.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -30,6 +31,10 @@ public class HomeController {
 
     private final EntryService entryService;
     private final UserService userService;
+    @Value("${oksocios.demo.userId}")
+    private Long demoId;
+    @Value("${oksocios.demo.establishmentId}")
+    private Long demoEstablishmentId;
 
     @Autowired
     public HomeController(EntryService entryService, UserService userService){
@@ -90,5 +95,16 @@ public class HomeController {
     @RequestMapping(method = RequestMethod.GET, value = "new-entry")
     public String getNewEntryView(){
         return "new-entry";
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/demo")
+    private String checkDemo(HttpServletRequest request){
+        User demo = userService.getUser(demoId);
+        Authentication auth =
+                new UsernamePasswordAuthenticationToken(demo, null, demo.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(auth);
+        userService.updateRole(demo.getId(), demoEstablishmentId);
+        request.getSession().setAttribute("idEstablishment", demoEstablishmentId);
+        return "redirect:/home";
     }
 }

@@ -58,6 +58,7 @@
 						<li><a href="#home">Principal</a></li>
 						<li><a href="#feature">Características</a></li>
 						<li><a href="#contact">Contáctanos</a></li>
+						<li><a id="demo" href="javascript:void(0)">Ver Demo</a></li>
 						<li><a id="login" href="javascript:void(0)">Ingresar</a></li>
 					</ul>
 				</div>
@@ -204,6 +205,9 @@
 			    $('#login').on('click', function(){
 			        window.location.href = "/login";
 				});
+                $('#demo').on('click', function(){
+                    window.location.href = "/demo";
+                });
 
 			    $('#btn-contact-us').on('click', function(){
                     var l = Ladda.create(this);
