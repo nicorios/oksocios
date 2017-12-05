@@ -87,8 +87,9 @@ public class HomeController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/home")
-    public String getCurrentUsers(Model model, @SessionAttribute Long idEstablishment){
+    public String getCurrentUsers(Model model, @SessionAttribute Long idEstablishment, @SessionAttribute Boolean isDemo){
         model.addAttribute("entries", entryService.getAllEntriesByEstablishmentIdInLastTwoHours(idEstablishment));
+        model.addAttribute("isDemo", isDemo);
         return "home";
     }
 
@@ -105,6 +106,7 @@ public class HomeController {
         SecurityContextHolder.getContext().setAuthentication(auth);
         userService.updateRole(demo.getId(), demoEstablishmentId);
         request.getSession().setAttribute("idEstablishment", demoEstablishmentId);
+        request.getSession().setAttribute("isDemo", true);
         return "redirect:/home";
     }
 }
