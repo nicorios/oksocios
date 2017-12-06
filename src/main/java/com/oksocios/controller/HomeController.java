@@ -87,9 +87,8 @@ public class HomeController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/home")
-    public String getCurrentUsers(Model model, @SessionAttribute Long idEstablishment, @SessionAttribute Boolean isDemo){
+    public String getCurrentUsers(Model model, @SessionAttribute Long idEstablishment){
         model.addAttribute("entries", entryService.getAllEntriesByEstablishmentIdInLastTwoHours(idEstablishment));
-        model.addAttribute("isDemo", isDemo);
         return "home";
     }
 

@@ -65,21 +65,10 @@
     </script>
     <script th:inline="javascript">
         /*<![CDATA[*/
-
-        var isDemo = [[${isDemo}]];
+        var isDemo = /*[[${session.isDemo}]]*/ false;
         if(isDemo){
-            var anno2 = new Anno([{
-                target  : '#table-datatables',
-                position: 'center-bottom',
-                content : "Aquí puedes ver los socios que ingresaron al establecimiento en las últimas dos horas."
-            }]);
-
-            setTimeout(function(){
-                anno2.show();
-            }, 1000)
-
+            annoTour('home');
         }
-
         /*]]>*/
     </script>
 </th:block>

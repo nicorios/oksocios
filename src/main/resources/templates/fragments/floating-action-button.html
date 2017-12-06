@@ -1,12 +1,12 @@
 <th:block xmlns:th="http://www.thymeleaf.org" th:fragment="floating-action-button">
     <!-- Floating Action Button -->
-    <div class="fixed-action-btn" style="bottom: 50px; right: 19px;">
+    <div id="fab" class="fixed-action-btn" style="bottom: 50px; right: 19px;">
         <a class="btn-floating btn-large">
             <i class="mdi-content-add"></i>
         </a>
         <ul>
-            <li><a href="/new-entry" class="btn-floating red tooltipped" data-position="left" data-tooltip="Nuevo Ingreso de Socio"><i class="large mdi-action-done"></i></a></li>
-            <li><a href="/customers/new" class="btn-floating yellow darken-1 tooltipped" data-position="left" data-tooltip="Nuevo socio o suscripción"><i class="large mdi-social-person-add"></i></a></li>
+            <li><a id="btn-new-entry" href="/new-entry" class="btn-floating red tooltipped" data-position="left" data-tooltip="Nuevo Ingreso de Socio"><i class="large mdi-action-done"></i></a></li>
+            <li><a id="btn-new-customer" href="/customers/new" class="btn-floating yellow darken-1 tooltipped" data-position="left" data-tooltip="Nuevo socio o suscripción"><i class="large mdi-social-person-add"></i></a></li>
         </ul>
     </div>
     <!-- Floating Action Button -->
