@@ -21,16 +21,16 @@ var annoTour = function(name){
               anno_home.show();
           }, 2000);
           break;
-      case 'subscriptions':
+      case 'customers':
           var anno_subscriptions = new Anno([{
-              target  : '#left-sidebar-nav',
-              position: 'right',
-              content : "Nos encontramos en la pantalla Principal, puedes acceder a las diferentes pantallas del sistema mediante los siguientes links."
-          },
+                  target  : '#left-sidebar-nav',
+                  position: 'right',
+                  content : "Nos encontramos en la pantalla Principal, puedes acceder a las diferentes pantallas del sistema mediante los siguientes links."
+              },
               {
-                  target  : '#table-datatables',
+                  target  : '#tbl-subscriptions',
                   position: 'center-bottom',
-                  content : "Aquí puedes ver los socios que ingresaron al establecimiento en las últimas dos horas."
+                  content : "Aquí puedes ver los socios que tienes registrados en tu establecimiento."
               },
               {
                   target  : '#fab',
