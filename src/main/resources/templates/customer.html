@@ -58,50 +58,54 @@
                 <div id="profile-page-sidebar" class="col s12 m4">
 
                     <!-- Profile About  -->
-                    <div th:if="${hasSubscription}" class="card amber darken-2">
-                        <div class="card-content white-text center-align">
-                            <div th:if="${subscription.freePass}">
-                                <p class="card-title"><i class="mdi-navigation-check"></i> Pase Libre</p>
-                                <p th:text="${'Vencimiento: ' + #dates.format(subscription.expirationDate, 'dd-MMM-yyyy')}"></p>
-                            </div>
-                            <div th:if="${!subscription.freePass}">
-                                <p class="card-title"><i class="mdi-navigation-check"></i> Clases</p>
-                                <p th:text="${subscription.classesLeft + ' clases restantes'}">3 clases restantes</p>
-                                <p th:text="${'Vencimiento: ' + #dates.format(subscription.expirationDate, 'dd-MMM-yyyy')}"></p>
+                    <div id="profile-subscription">
+                        <div th:if="${hasSubscription}" class="card amber darken-2">
+                            <div class="card-content white-text center-align">
+                                <div th:if="${subscription.freePass}">
+                                    <p class="card-title"><i class="mdi-navigation-check"></i> Pase Libre</p>
+                                    <p th:text="${'Vencimiento: ' + #dates.format(subscription.expirationDate, 'dd-MMM-yyyy')}"></p>
+                                </div>
+                                <div th:if="${!subscription.freePass}">
+                                    <p class="card-title"><i class="mdi-navigation-check"></i> Clases</p>
+                                    <p th:text="${subscription.classesLeft + ' clases restantes'}">3 clases restantes</p>
+                                    <p th:text="${'Vencimiento: ' + #dates.format(subscription.expirationDate, 'dd-MMM-yyyy')}"></p>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div th:if="${!hasSubscription}" class="card blue darken-2">
-                        <div class="card-content white-text center-align">
-                            <p><i class="mdi-navigation-check"></i> No tiene subscripción vigente</p>
+                        <div th:if="${!hasSubscription}" class="card blue darken-2">
+                            <div class="card-content white-text center-align">
+                                <p><i class="mdi-navigation-check"></i> No tiene subscripción vigente</p>
+                            </div>
                         </div>
                     </div>
                     <!-- Profile About  -->
 
                     <!-- Map Card -->
-                    <div th:if="${hasLocation}" class="map-card">
-                        <div class="card">
-                            <div class="card-image waves-effect waves-block waves-light">
-                                <div id="map-canvas"></div>
-                            </div>
-                            <div class="card-content">
-                                <a class="btn-floating activator btn-move-up waves-effect waves-light darken-2 right">
-                                    <i class="mdi-maps-pin-drop"></i>
-                                </a>
-                                <h4 class="card-title grey-text text-darken-4"><a href="#" class="grey-text text-darken-4"><span th:text="${user.name + ' ' + user.lastName}"></span></a>
-                                </h4>
-                                <p class="blog-post-content">Domicilio</p>
-                            </div>
-                            <div class="card-reveal">
-                                <span class="card-title grey-text text-darken-4"><span th:text="${user.name + ' ' + user.lastName}"></span><i class="mdi-navigation-close right"></i></span>
-                                <p><i class="mdi-communication-business cyan-text text-darken-2"></i><span th:text="${' ' + user.street + ' ' + user.number}"></span></p>
+                    <div id="profile-location">
+                        <div th:if="${hasLocation}" class="map-card">
+                            <div class="card">
+                                <div class="card-image waves-effect waves-block waves-light">
+                                    <div id="map-canvas"></div>
+                                </div>
+                                <div class="card-content">
+                                    <a class="btn-floating activator btn-move-up waves-effect waves-light darken-2 right">
+                                        <i class="mdi-maps-pin-drop"></i>
+                                    </a>
+                                    <h4 class="card-title grey-text text-darken-4"><a href="#" class="grey-text text-darken-4"><span th:text="${user.name + ' ' + user.lastName}"></span></a>
+                                    </h4>
+                                    <p class="blog-post-content">Domicilio</p>
+                                </div>
+                                <div class="card-reveal">
+                                    <span class="card-title grey-text text-darken-4"><span th:text="${user.name + ' ' + user.lastName}"></span><i class="mdi-navigation-close right"></i></span>
+                                    <p><i class="mdi-communication-business cyan-text text-darken-2"></i><span th:text="${' ' + user.street + ' ' + user.number}"></span></p>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div th:if="${!hasLocation}" class="card blue darken-2">
-                        <div class="card-content white-text center-align">
-                            <p><i class="mdi-navigation-check"></i> No se ha almacenado domicilio para el usuario</p>
-                            <small>En caso de haberlo hecho, por favor comúniquese con oksocios.consultas@gmail.com</small>
+                        <div th:if="${!hasLocation}" class="card blue darken-2">
+                            <div class="card-content white-text center-align">
+                                <p><i class="mdi-navigation-check"></i> No se ha almacenado domicilio para el usuario</p>
+                                <small>En caso de haberlo hecho, por favor comúniquese con oksocios.consultas@gmail.com</small>
+                            </div>
                         </div>
                     </div>
                     <!-- Map Card -->
@@ -199,6 +203,9 @@
 
             </div>
         </div>
+        <!-- floating-action-button -->
+        <div th:replace="fragments/floating-action-button :: floating-action-button"/>
+        <!-- floating-action-button -->
     </div>
     <!--end container-->
 </section>
@@ -274,6 +281,14 @@
                 });
             }
         });
+        /*]]>*/
+    </script>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var isDemo = /*[[${session.isDemo}]]*/ false;
+        if(isDemo){
+            annoTour('customer-profile');
+        }
         /*]]>*/
     </script>
 

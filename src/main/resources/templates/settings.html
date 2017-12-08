@@ -16,7 +16,7 @@
       <section id="content">
         <!--start container-->
         <div class="container">
-          <div class="section">
+          <div id="section-activities" class="section">
 
               <!--DataTables example-->
               <div id="table-datatables">
@@ -69,7 +69,7 @@
 
           </div>
 
-            <div class="section">
+            <div id="section-concepts" class="section">
 
                 <!--DataTables example-->
                 <div id="table-concept">
@@ -121,6 +121,9 @@
                 </div>
 
             </div>
+            <!-- floating-action-button -->
+            <div th:replace="fragments/floating-action-button :: floating-action-button"/>
+            <!-- floating-action-button -->
         </div>
         <!--end container-->
       </section>
@@ -281,6 +284,14 @@
                 }
             }
         });
+    </script>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var isDemo = /*[[${session.isDemo}]]*/ false;
+        if(isDemo){
+            annoTour('settings');
+        }
+        /*]]>*/
     </script>
 </th:block>
 

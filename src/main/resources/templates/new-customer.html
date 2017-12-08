@@ -164,6 +164,9 @@
                     </div>
                 </div>
             </div>
+            <!-- floating-action-button -->
+            <div th:replace="fragments/floating-action-button :: floating-action-button"/>
+            <!-- floating-action-button -->
         </div>
         <!--end container-->
     </section>
@@ -268,6 +271,14 @@
                 });
             }
         });
+    </script>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var isDemo = /*[[${session.isDemo}]]*/ false;
+        if(isDemo){
+            annoTour('new-customer');
+        }
+        /*]]>*/
     </script>
 </th:block>
 
