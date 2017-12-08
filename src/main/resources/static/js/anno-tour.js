@@ -91,5 +91,26 @@ let annoTour = function(name){
               anno_stats_entries.show();
           }, 2000);
           break;
+      case 'balance':
+          let anno_balance = new Anno([{
+                  target  : '#tbl-balance',
+                  position: 'center-bottom',
+                  content : "Esta tabla representa la caja del establecimiento. Las suscripciones serán cargadas como Ingresos."
+              },
+              {
+                  target  : '#card-incomes',
+                  position: 'center-top',
+                  content : "También puedes agregar ingresos externos sobre los cuales quieras llevar registro."
+              },
+              {
+                  target  : '#card-expenses',
+                  position: 'center-top',
+                  content : "Así como también egresos de dinero. Puedes agregar o quitar Conceptos en la pestaña Ajustes."
+              }]);
+
+          setTimeout(function(){
+              anno_balance.show();
+          }, 2000);
+          break;
   }
 };

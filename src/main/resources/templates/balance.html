@@ -52,7 +52,7 @@
           </div>
             <div class="row">
                 <div class="col s12 m6">
-                    <div class="card-panel">
+                    <div id="card-incomes" class="card-panel">
                         <h4 class="header2">Ingresos externos</h4>
                         <div class="row">
                             <form class="formValidate" id="form-income">
@@ -96,7 +96,7 @@
                     </div>
                 </div>
                 <div class="col s12 m6">
-                    <div class="card-panel">
+                    <div id="card-expenses" class="card-panel">
                         <h4 class="header2">Gastos</h4>
                         <div class="row">
                             <form class="formValidate" id="form-expense">
@@ -238,6 +238,14 @@
                 });
             }
         });
+    </script>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var isDemo = /*[[${session.isDemo}]]*/ false;
+        if(isDemo){
+            annoTour('balance');
+        }
+        /*]]>*/
     </script>
 </th:block>
 
