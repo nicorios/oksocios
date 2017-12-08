@@ -70,5 +70,26 @@ let annoTour = function(name){
               anno_stats_customers.show();
           }, 2000);
           break;
+      case 'entries-stats':
+          let anno_stats_entries = new Anno([{
+                  target  : '#stats-entries-week',
+                  position: 'center-bottom',
+                  content : "Este gráfico muestra los ingresos de socios en la última semana."
+              },
+              {
+                  target  : '#stats-entries-month',
+                  position: 'center-top',
+                  content : "Este último gráfico detalla los ingresos de socios en el mes actual."
+              },
+              {
+                  target  : '#select-month',
+                  position: 'center-top',
+                  content : "También puedes filtrar por mes."
+              }]);
+
+          setTimeout(function(){
+              anno_stats_entries.show();
+          }, 2000);
+          break;
   }
 };

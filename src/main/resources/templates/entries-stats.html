@@ -22,25 +22,7 @@
             <div id="chartjs-bar-chart" class="section">
                 <h4 class="header">Ingresos en la última semana</h4>
                 <div class="row">
-                    <div class="col s12 m4 l3">
-                        <p>A bar chart is a way of showing data as bars. It is sometimes used to show trend data, and the comparison of multiple data sets side by side.</p>
-                        <!--<div class="input-field">-->
-                            <!--<select class="browser-default" id="crole" name="activities">-->
-                                <!--<option value="">Selecciona Actividad</option>-->
-                                <!--<option th:each="activity : ${activities}" th:value="${activity.id}" th:text="${activity.name}">Activity</option>-->
-                            <!--</select>-->
-                        <!--</div>-->
-                        <!--<br/>-->
-                        <div id="alert-week" class="card red lighten-5" style="display: none">
-                            <div class="card-content red-text">
-                                <p>Parece que no hubieron ingresos en la última semana</p>
-                            </div>
-                            <button type="button" class="close red-text" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">×</span>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="col s12 m8 l9">
+                    <div id="stats-entries-week" class="col s12 m12 l12">
                         <div class="sample-chart-wrapper">
                             <canvas id="bar-chart-week" height="120"></canvas>
                         </div>
@@ -52,7 +34,7 @@
                 <h4 class="header">Ingresos por mes</h4>
                 <div class="row">
                     <div class="col s12 m4 l3">
-                        <div class="input-field">
+                        <div id="select-month" class="input-field">
                         <select class="browser-default">
                         <option value="">Selecciona Mes</option>
                             <option th:selected="${month} == 0" value="0">Enero</option>
@@ -79,7 +61,7 @@
                             </button>
                         </div>
                     </div>
-                    <div class="col s12 m8 l9">
+                    <div id="stats-entries-month" class="col s12 m8 l9">
                         <div class="sample-chart-wrapper">
                             <canvas id="bar-chart-month" height="120"></canvas>
                         </div>
@@ -90,19 +72,9 @@
             <div class="divider"></div>
 
         </div>
-        <!--&lt;!&ndash; Floating Action Button &ndash;&gt;-->
-        <!--<div class="fixed-action-btn" style="bottom: 50px; right: 19px;">-->
-            <!--<a class="btn-floating btn-large">-->
-                <!--<i class="mdi-action-stars"></i>-->
-            <!--</a>-->
-            <!--<ul>-->
-                <!--<li><a href="css-helpers.html" class="btn-floating red"><i class="large mdi-communication-live-help"></i></a></li>-->
-                <!--<li><a href="app-widget.html" class="btn-floating yellow darken-1"><i class="large mdi-device-now-widgets"></i></a></li>-->
-                <!--<li><a href="app-calendar.html" class="btn-floating green"><i class="large mdi-editor-insert-invitation"></i></a></li>-->
-                <!--<li><a href="app-email.html" class="btn-floating blue"><i class="large mdi-communication-email"></i></a></li>-->
-            <!--</ul>-->
-        <!--</div>-->
-        <!--&lt;!&ndash; Floating Action Button &ndash;&gt;-->
+        <!-- floating-action-button -->
+        <div th:replace="fragments/floating-action-button :: floating-action-button"/>
+        <!-- floating-action-button -->
     </div>
     <!--end container-->
 
@@ -233,6 +205,14 @@
 
         });
 
+        /*]]>*/
+    </script>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var isDemo = /*[[${session.isDemo}]]*/ false;
+        if(isDemo){
+            annoTour('entries-stats');
+        }
         /*]]>*/
     </script>
 
