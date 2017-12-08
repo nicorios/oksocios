@@ -34,7 +34,7 @@
 
   <!-- SweetAlert -->
   <link th:href="@{js/plugins/sweetalert/dist/sweetalert.css}" href="../static/js/plugins/sweetalert/dist/sweetalert.css" type="text/css" rel="stylesheet" media="screen,projection"/>
-  
+
 </head>
 
 <body class="cyan">
@@ -96,6 +96,9 @@
   <script type="text/javascript" th:src="@{js/custom-script.js}" src="../static/js/custom-script.js"></script>
   <!-- SweetAlert -->
   <script type="text/javascript" th:src="@{js/plugins/sweetalert/dist/sweetalert.min.js}" src="../static/js/plugins/sweetalert/dist/sweetalert.min.js"></script>
+  <link th:href="@{../js/plugins/anno/anno.min.css}" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <script type="text/javascript" th:src="@{../js/plugins/anno/anno.min.js}"></script>
+  <script type="text/javascript" th:src="@{../js/anno-tour.js}"></script>
   <script type="text/javascript">
     $(document).ready(function(){
         $('#new-entry-form').on('keyup keypress', function(e) {
@@ -158,6 +161,14 @@
         };
 
       });
+  </script>
+  <script th:inline="javascript">
+      /*<![CDATA[*/
+      var isDemo = /*[[${session.isDemo}]]*/ false;
+      if(isDemo){
+          annoTour('new-entry');
+      }
+      /*]]>*/
   </script>
 </body>
 

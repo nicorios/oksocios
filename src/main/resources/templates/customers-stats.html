@@ -32,7 +32,7 @@
                             </button>
                         </div>
                     </div>
-                    <div class="col s12 m12 l10">
+                    <div id="stats-customers" class="col s12 m12 l10">
                         <div class="sample-chart-wrapper">
                             <canvas id="customers-ages-chart" height="120"></canvas>
                         </div>
@@ -124,6 +124,14 @@
 
         });
 
+        /*]]>*/
+    </script>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var isDemo = /*[[${session.isDemo}]]*/ false;
+        if(isDemo){
+            annoTour('customers-stats');
+        }
         /*]]>*/
     </script>
 
