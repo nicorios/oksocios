@@ -4,9 +4,6 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.*;
 
-/**
- * Created by Envy on 14/5/2017.
- */
 @Entity
 @Table(name = "activity")
 public class Activity {
@@ -21,6 +18,18 @@ public class Activity {
     @JoinColumn(name = "id_establishment")
     @JsonBackReference
     private Establishment establishment;
+
+    public Activity() {
+    }
+
+    public Activity(Long id){
+        this.id = id;
+    }
+
+    public Activity(String name, Establishment establishment) {
+        this.name = name;
+        this.establishment = establishment;
+    }
 
     public Long getId() {
         return id;

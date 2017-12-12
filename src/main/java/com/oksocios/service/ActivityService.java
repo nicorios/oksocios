@@ -20,8 +20,8 @@ public class ActivityService {
         return activities;
     }
 
-    public void addActivity(Activity activity){
-        activityRepository.save(activity);
+    public Activity addActivity(Activity activity){
+        return activityRepository.save(activity);
     }
 
     public Activity getActivity(Long id) {

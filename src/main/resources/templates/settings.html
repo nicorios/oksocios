@@ -51,7 +51,7 @@
                                   <span class="card-title">Nueva Actividad</span>
                                   <form class="formValidate" id="form-activity" method="post" th:object="${activity}" action="/activities">
                                       <!--<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />-->
-                                      <input type="hidden" th:field="*{id}" />
+                                      <input type="hidden" id="activity-id" />
                                       <div class="row">
                                           <div class="input-field col s12">
                                               <label for="aname">Nombre *</label>
@@ -104,7 +104,7 @@
                                     <span class="card-title">Nuevo Concepto</span>
                                     <form class="formValidate" id="form-concept" method="post" th:object="${concept}" action="/concepts">
                                         <!--<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />-->
-                                        <input type="hidden" th:field="*{id}" />
+                                        <input type="hidden" id="concept-id" />
                                         <div class="row">
                                             <div class="input-field col s12">
                                                 <label for="cname">Nombre *</label>
@@ -128,26 +128,6 @@
         <!--end container-->
       </section>
       <!-- END CONTENT -->
-    <!--Edit Modal-->
-    <div id="edit-modal" class="modal">
-        <form class="formValidate" id="form-modal" th:method="PUT">
-            <div class="modal-content">
-                <span class="right modal-close">&times;</span>
-                <h5>Editar Actividad</h5>
-                <!--<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />-->
-                <input id="modal-id" type="hidden" name="id" />
-                <div class="row">
-                    <div class="input-field col s12">
-                        <input id="mname" type="text" name="name" data-error=".errorTxt1"/>
-                        <div class="errorTxt1"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="submit" class="waves-effect waves-light btn">Enviar</button>
-            </div>
-        </form>
-    </div>
 
     <script type="text/javascript" th:src="@{js/plugins/jquery-validation/jquery.validate.min.js}"></script>
     <script>
@@ -174,16 +154,7 @@
         $(document).ready(function(){
             $("#aname").rules("add",{required: true, maxlength: 30, messages: {required: "Ingrese el nombre de la actividad", maxlength: "El valor ingresado es demasiado largo"}});
             $("#cname").rules("add",{required: true, maxlength: 30, messages: {required: "Ingrese el nombre del concepto", maxlength: "El valor ingresado es demasiado largo"}});
-            $("#mname").rules("add",{required: true, maxlength: 30, messages: {required: "Ingrese el nombre", maxlength: "El valor ingresado es demasiado largo"}});
         });
-
-//        function editModal(elem){
-//            var id = $(elem).data('id');
-//            var entity = $(elem).data('entity');
-//            $('#modal-id').val(id);
-//            $('#modal-name').val($('#'+entity+'-'+id).text());
-//            $('#form-modal').attr('action','/'+entity+'/' + id);
-//        }
 
         $('#tbl-activities').on('click', '.delete-activity' , function(){
             var id = $(this).data('id');
@@ -260,8 +231,29 @@
                 } else {
                     error.insertAfter(element);
                 }
+            },
+            submitHandler: function(form){
+                let activity = objectifyForm($('#form-activity').serializeArray());
+                $.ajax({
+                    type : "POST",
+                    contentType : "application/json",
+                    url : "/activities",
+                    data : JSON.stringify(activity),
+                    dataType : 'json',
+                    success : function(activity) {
+                        if(activity){
+                            console.log(activity);
+                            swal("¡Éxito!", "Actividad cargada correctamente", "success");
+                            addActivityRowToTable(activity);
+                        }
+                    },
+                    error : function(e) {
+                        console.log("ERROR: ", e);
+                    }
+                });
             }
         });
+
         $("#form-concept").validate({
             errorElement : 'div',
             errorPlacement: function(error, element) {
@@ -271,19 +263,53 @@
                 } else {
                     error.insertAfter(element);
                 }
+            },
+            submitHandler: function(form){
+                let concept = objectifyForm($('#form-concept').serializeArray());
+                console.log(concept);
+                $.ajax({
+                    type : "POST",
+                    contentType : "application/json",
+                    url : "/concepts",
+                    data : JSON.stringify(concept),
+                    dataType : 'json',
+                    success : function(concept) {
+                        if(concept){
+                            console.log(concept);
+                            swal("¡Éxito!", "Concepto cargado correctamente", "success");
+                            addConceptRowToTable(concept);
+                        }
+                    },
+                    error : function(e) {
+                        console.log("ERROR: ", e);
+                    }
+                });
             }
         });
-        $("#form-modal").validate({
-            errorElement : 'div',
-            errorPlacement: function(error, element) {
-                var placement = $(element).data('error');
-                if (placement) {
-                    $(placement).append(error)
-                } else {
-                    error.insertAfter(element);
-                }
-            }
-        });
+
+        addActivityRowToTable = function(activity){
+            tblActivities.row.add([
+                activity.name,
+                ' <a href="javascript:void(0)" class="edit-activity" data-id="'+ activity.id +'">\n' +
+                '<i style="font-size: x-large;" class="mdi-image-edit edit-activity"></i>\n' +
+                '</a>\n' +
+                '<a href="javascript:void(0)" class="delete-activity" data-id="'+ activity.id +'">\n' +
+                '<i style="font-size: x-large;" class="mdi-action-delete"></i>\n' +
+                '</a>'
+            ]).draw(false);
+        };
+
+        addConceptRowToTable = function(concept){
+            tblConcepts.row.add([
+                concept.name,
+                ' <a href="javascript:void(0)" class="edit-concept" data-id="'+ concept.id +'">\n' +
+                '<i style="font-size: x-large;" class="mdi-image-edit edit-concept"></i>\n' +
+                '</a>\n' +
+                '<a href="javascript:void(0)" class="delete-concept" data-id="'+ concept.id +'">\n' +
+                '<i style="font-size: x-large;" class="mdi-action-delete"></i>\n' +
+                '</a>'
+            ]).draw(false);
+        };
     </script>
     <script th:inline="javascript">
         /*<![CDATA[*/

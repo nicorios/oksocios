@@ -25,10 +25,9 @@ public class ActivityController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/activities")
-    public String addActivity(@ModelAttribute Activity activity, @SessionAttribute Long idEstablishment){
+    public ResponseEntity<Activity> addActivity(@RequestBody Activity activity, @SessionAttribute Long idEstablishment){
         activity.setEstablishment(new Establishment(idEstablishment));
-        activityService.addActivity(activity);
-        return "redirect:/settings";
+        return new ResponseEntity<>(activityService.addActivity(activity), HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/activities/{id}")

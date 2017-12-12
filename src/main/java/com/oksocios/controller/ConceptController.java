@@ -20,10 +20,9 @@ public class ConceptController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/concepts")
-    public String addConcept(@SessionAttribute Long idEstablishment, @ModelAttribute Concept concept){
+    public ResponseEntity<Concept> addConcept(@RequestBody Concept concept, @SessionAttribute Long idEstablishment){
         concept.setEstablishment(new Establishment(idEstablishment));
-        conceptService.saveConcept(concept);
-        return "redirect:/settings";
+        return new ResponseEntity<>(conceptService.saveConcept(concept), HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = "/concepts/{id}")
