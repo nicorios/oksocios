@@ -1,8 +1,6 @@
 package com.oksocios.service;
 
-import com.oksocios.model.Establishment;
-import com.oksocios.model.Movement;
-import com.oksocios.model.User;
+import com.oksocios.model.*;
 import com.oksocios.repository.MovementRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,5 +31,15 @@ public class MovementService {
 
     public List<Movement> getMovementsByConceptId(Long conceptId){
         return movementRepository.findAllByConceptId(conceptId);
+    }
+
+    public Movement saveMovementFromSubscription(Subscription subscription){
+        Movement movement = new Movement(
+                true, subscription.getPrice(), subscription.getUser(), new Concept(1L),
+                String.format("Suscripción del socio %s %s", subscription.getUser().getName(), subscription.getUser().getLastName()),
+                subscription.getEstablishment(),
+                subscription.getSubscriptionDate());
+
+        return movementRepository.save(movement);
     }
 }

@@ -7,7 +7,6 @@ import com.oksocios.repository.SubscriptionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -17,10 +16,12 @@ import java.util.List;
 public class SubscriptionService {
 
     private final SubscriptionRepository subscriptionRepository;
+    private final MovementService movementService;
 
     @Autowired
-    public SubscriptionService(SubscriptionRepository subscriptionRepository){
+    public SubscriptionService(SubscriptionRepository subscriptionRepository, MovementService movementService){
         this.subscriptionRepository = subscriptionRepository;
+        this.movementService = movementService;
     }
 
     public List<Subscription> getAllSubscriptions(){
@@ -62,7 +63,9 @@ public class SubscriptionService {
 
         if(subscription.getClassesLeft() == null) subscription.setFreePass(true);
         if(subscription.getPrice() == null) subscription.setPrice(0D);
-        subscriptionRepository.save(subscription);
+        Subscription subscriptionSaved =subscriptionRepository.save(subscription);
+        //Save a new income
+        movementService.saveMovementFromSubscription(subscriptionSaved);
     }
 
     public int[] findAllLastYearSubscriptionsByActivity(Long idActivity, Long idEstablishment){

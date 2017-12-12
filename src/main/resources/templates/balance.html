@@ -70,6 +70,7 @@
                                             <label for="uconcept">Concepto</label>
                                             <select class="error browser-default" id="uconcept" data-error=".errorTxt2">
                                                 <option value="">Seleccionar Concepto</option>
+                                                <option value="1">Suscripción</option>
                                                 <option th:each="concept : ${concepts}" th:value="${concept.id}" th:text="${concept.name}">Concepts</option>
                                             </select>
                                             <div class="input-field">

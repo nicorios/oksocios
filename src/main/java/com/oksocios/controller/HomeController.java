@@ -1,5 +1,6 @@
 package com.oksocios.controller;
 
+import com.oksocios.exceptions.ObjectNotAccesibleException;
 import com.oksocios.model.User;
 import com.oksocios.service.EntryService;
 import com.oksocios.service.UserService;
@@ -79,7 +80,7 @@ public class HomeController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/get-entries")
-    public String setSessionIdEstablishment(Model model, @RequestParam(name = "establishment") Long idEstablishment, Principal principal){
+    public String setSessionIdEstablishment(Model model, @RequestParam(name = "establishment") Long idEstablishment, Principal principal) throws ObjectNotAccesibleException {
         User user =(User) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
         userService.updateRole(user.getId(), idEstablishment);
         model.addAttribute("idEstablishment", idEstablishment);
@@ -98,7 +99,7 @@ public class HomeController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/demo")
-    private String checkDemo(HttpServletRequest request){
+    private String checkDemo(HttpServletRequest request) throws ObjectNotAccesibleException {
         User demo = userService.getUser(demoId);
         Authentication auth =
                 new UsernamePasswordAuthenticationToken(demo, null, demo.getAuthorities());

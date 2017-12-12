@@ -201,8 +201,11 @@ public class UserService {
         return userRoleRepository.findAllByIdUserId(userId);
     }
 
-    public void updateRole(Long userId, Long idEstablishment) {
+    public void updateRole(Long userId, Long idEstablishment) throws ObjectNotAccesibleException {
         UserRole userRole = userRoleRepository.findFirstByIdUserIdAndIdEstablishmentId(userId, idEstablishment);
+        if(userRole == null){
+            throw new ObjectNotAccesibleException("No se encuentra autorizado a realizar ésta acción");
+        }
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         List<GrantedAuthority> updatedAuthorities = new ArrayList<>();
         updatedAuthorities.add(new SimpleGrantedAuthority(userRole.getRol())); //add your role here [e.g., new SimpleGrantedAuthority("ROLE_NEW_ROLE")]

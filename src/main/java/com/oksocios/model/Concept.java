@@ -22,6 +22,10 @@ public class Concept {
     public Concept() {
     }
 
+    public Concept(Long id){
+        this.id = id;
+    }
+
     public Concept(String name, Establishment establishment) {
         this.name = name;
         this.establishment = establishment;
