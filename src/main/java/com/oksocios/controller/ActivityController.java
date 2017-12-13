@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 @Controller
@@ -25,14 +26,15 @@ public class ActivityController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/activities")
-    public ResponseEntity<Activity> addActivity(@RequestBody Activity activity, @SessionAttribute Long idEstablishment){
+    public ResponseEntity<Object> addActivity(@RequestBody Activity activity, @SessionAttribute Long idEstablishment){
         activity.setEstablishment(new Establishment(idEstablishment));
-        return new ResponseEntity<>(activityService.addActivity(activity), HttpStatus.OK);
+        Map<String, Object> response = activityService.addActivity(activity);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/activities/{id}")
-    public Activity getActivity(@PathVariable Long id){
-        return activityService.getActivity(id);
+    public ResponseEntity<Activity> getActivity(@PathVariable Long id){
+        return new ResponseEntity<>(activityService.getActivity(id), HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = "/activities/{id}")

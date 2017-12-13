@@ -27,9 +27,7 @@ public class SettingsController {
     @RequestMapping(method = RequestMethod.GET, value = "/settings")
     public String getSettings(Model model, @SessionAttribute Long idEstablishment){
         model.addAttribute("activities", activityService.getAllActivitiesByEstablishment(idEstablishment));
-        model.addAttribute("activity", new Activity());
         model.addAttribute("concepts", conceptService.getConceptsByEstablishmentId(idEstablishment));
-        model.addAttribute("concept", new Concept());
         return "settings";
     }
 

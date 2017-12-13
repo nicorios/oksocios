@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ActivityService {
@@ -20,8 +22,11 @@ public class ActivityService {
         return activities;
     }
 
-    public Activity addActivity(Activity activity){
-        return activityRepository.save(activity);
+    public Map<String, Object> addActivity(Activity activity){
+        Map<String, Object> map = new HashMap<>();
+        map.put("update", activity.getId() != null);
+        map.put("activity", activityRepository.save(activity));
+        return map;
     }
 
     public Activity getActivity(Long id) {

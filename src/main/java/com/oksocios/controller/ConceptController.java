@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @Controller
 public class ConceptController {
 
@@ -20,9 +22,10 @@ public class ConceptController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/concepts")
-    public ResponseEntity<Concept> addConcept(@RequestBody Concept concept, @SessionAttribute Long idEstablishment){
+    public ResponseEntity<Object> addConcept(@RequestBody Concept concept, @SessionAttribute Long idEstablishment){
         concept.setEstablishment(new Establishment(idEstablishment));
-        return new ResponseEntity<>(conceptService.saveConcept(concept), HttpStatus.OK);
+        Map<String, Object> response = conceptService.saveConcept(concept);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = "/concepts/{id}")
@@ -34,5 +37,10 @@ public class ConceptController {
     @RequestMapping(method = RequestMethod.DELETE, value = "/concepts/{id}")
     public ResponseEntity<Boolean> deleteConcept(@PathVariable Long id){
         return new ResponseEntity<>(conceptService.deleteConcept(id), HttpStatus.OK);
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/concepts/{id}")
+    public ResponseEntity<Concept> getConcept(@PathVariable Long id){
+        return new ResponseEntity<>(conceptService.getConcept(id), HttpStatus.OK);
     }
 }

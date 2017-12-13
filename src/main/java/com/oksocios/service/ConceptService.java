@@ -6,7 +6,9 @@ import com.oksocios.repository.ConceptRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ConceptService {
@@ -24,8 +26,11 @@ public class ConceptService {
         return conceptRepository.findAllByEstablishmentId(idEstablishment);
     }
 
-    public Concept saveConcept(Concept concept) {
-        return conceptRepository.save(concept);
+    public Map<String, Object> saveConcept(Concept concept) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("update", concept.getId() != null);
+        map.put("concept", conceptRepository.save(concept));
+        return map;
     }
 
     public Concept updateConcept(Concept concept) {
@@ -40,5 +45,9 @@ public class ConceptService {
         }
         return false;
 
+    }
+
+    public Concept getConcept(Long id){
+        return conceptRepository.findOne(id);
     }
 }
