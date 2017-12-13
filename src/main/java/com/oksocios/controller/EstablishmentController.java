@@ -34,8 +34,11 @@ public class EstablishmentController {
     public String selectEstablishments(Principal principal, Model model){
         User user =(User) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
         List<Establishment> establishments = establishmentService.getEstablishmentsByUserId(user.getId());
+        if(establishments.size() == 1){
+            return "redirect:/get-entries?establishment=" + establishments.get(0).getId();
+        }
         model.addAttribute("user", user);
-        model.addAttribute("hasEstablishments", establishments.size()>0? true : false);
+        model.addAttribute("hasEstablishments", establishments.size()>0);
         model.addAttribute("establishments", establishments);
         return "establishments";
     }
