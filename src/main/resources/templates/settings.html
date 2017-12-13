@@ -32,7 +32,7 @@
                               </thead>
                               <tbody>
                               <tr th:each="activity : ${activities}">
-                                  <td th:id="activities- + ${activity.id}" th:text="${activity.name}">Nombre</td>
+                                  <td th:id="activity- + ${activity.id}" th:text="${activity.name}">Nombre</td>
                                   <td width="20%">
                                       <a href="javascript:void(0)" class="edit-activity" th:attr="data-id=${activity.id}">
                                           <i style="font-size: x-large;" class="mdi-image-edit"></i>
@@ -85,7 +85,7 @@
                                 </thead>
                                 <tbody>
                                 <tr th:each="concept : ${concepts}">
-                                    <td th:id="concepts- + ${concept.id}" th:text="${concept.name}">Nombre</td>
+                                    <td th:id="concept- + ${concept.id}" th:text="${concept.name}">Nombre</td>
                                     <td width="20%">
                                         <a href="javascript:void(0)" class="edit-concept" th:attr="data-id=${concept.id}">
                                             <i style="font-size: x-large;" class="mdi-image-edit"></i>
@@ -163,7 +163,6 @@
                 url: '/activities/' + id,
                 success: function (activity) {
                     if(activity){
-                        console.log(activity);
                         $('#aid').val(activity.id);
                         $('#lbl-aname').addClass('active');
                         $('#aname').val(activity.name);
@@ -185,7 +184,6 @@
                 url: '/concepts/' + id,
                 success: function (concept) {
                     if(concept){
-                        console.log(concept);
                         $('#cid').val(concept.id);
                         $('#lbl-cname').addClass('active');
                         $('#cname').val(concept.name);
@@ -223,7 +221,8 @@
                                 }else{
                                     swal("Lo lamentamos", "No es posible eliminar una actividad con suscripciones asociadas", "error");
                                 }
-
+                                $('#form-activity')[0].reset();
+                                $('#aid').val("");
                             },
                             error: function (e) {
                                 console.log(e);
@@ -256,7 +255,8 @@
                                 }else{
                                     swal("Lo lamentamos", "No es posible eliminar un concepto con gastos asociados", "error");
                                 }
-
+                                $('#form-concept')[0].reset();
+                                $('#cid').val("");
                             },
                             error: function (e) {
                                 console.log(e);
@@ -290,6 +290,7 @@
                     success : function(response) {
                         if(response.update){
                             swal("¡Éxito!", "Actividad actualizada correctamente", "success");
+                            $('#activity-' + response.activity.id).text(response.activity.name);
                         }else{
                             swal("¡Éxito!", "Actividad cargada correctamente", "success");
                             addActivityRowToTable(response.activity);
@@ -325,7 +326,7 @@
                     success : function(response) {
                         if(response.update){
                             swal("¡Éxito!", "Concepto actualizado correctamente", "success");
-
+                            $('#concept-' + response.concept.id).text(response.concept.name);
                         }else{
                             swal("¡Éxito!", "Concepto cargado correctamente", "success");
                             addConceptRowToTable(response.concept);
@@ -344,7 +345,7 @@
             tblActivities.row.add([
                 activity.name,
                 ' <a href="javascript:void(0)" class="edit-activity" data-id="'+ activity.id +'">\n' +
-                '<i style="font-size: x-large;" class="mdi-image-edit edit-activity"></i>\n' +
+                '<i style="font-size: x-large;" class="mdi-image-edit"></i>\n' +
                 '</a>\n' +
                 '<a href="javascript:void(0)" class="delete-activity" data-id="'+ activity.id +'">\n' +
                 '<i style="font-size: x-large;" class="mdi-action-delete"></i>\n' +
@@ -356,7 +357,7 @@
             tblConcepts.row.add([
                 concept.name,
                 ' <a href="javascript:void(0)" class="edit-concept" data-id="'+ concept.id +'">\n' +
-                '<i style="font-size: x-large;" class="mdi-image-edit edit-concept"></i>\n' +
+                '<i style="font-size: x-large;" class="mdi-image-edit"></i>\n' +
                 '</a>\n' +
                 '<a href="javascript:void(0)" class="delete-concept" data-id="'+ concept.id +'">\n' +
                 '<i style="font-size: x-large;" class="mdi-action-delete"></i>\n' +
