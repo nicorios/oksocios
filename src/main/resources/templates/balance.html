@@ -32,7 +32,7 @@
                                   <th>Hora</th>
                                   <th>Concepto</th>
                                   <th>Monto</th>
-                                  <!--<th>Acciones</th>-->
+                                  <th>Acciones</th>
                               </tr>
                               </thead>
                               <tbody>
@@ -41,7 +41,14 @@
                                   <td th:text="${#dates.format(movement.date, 'HH:mm')}">Hora</td>
                                   <td th:text="${movement.concept == null ? '-' : movement.concept.name}">Concepto</td>
                                   <td th:text="${movement.income? movement.amount : '- ' + movement.amount}">Monto</td>
-                                  <!--<td>Acciones</td>-->
+                                  <td width="20%">
+                                      <a href="javascript:void(0)" class="edit-movement" th:attr="data-id=${movement.id}">
+                                          <i style="font-size: x-large;" class="mdi-image-edit"></i>
+                                      </a>
+                                      <a href="javascript:void(0)" class="delete-movement" th:attr="data-id=${movement.id}">
+                                          <i style="font-size: x-large;" class="mdi-action-delete"></i>
+                                      </a>
+                                  </td>
                               </tr>
                               </tbody>
                           </table>
@@ -57,10 +64,11 @@
                         <div class="row">
                             <form class="formValidate" id="form-income">
                                 <!--<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />-->
+                                <input type="hidden" id="uid" name="id" />
                                 <div class="container">
                                     <div class="row">
                                         <div class="input-field col s12">
-                                            <label for="uamount">Monto [AR$]</label>
+                                            <label id="lbl-uamount" for="uamount">Monto [AR$]</label>
                                             <input id="uamount" type="number" name="amount" data-error=".errorTxt1"/>
                                             <div class="errorTxt1"></div>
                                         </div>
@@ -80,7 +88,7 @@
                                     </div>
                                     <div class="row">
                                         <div class="input-field col s12">
-                                            <label for="idesc">Detalle</label>
+                                            <label id="lbl-udesc" for="idesc">Detalle</label>
                                             <textarea id="idesc" type="text" name="detail" class="materialize-textarea"></textarea>
                                         </div>
                                     </div>
@@ -102,10 +110,11 @@
                         <div class="row">
                             <form class="formValidate" id="form-expense">
                                 <!--<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />-->
+                                <input type="hidden" id="eid" name="id" />
                                 <div class="container">
                                     <div class="row">
                                         <div class="input-field col s12">
-                                            <label for="eamount">Monto [AR$]</label>
+                                            <label id="lbl-eamount" for="eamount">Monto [AR$]</label>
                                             <input id="eamount" type="number" name="amount" data-error=".errorTxt3"/>
                                             <div class="errorTxt3"></div>
                                         </div>
@@ -124,7 +133,7 @@
                                     </div>
                                     <div class="row">
                                         <div class="input-field col s12">
-                                            <label for="idesc-e">Detalle</label>
+                                            <label id="lbl-edesc" for="idesc-e">Detalle</label>
                                             <textarea id="idesc-e" type="text" name="detail" class="materialize-textarea"></textarea>
                                         </div>
                                     </div>
@@ -150,19 +159,22 @@
       <!-- END CONTENT -->
     <script type="text/javascript" th:src="@{/js/plugins/jquery-validation/jquery.validate.min.js}"></script>
     <script type="text/javascript">
-        $('#tbl-balance').DataTable({
+        let tblBalance = $('#tbl-balance').DataTable({
             searching: false,
             lengthChange: false,
+            pageLength: 10,
             language: {
                 "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
             }
         });
 
         $(document).ready(function () {
-            $("#uamount").rules("add", { required: true, messages: { required: "Ingrese el monto"}});
-            $("#eamount").rules("add", { required: true, messages: { required: "Ingrese el monto"}});
+            $("#uamount").rules("add", { required: true, maxlength: 8, messages: { required: "Ingrese el monto", maxlength: "El valor ingresado es demasiado largo"}});
+            $("#eamount").rules("add", { required: true, maxlength: 8, messages: { required: "Ingrese el monto", maxlength: "El valor ingresado es demasiado largo"}});
             $("#uconcept").rules("add", { required: true, messages: { required: "Seleccione el concepto"}});
             $("#econcept").rules("add", { required: true, messages: { required: "Seleccione el concepto"}});
+            $("#idesc").rules("add", { maxlength: 250, messages: { maxlength: "El valor ingresado es demasiado largo"}});
+            $("#idesc-e").rules("add", { maxlength: 250, messages: { maxlength: "El valor ingresado es demasiado largo"}});
         });
 
         $("#form-income").validate({
@@ -215,7 +227,7 @@
                 var concept = {};
                 concept["id"] = $('#econcept').val();
                 movement["concept"] = concept;
-                movement["income"] = true;
+                movement["income"] = false;
 
                 $.ajax({
                     type : "POST",
@@ -233,6 +245,79 @@
                     }
                 });
             }
+        });
+
+        tblBalance.on('click', '.edit-movement' , function(){
+            let id = $(this).data('id');
+            $.ajax({
+                type: 'GET',
+                url: '/movements/' + id,
+                success: function (movement) {
+                    if(movement){
+                        displayInCard(movement);
+                    }else{
+                        swal("Lo lamentamos", "No es posible traer este registro. Por favor, comúniquese con oksocios.consultas@gmail.com", "error");
+                    }
+
+                },
+                error: function (e) {
+                    console.log(e);
+                }
+            });
+        });
+
+        displayInCard = function(movement){
+            if(movement.income){
+                $('#uid').val(movement.id);
+                $('#uamount').val(movement.amount);
+                $('#lbl-uamount').addClass('active');
+                $('#uconcept').val(movement.concept.id);
+                $('#idesc').val(movement.detail);
+                $('#lbl-udesc').addClass('active');
+            }else{
+                $('#eid').val(movement.id);
+                $('#eamount').val(movement.amount);
+                $('#lbl-eamount').addClass('active');
+                $('#econcept').val(movement.concept.id);
+                $('#idesc-e').val(movement.detail);
+                $('#lbl-edesc').addClass('active');
+            }
+        }
+
+        tblBalance.on('click', '.delete-movement', function(){
+            var id = $(this).data('id');
+            swal({
+                title: "¿Estás seguro?",
+                text: "Una vez eliminado, no podrá volver a ver este registro",
+                icon: "warning",
+                buttons: true
+            })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        var btn = $(this);
+
+                        $.ajax({
+                            type: 'DELETE',
+                            url: '/movements/' + id,
+                            contentType: 'application/json',
+                            success: function (data) {
+                                if(data){
+                                    tblBalance.row(btn.parents('tr')).remove().draw();
+                                    swal("Eliminado", "El registro ha sido correctamente eliminado", "success");
+                                }else{
+                                    swal("Lo lamentamos", "No es posible eliminar este registro. Por favor, comúniquese con oksocios.consultas@gmail.com", "error");
+                                }
+                                $('#form-income')[0].reset();
+                                $('#form-expense')[0].reset();
+                                $('#uid').val("");
+                                $('#eid').val("");
+                            },
+                            error: function (e) {
+                                console.log(e);
+                            }
+                        });
+                    }
+                });
         });
     </script>
     <script th:inline="javascript">

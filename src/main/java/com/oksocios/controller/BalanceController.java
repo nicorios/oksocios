@@ -40,4 +40,15 @@ public class BalanceController {
         Movement movementResult = movementService.addMovement(movement, user, new Establishment(idEstablishment));
         return new ResponseEntity(movementResult, HttpStatus.OK);
     }
+
+
+    @RequestMapping(method = RequestMethod.DELETE, value = "/movements/{id}")
+    public ResponseEntity<Boolean> deleteMovement(@PathVariable Long id){
+        return new ResponseEntity<>(movementService.deleteMovement(id), HttpStatus.OK);
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/movements/{id}")
+    public ResponseEntity<Movement> getMovement(@PathVariable Long id){
+        return new ResponseEntity<>(movementService.getMovement(id), HttpStatus.OK);
+    }
 }

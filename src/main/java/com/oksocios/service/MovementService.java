@@ -42,4 +42,18 @@ public class MovementService {
 
         return movementRepository.save(movement);
     }
+
+    public Boolean deleteMovement(Long id) {
+        try{
+            movementRepository.delete(id);
+            return true;
+        }
+        catch(Exception e){
+            return false;
+        }
+    }
+
+    public Movement getMovement(Long id){
+        return movementRepository.findOne(id);
+    }
 }
