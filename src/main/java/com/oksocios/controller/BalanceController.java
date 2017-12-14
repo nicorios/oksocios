@@ -1,5 +1,6 @@
 package com.oksocios.controller;
 
+import com.oksocios.model.Concept;
 import com.oksocios.model.Establishment;
 import com.oksocios.model.Movement;
 import com.oksocios.model.User;
@@ -14,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.Map;
 
 @Controller
 public class BalanceController {
@@ -35,13 +37,12 @@ public class BalanceController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/balance")
-    public ResponseEntity<Movement> saveMovement(@RequestBody Movement movement, @SessionAttribute Long idEstablishment, Principal principal){
+    public ResponseEntity<Object> saveMovement(@RequestBody Movement movement, @SessionAttribute Long idEstablishment, Principal principal){
         User user = (User)((UsernamePasswordAuthenticationToken) principal).getPrincipal();
-        Movement movementResult = movementService.addMovement(movement, user, new Establishment(idEstablishment));
-        return new ResponseEntity(movementResult, HttpStatus.OK);
+        Map<String, Object> response = movementService.addMovement(movement, user, new Establishment(idEstablishment));
+        return new ResponseEntity(response, HttpStatus.OK);
     }
-
-
+    
     @RequestMapping(method = RequestMethod.DELETE, value = "/movements/{id}")
     public ResponseEntity<Boolean> deleteMovement(@PathVariable Long id){
         return new ResponseEntity<>(movementService.deleteMovement(id), HttpStatus.OK);

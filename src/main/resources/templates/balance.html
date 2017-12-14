@@ -200,10 +200,16 @@
                     url : "/balance",
                     data : JSON.stringify(movement),
                     dataType : 'json',
-                    success : function(data) {
-                        console.log("SUCCESS: ", data);
-                        swal("Éxito!", "Ingreso cargado correctamente", "success");
-                        //todo show new movement in datatable?
+                    success : function(response) {
+                        if(response.update){
+                            swal("¡Éxito!", "Registro actualizado correctamente", "success");
+                            // Update in table?
+//                            $('#activity-' + response.activity.id).text(response.activity.name);
+                        }else{
+                            swal("¡Éxito!", "Registro creado correctamente", "success");
+                            addMovementRowToTable(response.movement);
+                        }
+                        clearForms();
                     },
                     error : function(e) {
                         console.log("ERROR: ", e);
@@ -211,6 +217,23 @@
                 });
             }
         });
+
+        addMovementRowToTable = function(movement){
+            let date = new Date(movement.date);
+            let month = date.getMonth() + 1;
+            tblBalance.row.add([
+                date.getDate() + '-' + month + '-' +  date.getFullYear(),
+                date.getHours() + ':' + date.getMinutes(),
+                movement.concept.name,
+                movement.amount,
+                ' <a href="javascript:void(0)" class="edit-movement" data-id="'+ movement.id +'">\n' +
+                '<i style="font-size: x-large;" class="mdi-image-edit"></i>\n' +
+                '</a>\n' +
+                '<a href="javascript:void(0)" class="delete-movement" data-id="'+ movement.id +'">\n' +
+                '<i style="font-size: x-large;" class="mdi-action-delete"></i>\n' +
+                '</a>'
+            ]).draw(false);
+        };
 
         $("#form-expense").validate({
             errorElement : 'div',
@@ -282,7 +305,7 @@
                 $('#idesc-e').val(movement.detail);
                 $('#lbl-edesc').addClass('active');
             }
-        }
+        };
 
         tblBalance.on('click', '.delete-movement', function(){
             var id = $(this).data('id');
@@ -307,10 +330,7 @@
                                 }else{
                                     swal("Lo lamentamos", "No es posible eliminar este registro. Por favor, comúniquese con oksocios.consultas@gmail.com", "error");
                                 }
-                                $('#form-income')[0].reset();
-                                $('#form-expense')[0].reset();
-                                $('#uid').val("");
-                                $('#eid').val("");
+                                clearForms();
                             },
                             error: function (e) {
                                 console.log(e);
@@ -319,6 +339,13 @@
                     }
                 });
         });
+
+        let clearForms = function(){
+            $('#form-income')[0].reset();
+            $('#form-expense')[0].reset();
+            $('#uid').val("");
+            $('#eid').val("");
+        }
     </script>
     <script th:inline="javascript">
         /*<![CDATA[*/
