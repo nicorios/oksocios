@@ -1,6 +1,7 @@
 package com.oksocios.service;
 
 import com.oksocios.model.Entry;
+import com.oksocios.model.Establishment;
 import com.oksocios.model.User;
 import com.oksocios.repository.EntryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,10 +51,13 @@ public class EntryService {
     }
 
     public void addEntry(Entry entry, Long idEstablishment){
-        entry.setUser(userService.getUserByDni(entry.getUser().getDni()));
-        entry.setEstablishment(establishmentService.getEstablishmentById(idEstablishment));
-        entry.setEntryDate(new Date());
-        entryRepository.save(entry);
+        Boolean hasEntryInLastTwoHours = entryRepository.findByUserDniAndEstablishment_IdAndEntryDateGreaterThan(entry.getUser().getDni(), idEstablishment, new Date(System.currentTimeMillis() - (2 * 60 * 60 * 1000))).size() > 0;
+        if(!hasEntryInLastTwoHours){
+            entry.setUser(userService.getUserByDni(entry.getUser().getDni()));
+            entry.setEstablishment(new Establishment(idEstablishment));
+            entry.setEntryDate(new Date());
+            entryRepository.save(entry);
+        }
     }
 
     public int[] getEntriesFromMonth(int month, Long idEstablishment){
