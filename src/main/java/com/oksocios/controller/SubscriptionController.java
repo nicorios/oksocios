@@ -39,7 +39,7 @@ public class SubscriptionController {
         if (subscription.getUser().getDni() == null) return new ResponseEntity<>("Por favor, Ingrese el DNI del socio", HttpStatus.OK) ;
         User user = userService.getUserByDni(subscription.getUser().getDni());
         if(user == null) return new ResponseEntity<>("No existe ningún usuario registrado con el DNI ingresado", HttpStatus.OK);
-        Subscription subscriptionResponse = subscriptionService.checkSubscription(subscription.getUser().getDni(), idEstablishment);
+        Subscription subscriptionResponse = subscriptionService.getUserSubscription(subscription.getUser().getDni(), idEstablishment);
         if(subscriptionResponse != null) return new ResponseEntity<>("Ya existe una subscripción para el DNI ingresado", HttpStatus.OK);
         subscriptionService.addSubscription(subscription, user, idEstablishment);
         return new ResponseEntity<Object>(true, HttpStatus.OK);

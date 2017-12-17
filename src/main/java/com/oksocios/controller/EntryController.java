@@ -40,7 +40,7 @@ public class EntryController {
     public ResponseEntity<Boolean> addEntry(@RequestBody Entry entry, @SessionAttribute Long idEstablishment){
         Subscription subscription = subscriptionService.checkSubscription(entry.getUser().getDni(), idEstablishment);
         if(subscription != null){
-            entryService.addEntry(entry, idEstablishment);
+            entryService.addEntry(entry, idEstablishment, subscription);
             return new ResponseEntity<>(true, HttpStatus.OK);
         }
         return new ResponseEntity<>(false, HttpStatus.OK);

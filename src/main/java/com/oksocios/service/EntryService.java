@@ -2,6 +2,7 @@ package com.oksocios.service;
 
 import com.oksocios.model.Entry;
 import com.oksocios.model.Establishment;
+import com.oksocios.model.Subscription;
 import com.oksocios.model.User;
 import com.oksocios.repository.EntryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,14 +17,14 @@ import java.util.List;
 public class EntryService {
 
     private final EntryRepository entryRepository;
-    private final EstablishmentService establishmentService;
     private final UserService userService;
+    private final SubscriptionService subscriptionService;
 
     @Autowired
-    public EntryService(EntryRepository entryRepository, EstablishmentService establishmentService, UserService userService){
+    public EntryService(EntryRepository entryRepository, UserService userService, SubscriptionService subscriptionService){
         this.entryRepository = entryRepository;
-        this.establishmentService = establishmentService;
         this.userService = userService;
+        this.subscriptionService = subscriptionService;
     }
 
     public List<Entry> getAllEntries(){
@@ -50,13 +51,20 @@ public class EntryService {
         return entryRepository.findByUserDniAndEstablishment_IdAndEntryDateGreaterThan(dni, idEstablishment, cal.getTime());
     }
 
-    public void addEntry(Entry entry, Long idEstablishment){
+    public void addEntry(Entry entry, Long idEstablishment, Subscription subscription){
         Boolean hasEntryInLastTwoHours = entryRepository.findByUserDniAndEstablishment_IdAndEntryDateGreaterThan(entry.getUser().getDni(), idEstablishment, new Date(System.currentTimeMillis() - (2 * 60 * 60 * 1000))).size() > 0;
         if(!hasEntryInLastTwoHours){
             entry.setUser(userService.getUserByDni(entry.getUser().getDni()));
             entry.setEstablishment(new Establishment(idEstablishment));
             entry.setEntryDate(new Date());
             entryRepository.save(entry);
+
+            //Check classesLeft
+            if(!subscription.getFreePass()){
+                int classesLeft = subscription.getClassesLeft();
+                subscription.setClassesLeft(classesLeft -1);
+                subscriptionService.saveSubscription(subscription);
+            }
         }
     }
 

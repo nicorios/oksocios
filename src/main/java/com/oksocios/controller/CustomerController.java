@@ -71,7 +71,7 @@ public class CustomerController {
             throw new ObjectNotAccesibleException("No está autorizado a ver dicho perfil");
         }
         User user = userService.getUser(id);
-        Subscription subscription = subscriptionService.checkSubscription(user.getDni(), idEstablishment);
+        Subscription subscription = subscriptionService.getUserSubscription(user.getDni(), idEstablishment);
         List<Entry> entries = entryService.getAllEntriesByEstablishmentIdInLastMonth(user.getDni(), idEstablishment);
         boolean hasLocation = user.hasLocation();
         model.addAttribute("user", user);

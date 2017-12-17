@@ -48,8 +48,17 @@ public class SubscriptionService {
         return subscriptions;
     }
 
-    public Subscription checkSubscription(Long dni, Long currentEstablishment){
+    public Subscription getUserSubscription(Long dni, Long currentEstablishment){
         return subscriptionRepository.findFirstByUserDniAndEstablishmentIdAndExpirationDateIsAfter(dni, currentEstablishment, new Date());
+    }
+
+    public Subscription checkSubscription(Long dni, Long currentEstablishment){
+        Subscription subscription = subscriptionRepository.findFirstByUserDniAndEstablishmentIdAndExpirationDateIsAfter(dni, currentEstablishment, new Date());
+        if(subscription.getFreePass() || subscription.getClassesLeft() > 0){
+           return subscription;
+        }
+        //Subscription doesn't have freePass and has no more classesLeft.
+        return null;
     }
 
     public void addSubscription(Subscription subscription, User user, Long idEstablishment){
@@ -66,6 +75,10 @@ public class SubscriptionService {
         Subscription subscriptionSaved =subscriptionRepository.save(subscription);
         //Save a new income
         movementService.saveMovementFromSubscription(subscriptionSaved);
+    }
+
+    public Subscription saveSubscription(Subscription subscription){
+        return subscriptionRepository.save(subscription);
     }
 
     public int[] findAllLastYearSubscriptionsByActivity(Long idActivity, Long idEstablishment){
