@@ -20,7 +20,7 @@ $(document).ready(function(){
         var list = $('#establishments-list');
         for (var i in array) {
             var establishment = array[i];
-            list.append('<li><a href="/get-entries?establishment='+ establishment.id +'">'+ establishment.name +'</a></li>')
+            list.prepend('<li><a href="/get-entries?establishment='+ establishment.id +'">'+ establishment.name +'</a></li>')
         }
     }
 
