@@ -1,5 +1,6 @@
 package com.oksocios.controller;
 
+import com.oksocios.exceptions.ObjectNotAccesibleException;
 import com.oksocios.model.Establishment;
 import com.oksocios.model.User;
 import com.oksocios.service.EstablishmentService;
@@ -61,8 +62,10 @@ public class EstablishmentController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/establishments")
-    private String createEstablishment(@ModelAttribute Establishment establishment, HttpSession session){
+    private String createEstablishment(@ModelAttribute Establishment establishment, HttpSession session, Principal principal) throws ObjectNotAccesibleException {
+        User user =(User) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
         Establishment establishmentResponse = establishmentService.addEstablishment(establishment);
+        userService.updateRole(user.getId(), establishmentResponse.getId());
         session.setAttribute("idEstablishment", establishmentResponse.getId());
         return "redirect:/home";
     }
